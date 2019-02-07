@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Propriedade, Adress
+
+admin.site.register(Propriedade)
+admin.site.register(Adress)

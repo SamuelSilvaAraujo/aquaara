@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Propriedades{% endblock %}
+
+{% block header %}
+    <link href="{% static 'css/plugins/footable/footable.core.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+    {% if object_list %}
+
+        <div class="row border-bottom white-bg page-heading">
+            <div class="col-sm-4">
+                <h2>Propriedades</h2>
+            </div>
+            <div class="col-sm-8">
+                <div class="title-action">
+                    <a href="" class="btn btn-primary">+ Nova Propriedade</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row wrapper-content animated fadeInRight">
+
+            {% for propriedade in object_list %}
+
+                <div class="col-lg-3">
+                    <div class="contact-box">
+                        <a href="{% url 'propriedade' propriedade.slug %}">
+                            <div class="col-sm-12 text-center">
+                                <h3><strong>{{ propriedade.name }}</strong></h3>
+                                <address>
+                                    Rua {{ propriedade.adress.street }}, N° {{ propriedade.adress.street }}<br>
+                                    {{ propriedade.adress.district }}<br>
+                                    {{ propriedade.adress.city }}, {{ propriedade.adress.state }}<br>
+                                </address>
+                            </div>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% else %}
+
+            <div class="wrapper wrapper-content">
+                <div class="middle-box text-center animated fadeInRightBig">
+                    <h3 class="font-bold">Nenhuma Propriedade Cadastrada</h3>
+                    <div class="error-desc">
+                        Cadastre suas Propriedades para que possa Utilizar o sistema.
+                        <br/><a href="#" class="btn btn-primary m-t">+ Nova Propriedade</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+{% endblock %}
+
