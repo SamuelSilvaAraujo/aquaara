@@ -132,5 +132,5 @@ AUTH_USER_MODEL = 'users.User'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'propriedades'
+LOGIN_REDIRECT_URL = 'propriedade_list'
 LOGOUT_REDIRECT_URL = 'login'

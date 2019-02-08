@@ -39,7 +39,7 @@ class Adress(models.Model):
     street = models.CharField("Rua", max_length=30)
     state = models.CharField("Estado", choices=STATES_CHOICES, max_length=2)
 
-class Propriedade(models.Model):
+class Property(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField("Nome", max_length=50)
     adress = models.ForeignKey(Adress, on_delete=models.CASCADE)
@@ -47,4 +47,4 @@ class Propriedade(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Propriedade, self).save(*args, **kwargs)
+        super(Property, self).save(*args, **kwargs)

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Propriedade, Adress
+from .models import Property, Adress
 
-admin.site.register(Propriedade)
+admin.site.register(Property)
 admin.site.register(Adress)
