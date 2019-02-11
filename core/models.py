@@ -48,3 +48,32 @@ class Property(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Property, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class Pond(models.Model):
+
+    TYPE_SYSTEM_CHOICES = [
+        ('INTENSIVO', 'Intensivo'),
+        ('S_INTENSIVO', 'Semi-Intensivo')
+    ]
+
+    property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    identification = models.CharField("Identificação", max_length=20, unique=True)
+    type_system = models.CharField("Tipo de Sistema", max_length=12, choices=TYPE_SYSTEM_CHOICES)
+    width = models.IntegerField("Largura")
+    length = models.IntegerField("Comprimento")
+    quant_povoamento = models.IntegerField(default=0)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.identification
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.identification)
+        super(Pond, self).save(*args, **kwargs)
+
+    def volume(self):
+        return self.width*self.length*1
