@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_template.html' %}
 
 {% load static %}
 
@@ -29,7 +29,7 @@
 
                 <div class="col-lg-3">
                     <div class="contact-box">
-                        <a href="{% url 'propriedade_detail' propriedade.slug %}">
+                        <a href="{% url 'propriedade_ponds' propriedade.slug %}">
                             <div class="col-sm-12 text-center">
                                 <h3><strong>{{ propriedade.name }}</strong></h3>
                                 <address>

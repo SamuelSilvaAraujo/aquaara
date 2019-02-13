@@ -1,11 +1,15 @@
-from django.urls import path
+from django.urls import path, include
 from core.views import *
 
 urlpatterns = [
     path('', Index.as_view(), name="index"),
-    path('propriedade/list/', PropertyListView.as_view(), name="propriedade_list"),
-    path('propriedade/detail/<slug:slug>/', PropertyDetailView.as_view(), name="propriedade_detail"),
-    path('propriedade/create/', PropertyCreateView.as_view(), name="propriedade_create"),
-    path('propriedade/<slug:slug>/viveiro/create/', PondCreateView.as_view(), name="viveiro_create"),
-    path('propriedade/<slug:property_slug>/viveiro/<slug:slug>/', PondDetailView.as_view(), name="viveiro_detail")
+    path('propriedades/', PropertyListView.as_view(), name="propriedade_list"),
+    path('novapropriedade/', PropertyCreateView.as_view(), name="propriedade_create"),
+    path('<slug:slug_property>/', include([
+        path('viveiros/', PropertyPondsView.as_view(), name="propriedade_ponds"),
+        path('novoviveiro/', PondCreateView.as_view(), name="viveiro_create"),
+        path('viveiro/<slug:slug_pond>/', PondDetailView.as_view(), name="viveiro_detail"),
+        path('viveiro/<slug:slug_pond>/atualizar/',  PondUpdateView.as_view(), name="viveiro_update"),
+        path('viveiro/<slug:slug_pond>/excluir/',  PondDeleteView.as_view(), name="viveiro_delete"),
+    ])),
 ]

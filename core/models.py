@@ -1,5 +1,6 @@
 from django.template.defaultfilters import slugify
 from django.db import models
+
 from users.models import User
 
 class Adress(models.Model):
@@ -77,3 +78,6 @@ class Pond(models.Model):
 
     def volume(self):
         return self.width*self.length*1
+
+    def area(self):
+        return self.width*self.length

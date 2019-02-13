@@ -1,6 +1,6 @@
-{% extends 'base_template.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Novo Viveiro{% endblock %}
+{% block title %} Editar Viveiro {% endblock %}
 
 {% block content %}
 
@@ -50,7 +50,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <a class="btn btn-white" href="{% url 'propriedade_ponds' slug_property %}">Cancelar</a>
+                                <a class="btn btn-white" href="{% url 'viveiro_detail' slug_property slug_pond %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
                         </div>

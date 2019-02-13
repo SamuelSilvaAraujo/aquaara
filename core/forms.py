@@ -28,6 +28,6 @@ class PondForm(forms.ModelForm):
         widgets = {
             'identification': forms.TextInput(attrs={'class': 'form-control'}),
             'type_system': forms.Select(attrs={'class': 'form-control'}),
-            'width': forms.TextInput(attrs={'class': 'form-control'}),
-            'length': forms.TextInput(attrs={'class': 'form-control'}),
+            'width': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Largura'}),
+            'length': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Comprimento'}),
         }

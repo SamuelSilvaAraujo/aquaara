@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="wrapper wrapper-content">
+            <div class="middle-box text-center animated fadeInRightBig">
+                <h3 class="font-bold">Excluir {{ object }}</h3>
+                <div class="error-desc">
+                    Se você excluir esse viveiro, todas as informações seram perdidas
+                    <br/><button type="submit" class="btn btn-danger m-t"><i class="fa fa-trash"></i> Excluir</button>
+                    <a href="{% url 'viveiro_detail' slug_property object.slug %}" class="btn btn-primary m-t">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
