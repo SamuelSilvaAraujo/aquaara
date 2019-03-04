@@ -24,10 +24,10 @@ class AdressForm(forms.ModelForm):
 class PondForm(forms.ModelForm):
     class Meta:
         model = Pond
-        fields = ['identification', 'type_system', 'width', 'length', ]
+        fields = ['identification', 'vazao', 'width', 'length', ]
         widgets = {
             'identification': forms.TextInput(attrs={'class': 'form-control'}),
-            'type_system': forms.Select(attrs={'class': 'form-control'}),
+            'vazao': forms.NumberInput(attrs={'class': 'form-control'}),
             'width': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Largura'}),
             'length': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Comprimento'}),
         }

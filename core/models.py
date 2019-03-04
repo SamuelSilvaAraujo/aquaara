@@ -53,20 +53,14 @@ class Property(models.Model):
     def __str__(self):
         return self.name
 
-
 class Pond(models.Model):
-
-    TYPE_SYSTEM_CHOICES = [
-        ('INTENSIVO', 'Intensivo'),
-        ('S_INTENSIVO', 'Semi-Intensivo')
-    ]
 
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
     identification = models.CharField("Identificação", max_length=20, unique=True)
-    type_system = models.CharField("Tipo de Sistema", max_length=12, choices=TYPE_SYSTEM_CHOICES)
     width = models.IntegerField("Largura")
     length = models.IntegerField("Comprimento")
     quant_povoamento = models.IntegerField(default=0)
+    vazao = models.FloatField("Vazão")
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -81,3 +75,33 @@ class Pond(models.Model):
 
     def area(self):
         return self.width*self.length
+
+class Population(models.Model):
+
+    TYPE_SYSTEM_CHOICES = [
+        ('INTENSIVO', 'Intensivo'),
+        ('S_INTENSIVO', 'Semi-Intensivo')
+    ]
+
+    date = models.DateField("Data")
+    peso_medio_povoamento = models.FloatField("Peso Medio no Povoamento")
+    peso_medio_despesca = models.FloatField("Peso Medio Esperado na Despeca")
+    quant_peixe_povoamento = models.IntegerField("Quantidade de peixes no povoamento")
+    idade_peixe = models.FloatField("Idade do peixe")
+    type_system = models.CharField("Tipo de Sistema", max_length=12, choices=TYPE_SYSTEM_CHOICES)
+
+class Despesca(models.Model):
+    date = models.DateField("Data")
+    peso_medio_final = models.FloatField("Peso Medio Final")
+    quant_final = models.IntegerField("Quantidade Final de peixes")
+
+class Ciclo(models.Model):
+    pond = models.ForeignKey(Pond, on_delete=models.CASCADE)
+    population = models.ForeignKey(Population, on_delete=models.CASCADE)
+    despesca = models.ForeignKey(Despesca, on_delete=models.CASCADE)
+
+class Biometria(models.Model):
+    ciclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
+    date = models.DateField("Data")
+    peso_medio = models.FloatField("Peso Medio")
+    mortalidade = models.IntegerField("Mortalidade")
