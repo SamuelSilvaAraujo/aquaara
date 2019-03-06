@@ -20,7 +20,7 @@
                         <div class="ibox-title">
                             <h5>Viveiros</h5>
                             <div class="ibox-tools">
-                                <a href="{% url 'viveiro_create' property.slug %}" class="btn btn-primary btn-xs">+ Novo Viveiro</a>
+                                <a href="{% url 'pond_create' property.slug %}" class="btn btn-primary btn-xs">+ Novo Viveiro</a>
                             </div>
                         </div>
                         <div class="ibox-content">
@@ -39,7 +39,7 @@
                                 {% for viveiro in viveiros %}
 
                                     <tr class="gradeX">
-                                        <td><a href="{% url 'viveiro_detail' property.slug viveiro.slug %}" class="client-link">{{ viveiro.identification }}</a></td>
+                                        <td><a href="{% url 'pond_detail' property.slug viveiro.slug %}" class="client-link">{{ viveiro.identification }}</a></td>
                                         <td>{{ viveiro.get_type_system_display }}</td>
                                     </tr>
 
