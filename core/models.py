@@ -54,21 +54,14 @@ class Property(models.Model):
         return self.name
 
 class Pond(models.Model):
-
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
-    identification = models.CharField("Identificação", max_length=20, unique=True)
+    identification = models.CharField("Identificação", max_length=20)
     width = models.IntegerField("Largura")
     length = models.IntegerField("Comprimento")
-    quant_povoamento = models.IntegerField(default=0)
-    vazao = models.FloatField("Vazão")
-    slug = models.SlugField(unique=True)
+    water_flow = models.FloatField("Vazão de Água")
 
     def __str__(self):
         return self.identification
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.identification)
-        super(Pond, self).save(*args, **kwargs)
 
     def volume(self):
         return self.width*self.length*1
@@ -76,32 +69,38 @@ class Pond(models.Model):
     def area(self):
         return self.width*self.length
 
+    def number_cycles(self):
+        return self.cycle_set.count()
+
+    def cycle(self):
+        return self.cycle_set.filter(finalized=False).first()
+
 class Population(models.Model):
-
-    TYPE_SYSTEM_CHOICES = [
-        ('INTENSIVO', 'Intensivo'),
-        ('S_INTENSIVO', 'Semi-Intensivo')
-    ]
-
     date = models.DateField("Data")
-    peso_medio_povoamento = models.FloatField("Peso Medio no Povoamento")
-    peso_medio_despesca = models.FloatField("Peso Medio Esperado na Despeca")
-    quant_peixe_povoamento = models.IntegerField("Quantidade de peixes no povoamento")
-    idade_peixe = models.FloatField("Idade do peixe")
-    type_system = models.CharField("Tipo de Sistema", max_length=12, choices=TYPE_SYSTEM_CHOICES)
+    middleweight = models.FloatField("Peso Medio")
+    amount = models.IntegerField("Quantidade de peixes")
+    age = models.FloatField("Idade do peixe")
 
 class Despesca(models.Model):
     date = models.DateField("Data")
-    peso_medio_final = models.FloatField("Peso Medio Final")
-    quant_final = models.IntegerField("Quantidade Final de peixes")
+    final_middleweight = models.FloatField("Peso Medio Final")
+    final_amount = models.IntegerField("Quantidade Final de peixes")
 
-class Ciclo(models.Model):
+class Cycle(models.Model):
+    TYPE_SYSTEM_CHOICES = [
+        ('IN', 'Intensivo'),
+        ('SI', 'Semi-Intensivo')
+    ]
+
     pond = models.ForeignKey(Pond, on_delete=models.CASCADE)
-    population = models.ForeignKey(Population, on_delete=models.CASCADE)
-    despesca = models.ForeignKey(Despesca, on_delete=models.CASCADE)
+    population = models.ForeignKey(Population, on_delete=models.CASCADE, null=True, blank=True)
+    despesca = models.ForeignKey(Despesca, on_delete=models.CASCADE, null=True, blank=True)
+    type_system = models.CharField("Tipo de Sistema", max_length=2, choices=TYPE_SYSTEM_CHOICES)
+    middleweight_despesca = models.FloatField("Peso Medio Esperado na Despeca")
+    finalized = models.BooleanField(default=False)
 
 class Biometria(models.Model):
-    ciclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
+    ciclo = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data")
-    peso_medio = models.FloatField("Peso Medio")
-    mortalidade = models.IntegerField("Mortalidade")
+    middleweight = models.FloatField("Peso Medio")
+    mortality = models.IntegerField("Mortalidade")

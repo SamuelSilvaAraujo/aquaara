@@ -3,13 +3,20 @@ from core.views import *
 
 urlpatterns = [
     path('', Index.as_view(), name="index"),
-    path('propriedades/', PropertyListView.as_view(), name="propriedade_list"),
-    path('novapropriedade/', PropertyCreateView.as_view(), name="propriedade_create"),
-    path('<slug:slug_property>/', include([
-        path('viveiros/', PropertyPondsView.as_view(), name="propriedade_ponds"),
-        path('novoviveiro/', PondCreateView.as_view(), name="pond_create"),
-        path('viveiro/<slug:slug_pond>/', PondDetailView.as_view(), name="pond_detail"),
-        path('viveiro/<slug:slug_pond>/atualizar/',  PondUpdateView.as_view(), name="pond_update"),
-        path('viveiro/<slug:slug_pond>/excluir/',  PondDeleteView.as_view(), name="pond_delete"),
+    path('propriedades/', PropertyListView.as_view(), name="property_list"),
+    path('propriedade/', include([
+        path('cadastro/', PropertyCreateView.as_view(), name="property_create"),
+    ])),
+    path('<int:pk_property>/', include([
+        path('viveiros/', PropertyPondsView.as_view(), name="property_ponds"),
+        path('viveiro/', include([
+            path('cadastro/', PondCreateView.as_view(), name="pond_create"),
+            path('<int:pk_pond>/', include([
+                path('', PondDetailView.as_view(), name="pond_detail"),
+                path('editar/', PondUpdateView.as_view(), name="pond_update"),
+                path('excluir/', PondDeleteView.as_view(), name="pond_delete"),
+                path('iniciarciclo/', CycleInitView.as_view(), name="cycle_init"),
+            ]))
+        ])),
     ])),
 ]

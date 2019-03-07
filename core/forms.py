@@ -24,10 +24,19 @@ class AdressForm(forms.ModelForm):
 class PondForm(forms.ModelForm):
     class Meta:
         model = Pond
-        fields = ['identification', 'vazao', 'width', 'length', ]
+        fields = ['identification', 'water_flow', 'width', 'length', ]
         widgets = {
             'identification': forms.TextInput(attrs={'class': 'form-control'}),
-            'vazao': forms.NumberInput(attrs={'class': 'form-control'}),
-            'width': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Largura'}),
-            'length': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Comprimento'}),
+            'water_flow': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Vazão de Água'}),
+            'width': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Largura'}),
+            'length': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Comprimento'}),
+        }
+
+class CycleForm(forms.ModelForm):
+    class Meta:
+        model = Cycle
+        fields = ['type_system', 'middleweight_despesca', ]
+        widgets = {
+            'type_system': forms.Select(attrs={'class': 'form-control'}),
+            'middleweight_despesca': forms.NumberInput(attrs={'class': 'form-control'})
         }

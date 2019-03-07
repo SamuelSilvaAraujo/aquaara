@@ -18,7 +18,7 @@
             </div>
             <div class="col-sm-8">
                 <div class="title-action">
-                    <a href="{% url 'propriedade_create' %}" class="btn btn-primary">+ Nova Propriedade</a>
+                    <a href="{% url 'property_create' %}" class="btn btn-primary">+ Nova Propriedade</a>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
 
                 <div class="col-lg-3">
                     <div class="contact-box">
-                        <a href="{% url 'propriedade_ponds' propriedade.slug %}">
+                        <a href="{% url 'property_ponds' propriedade.id %}">
                             <div class="col-sm-12 text-center">
                                 <h3><strong>{{ propriedade.name }}</strong></h3>
                                 <address>
@@ -51,7 +51,7 @@
                     <h3 class="font-bold">Nenhuma Propriedade Cadastrada</h3>
                     <div class="error-desc">
                         Cadastre suas Propriedades para que possa Utilizar o sistema.
-                        <br/><a href="{% url 'propriedade_create' %}" class="btn btn-primary m-t">+ Nova Propriedade</a>
+                        <br/><a href="{% url 'property_create' %}" class="btn btn-primary m-t">+ Nova Propriedade</a>
                     </div>
                 </div>
             </div>

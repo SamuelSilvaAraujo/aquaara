@@ -4,69 +4,129 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="wrapper wrapper-content animated fadeInUp">
-                <div class="ibox">
+    <div class="wrapper wrapper-content animated fadeInUp">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{ pond.identification }}</h5>
+                        <div class="ibox-tools">
+                            {% if not pond.cycle %}
+                                <a href="{% url 'cycle_init' pk_property pond.id %}" class="btn btn-success btn-xs">Iniciar Ciclo</a>
+                            {% endif %}
+                            <a href="{% url 'pond_update' pk_property pond.id %}" class="btn btn-primary btn-xs">Editar</a>
+                            <a href="{% url 'pond_delete' pk_property pond.id %}" class="btn btn-danger btn-xs">Exluir</a>
+                        </div>
+                    </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="m-b-md">
-                                    <a href="{% url 'pond_update' slug_property pond.slug %}" class="btn btn-white btn-xs pull-right">Editar projeto</a>
-                                    <h2>{{ pond.identification }}</h2>
-                                </div>
+                            <div class="col-md-12">
                                 <dl class="dl-horizontal">
                                     <dt>Status:</dt> <dd><span class="label label-primary">Active</span></dd>
                                 </dl>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-5">
+                            <div class="col-md-3">
                                 <dl class="dl-horizontal">
-
-                                    <dt>Povoamentos:</dt> <dd>{{ pond.quant_povoamento }}</dd>
-                                    <dt>Vazão:</dt> <dd>  {{ pond.vazao }}</dd>
+                                    <dt>Ciclos realizados:</dt> <dd>{{ pond.number_cycles }}</dd>
+                                    <dt>Vazão:</dt> <dd>  {{ pond.water_flow }}</dd>
                                 </dl>
                             </div>
-                            <div class="col-lg-7" id="cluster_info">
+                            <div class="col-lg-3" id="cluster_info">
                                 <dl class="dl-horizontal" >
                                     <dt>Área:</dt> <dd>{{ pond.area }} m²</dd>
                                     <dt>Volume:</dt> <dd> 	{{ pond.volume }} m³</dd>
                                 </dl>
                             </div>
                         </div>
-                        <div class="row m-t-sm">
-                            <div class="col-lg-12">
-                                <div class="panel blank-panel">
-                                    <div class="panel-heading">
-                                        <div class="panel-options">
-                                            <ul class="nav nav-tabs">
-                                                <li class="active"><a href="#tab-1" data-toggle="tab">Ciclo Atual</a></li>
-                                                <li class=""><a href="#tab-2" data-toggle="tab">Ciclos Realizados</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div class="panel-body">
-
-                                        <div class="tab-content">
-                                            <div class="tab-pane active" id="tab-1">
-
-                                            </div>
-                                            <div class="tab-pane" id="tab-2">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
+        {% if pond.cycle %}
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Densidade</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h2 class="font-bold">
+                                390,00
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Data da Despesca</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h2 class="font-bold">
+                                12/12/2019
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Proxima Biometria</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h2 class="font-bold">
+                                20/03/2019
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Quantidade de Ração</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h2 class="font-bold">
+                                390,00
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Taxa de Renovação</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h2 class="font-bold">
+                                390,00
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Qualidade da Água</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h2 class="font-bold">
+                                390,00
+                            </h2>
+                        </div>
+                        <div class="ibox-footer">
+                            <a href="#" class="btn btn-primary btn-sm">Calcular</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 
 
 {% endblock %}

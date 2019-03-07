@@ -10,9 +10,9 @@
 
 {% block content %}
 
-    {% with viveiros=property.pond_set.all  %}
+    {% with ponds=property.pond_set.all  %}
 
-        {% if viveiros %}
+        {% if ponds %}
 
             <div class="row wrapper-content animated fadeInRight">
                 <div class="col-lg-12">
@@ -20,7 +20,7 @@
                         <div class="ibox-title">
                             <h5>Viveiros</h5>
                             <div class="ibox-tools">
-                                <a href="{% url 'pond_create' property.slug %}" class="btn btn-primary btn-xs">+ Novo Viveiro</a>
+                                <a href="{% url 'pond_create' property.id %}" class="btn btn-primary btn-xs">+ Novo Viveiro</a>
                             </div>
                         </div>
                         <div class="ibox-content">
@@ -36,11 +36,11 @@
                                 </thead>
                                 <tbody>
 
-                                {% for viveiro in viveiros %}
+                                {% for pond in ponds %}
 
                                     <tr class="gradeX">
-                                        <td><a href="{% url 'pond_detail' property.slug viveiro.slug %}" class="client-link">{{ viveiro.identification }}</a></td>
-                                        <td>{{ viveiro.get_type_system_display }}</td>
+                                        <td><a href="{% url 'pond_detail' property.id pond.id %}" class="client-link">{{ pond.identification }}</a></td>
+                                        <td>{{ pond.get_type_system_display }}</td>
                                     </tr>
 
                                 {% endfor %}
@@ -63,10 +63,10 @@
 
             <div class="wrapper wrapper-content">
                 <div class="middle-box text-center animated fadeInRightBig">
-                    <h3 class="font-bold">Nenhuma Viveiro Cadastrado</h3>
+                    <h3 class="font-bold">Nenhum Viveiro Cadastrado</h3>
                     <div class="error-desc">
                         Cadastre seus Viveiros.
-                        <br/><a href="{% url 'viveiro_create' property.slug %}" class="btn btn-primary m-t">+ Novo Viveiro</a>
+                        <br/><a href="{% url 'pond_create' property.id %}" class="btn btn-primary m-t">+ Novo Viveiro</a>
                     </div>
                 </div>
             </div>
