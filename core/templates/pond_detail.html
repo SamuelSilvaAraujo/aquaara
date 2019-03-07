@@ -12,17 +12,18 @@
                         <h5>{{ pond.identification }}</h5>
                         <div class="ibox-tools">
                             {% if not pond.cycle %}
-                                <a href="{% url 'cycle_init' pk_property pond.id %}" class="btn btn-success btn-xs">Iniciar Ciclo</a>
+                                <a href="{% url 'cycle_init' pk_property pond.id %}" class="btn btn-white btn-w-m">Iniciar Ciclo</a>
                             {% endif %}
-                            <a href="{% url 'pond_update' pk_property pond.id %}" class="btn btn-primary btn-xs">Editar</a>
-                            <a href="{% url 'pond_delete' pk_property pond.id %}" class="btn btn-danger btn-xs">Exluir</a>
+                            <a href="#" class="btn btn-success btn-w-m">Calcular Qualidade da Água</a>
+                            <a href="{% url 'pond_update' pk_property pond.id %}" class="btn btn-primary btn-w-m">Editar</a>
+                            <a href="{% url 'pond_delete' pk_property pond.id %}" class="btn btn-danger btn-w-m">Exluir</a>
                         </div>
                     </div>
                     <div class="ibox-content">
                         <div class="row">
                             <div class="col-md-12">
                                 <dl class="dl-horizontal">
-                                    <dt>Status:</dt> <dd><span class="label label-primary">Active</span></dd>
+                                    <dt>Qualidade da água:</dt> <dd><span class="label label-primary">Boa</span></dd>
                                 </dl>
                             </div>
                         </div>
@@ -50,7 +51,7 @@
                 <div class="col-lg-4">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Densidade</h5>
+                            <h5>Densidade de Peixes</h5>
                         </div>
                         <div class="ibox-content">
                             <h2 class="font-bold">
@@ -59,30 +60,46 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Data da Despesca</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h2 class="font-bold">
-                                12/12/2019
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Proxima Biometria</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h2 class="font-bold">
-                                20/03/2019
-                            </h2>
+                {% if pond.cycle.population %}
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Data da Despesca</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="font-bold">
+                                    {{ pond.cycle.date_despesca }}
+                                </h2>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Proxima Biometria</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="font-bold">
+                                    {{ pond.cycle.date_biometria }}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+
+                {% else %}
+
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Povoamento não realizado</h5>
+                            </div>
+                            <div class="ibox-footer">
+                                <a href="{% url 'population_create' pk_property pond.id %}" class="btn btn-warning">Realizar povoamento</a>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
             </div>
             <div class="row">
                 <div class="col-lg-4">
@@ -106,21 +123,6 @@
                             <h2 class="font-bold">
                                 390,00
                             </h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Qualidade da Água</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h2 class="font-bold">
-                                390,00
-                            </h2>
-                        </div>
-                        <div class="ibox-footer">
-                            <a href="#" class="btn btn-primary btn-sm">Calcular</a>
                         </div>
                     </div>
                 </div>

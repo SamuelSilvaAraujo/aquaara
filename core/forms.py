@@ -40,3 +40,14 @@ class CycleForm(forms.ModelForm):
             'type_system': forms.Select(attrs={'class': 'form-control'}),
             'middleweight_despesca': forms.NumberInput(attrs={'class': 'form-control'})
         }
+
+class PopulationForm(forms.ModelForm):
+    class Meta:
+        model = Population
+        fields = ['date', 'middleweight', 'amount', 'age', ]
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'form-control'}),
+            'middleweight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'age': forms.NumberInput(attrs={'class': 'form-control'})
+        }

@@ -1,5 +1,6 @@
 from django.template.defaultfilters import slugify
 from django.db import models
+from datetime import datetime, timedelta
 
 from users.models import User
 
@@ -98,6 +99,23 @@ class Cycle(models.Model):
     type_system = models.CharField("Tipo de Sistema", max_length=2, choices=TYPE_SYSTEM_CHOICES)
     middleweight_despesca = models.FloatField("Peso Medio Esperado na Despeca")
     finalized = models.BooleanField(default=False)
+
+    def date_despesca(self):
+        if not self.population:
+            return None
+        else:
+            date_population = self.population.date
+            return date_population + timedelta(6*365/12)
+
+    def date_biometria(self):
+        if not self.population:
+            return None
+        else:
+            biometrias = self.biometria_set.all().order_by('date')
+            if not len(biometrias) > 0:
+                return self.population.date + timedelta(days=15)
+            else:
+                return biometrias[0].date + timedelta(days=15)
 
 class Biometria(models.Model):
     ciclo = models.ForeignKey(Cycle, on_delete=models.CASCADE)

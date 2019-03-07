@@ -2,8 +2,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Property, Pond, Cycle
-from .forms import PondForm, PropertyForm, AdressForm, CycleForm
+from .models import *
+from .forms import *
 
 class Index(TemplateView):
     template_name = 'index.html'
@@ -107,7 +107,6 @@ class CycleInitView(LoginRequiredMixin, CreateView):
     model = Cycle
     template_name = 'cycle_init.html'
     form_class = CycleForm
-    pk_url_kwarg = 'pk_pond'
 
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
@@ -116,9 +115,30 @@ class CycleInitView(LoginRequiredMixin, CreateView):
         obj.pond = Pond.objects.get(pk=pk_pond)
         obj.save()
         return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
-    
+
     def get_context_data(self, **kwargs):
         context = super(CycleInitView, self).get_context_data(**kwargs)
+        context["pk_property"] = self.kwargs["pk_property"]
+        context["pk_pond"] = self.kwargs["pk_pond"]
+        return context
+
+class PopulationCreateView(LoginRequiredMixin, CreateView):
+    model = Population
+    form_class = PopulationForm
+    template_name = 'population_create.html'
+
+    def form_valid(self, form):
+        pk_pond = self.kwargs["pk_pond"]
+        pk_property = self.kwargs["pk_property"]
+        pond_obj = Pond.objects.get(pk=pk_pond)
+        cycle = pond_obj.cycle()
+        population_obj = form.save()
+        cycle.population = population_obj
+        cycle.save()
+        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
+
+    def get_context_data(self, **kwargs):
+        context = super(PopulationCreateView, self).get_context_data(**kwargs)
         context["pk_property"] = self.kwargs["pk_property"]
         context["pk_pond"] = self.kwargs["pk_pond"]
         return context

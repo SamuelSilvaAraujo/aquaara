@@ -15,7 +15,8 @@ urlpatterns = [
                 path('', PondDetailView.as_view(), name="pond_detail"),
                 path('editar/', PondUpdateView.as_view(), name="pond_update"),
                 path('excluir/', PondDeleteView.as_view(), name="pond_delete"),
-                path('iniciarciclo/', CycleInitView.as_view(), name="cycle_init"),
+                path('ciclo/cadastro/', CycleInitView.as_view(), name="cycle_init"),
+                path('povoamento/cadastro/', PopulationCreateView.as_view(), name="population_create"),
             ]))
         ])),
     ])),

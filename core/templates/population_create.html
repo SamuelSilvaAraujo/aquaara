@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Povoamento{% endblock %}
+
+{% block content %}
+
+    <div class="row wrapper-content animated fadeInRight">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Povoamento</h5>
+                </div>
+                <div class="ibox-content">
+                    <form method="post" class="form-horizontal">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ form.date.label }}</label>
+
+                            <div class="col-sm-10">{{ form.date }}</div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ form.middleweight.label }}</label>
+
+                            <div class="col-sm-10">{{ form.middleweight }}</div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ form.amount.label }}</label>
+
+                            <div class="col-sm-10">{{ form.amount }}</div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ form.age.label }}</label>
+
+                            <div class="col-sm-10">{{ form.age }}</div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <a class="btn btn-white" href="{% url 'pond_detail' pk_property pk_pond %}">Cancelar</a>
+                                <button class="btn btn-primary" type="submit">Salvar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
