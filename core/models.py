@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from users.models import User
 
-class Adress(models.Model):
+class Address(models.Model):
     STATES_CHOICES = [
         ('AC', 'Acre'),
         ('AL', 'Alagoas'),
@@ -44,7 +44,7 @@ class Adress(models.Model):
 class Property(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField("Nome", max_length=50)
-    adress = models.ForeignKey(Adress, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):

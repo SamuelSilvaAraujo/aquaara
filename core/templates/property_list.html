@@ -12,37 +12,63 @@
 
     {% if object_list %}
 
-        <div class="row border-bottom white-bg page-heading">
-            <div class="col-sm-4">
-                <h2>Propriedades</h2>
-            </div>
-            <div class="col-sm-8">
-                <div class="title-action">
-                    <a href="{% url 'property_create' %}" class="btn btn-primary">+ Nova Propriedade</a>
-                </div>
-            </div>
-        </div>
-
         <div class="row wrapper-content animated fadeInRight">
 
-            {% for propriedade in object_list %}
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Propriedades</h5>
 
-                <div class="col-lg-3">
-                    <div class="contact-box">
-                        <a href="{% url 'property_ponds' propriedade.id %}">
-                            <div class="col-sm-12 text-center">
-                                <h3><strong>{{ propriedade.name }}</strong></h3>
-                                <address>
-                                    Rua {{ propriedade.adress.street }}, N° {{ propriedade.adress.number }}<br>
-                                    {{ propriedade.adress.district }}<br>
-                                    {{ propriedade.adress.city }}, {{ propriedade.adress.state }}<br>
-                                </address>
-                            </div>
-                            <div class="clearfix"></div>
-                        </a>
+                        <div class="ibox-tools">
+                            <a href="{% url 'property_create' %}" class="btn-primary btn btn-xs">+ Nova Propriedade</a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Pesquise uma propriedade">
+
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20" data-filter=#filter>
+                            <thead>
+                            <tr>
+
+                                <th data-toggle="true">Propriedade</th>
+                                <th data-hide="all">Bairro</th>
+                                <th data-hide="all">Rua</th>
+                                <th data-hide="all">Numero</th>
+                                <th data-hide="all">cidade</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for propriedade in object_list %}
+
+                                <tr>
+                                    <td>{{ propriedade.name }}</td>
+                                    <td>{{ propriedade.address.district }}</td>
+                                    <td>{{ propriedade.address.street }}</td>
+                                    <td>{{ propriedade.address.number }}</td>
+                                    <td>{{ propriedade.address.city }} - {{ propriedade.address.state }}</td>
+                                    <td class="project-actions">
+                                        <a href="{% url 'property_ponds' propriedade.id %}" class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> Abrir Propriedade </a>
+                                        <a href="{% url 'property_update' propriedade.id %}" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Editar </a>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+
                     </div>
                 </div>
-            {% endfor %}
+            </div>
 
             {% else %}
 
@@ -60,6 +86,21 @@
 
     {% endif %}
 
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'js/plugins/footable/footable.all.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+
+        });
+
+    </script>
 
 {% endblock %}
 

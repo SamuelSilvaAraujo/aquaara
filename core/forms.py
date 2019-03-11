@@ -9,9 +9,9 @@ class PropertyForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class':'form-control'})
         }
 
-class AdressForm(forms.ModelForm):
+class AddressForm(forms.ModelForm):
     class Meta:
-        model = Adress
+        model = Address
         fields = '__all__'
         widgets = {
             'street': forms.TextInput(attrs={'class': 'form-control'}),
