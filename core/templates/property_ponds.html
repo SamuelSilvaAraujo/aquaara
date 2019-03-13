@@ -31,7 +31,6 @@
                                 <thead>
                                 <tr>
                                     <th>Identificação</th>
-                                    <th>Tipo de Sistema</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -40,7 +39,6 @@
 
                                     <tr class="gradeX">
                                         <td><a href="{% url 'pond_detail' property.id pond.id %}" class="client-link">{{ pond.identification }}</a></td>
-                                        <td>{{ pond.get_type_system_display }}</td>
                                     </tr>
 
                                 {% endfor %}

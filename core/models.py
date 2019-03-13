@@ -117,6 +117,17 @@ class Cycle(models.Model):
             else:
                 return biometrias[0].date + timedelta(days=15)
 
+    def amount_fish(self):
+        if self.population:
+            amount = self.population.amount
+            if self.biometria_set.count() == 0:
+                return amount
+            else:
+                biometrias = self.biometria_set.all()
+                for biometria in biometrias:
+                    amount -= biometria.mortality
+                return amount
+
 class Biometria(models.Model):
     ciclo = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data")

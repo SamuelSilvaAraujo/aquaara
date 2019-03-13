@@ -5,129 +5,163 @@
 {% block content %}
 
     <div class="wrapper wrapper-content animated fadeInUp">
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>{{ pond.identification }}</h5>
+
                         <div class="ibox-tools">
                             {% if not pond.cycle %}
-                                <a href="{% url 'cycle_init' pk_property pond.id %}" class="btn btn-white btn-w-m">Iniciar Ciclo</a>
+                                <a href="{% url 'cycle_init' pk_property pond.id %}" class="btn btn-warning btn-outline btn-w-m">Iniciar Ciclo</a>
+                            {% else %}
+                                {#                                {% if pond.cycle.type_system == 'SI' %}#}
+                                {##}
+                                {#                                    <a href="#" class="btn btn-success btn-outline btn-w-m">Calcular Qualidade da Água</a>#}
+                                {##}
+                                {#                                {% endif %}#}
+
+                                {% if not pond.cycle.population %}
+
+                                    <a href="{% url 'population_create' pk_property pond.id %}" class="btn btn-success btn-outline btn-w-m">Realizar Povoamento</a>
+
+                                {% endif %}
+
                             {% endif %}
-                            <a href="#" class="btn btn-success btn-w-m">Calcular Qualidade da Água</a>
-                            <a href="{% url 'pond_update' pk_property pond.id %}" class="btn btn-primary btn-w-m">Editar</a>
-                            <a href="{% url 'pond_delete' pk_property pond.id %}" class="btn btn-danger btn-w-m">Exluir</a>
+
+                            <a href="{% url 'pond_update' pk_property pond.id %}" class="btn btn-info btn-outline btn-w-m">Editar</a>
+                            <a href="{% url 'pond_delete' pk_property pond.id %}" class="btn btn-danger btn-outline btn-w-m">Exluir</a>
                         </div>
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-12">
-                                <dl class="dl-horizontal">
-                                    <dt>Qualidade da água:</dt> <dd><span class="label label-primary">Boa</span></dd>
-                                </dl>
+                            <div class="col-lg-3">
+                                <div class="widget  p-lg text-center">
+                                    <div class="m-b-md">
+                                        <h1 class="m-xs">{{ pond.number_cycles }}</h1>
+                                        <h3 class="font-bold no-margins">
+                                            Ciclos Realizados
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="widget  p-lg text-center">
+                                    <div class="m-b-md">
+                                        <div class="col-xs-12 text-center">
+                                            <h1 class="m-xs">{{ pond.water_flow }}</h1>
+                                            <h3 class="font-bold no-margins">
+                                                Vazão de Agua
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="widget  p-lg text-center">
+                                    <div class="m-b-md">
+                                        <div class="col-xs-12 text-center">
+                                            <h1 class="m-xs">{{ pond.area }} m²</h1>
+                                            <h3 class="font-bold no-margins">
+                                                Área
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="widget  p-lg text-center">
+                                    <div class="m-b-md">
+                                        <div class="col-xs-12 text-center">
+                                            <h1 class="m-xs">{{ pond.volume }} m³</h1>
+                                            <h3 class="font-bold no-margins">
+                                                Volume
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <dl class="dl-horizontal">
-                                    <dt>Ciclos realizados:</dt> <dd>{{ pond.number_cycles }}</dd>
-                                    <dt>Vazão:</dt> <dd>  {{ pond.water_flow }}</dd>
-                                </dl>
+                        {% if pond.cycle %}
+                            <div class="hr-line-dashed"></div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="widget  p-lg text-center">
+                                        <div class="m-b-md">
+                                            <div class="col-xs-12 text-center">
+                                                <h1 class="m-xs">2,0 peixe/m²</h1>
+                                                <h3 class="font-bold no-margins">
+                                                    Densidade de Peixes
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if pond.cycle.population %}
+                                    <div class="col-lg-6">
+                                        <div class="widget  p-lg text-center">
+                                            <div class="m-b-md">
+                                                <div class="col-xs-12 text-center">
+                                                    <h1 class="m-xs">1.5 kg</h1>
+                                                    <h3 class="font-bold no-margins">
+                                                        Arraçoamento
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
-                            <div class="col-lg-3" id="cluster_info">
-                                <dl class="dl-horizontal" >
-                                    <dt>Área:</dt> <dd>{{ pond.area }} m²</dd>
-                                    <dt>Volume:</dt> <dd> 	{{ pond.volume }} m³</dd>
-                                </dl>
+                            <div class="hr-line-dashed"></div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="widget  p-lg text-center">
+                                        <div class="m-b-md">
+                                            <div class="col-xs-12 text-center">
+                                                <h1 class="m-xs">{{ pond.cycle.date_biometria|date:'d M' }}</h1>
+                                                <h3 class="font-bold no-margins">
+                                                    Data da Biometria
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="widget p-lg text-center">
+                                        <div class="m-b-md">
+                                            <div class="col-xs-12 text-center">
+                                                <h1 class="m-xs">{{ pond.cycle.date_despesca|date:'d M' }}</h1>
+                                                <h3 class="font-bold no-margins">
+                                                    Data da Despesca
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            {% if pond.cycle.type_system == 'SI' %}
+                                <div class="hr-line-dashed"></div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="widget navy-bg p-lg text-center">
+                                            <div class="m-b-md">
+                                                <i class="fa fa-tint fa-4x"></i>
+                                                <h3 class="font-bold no-margins">
+                                                    Qualidade da Agua
+                                                </h3>
+                                                <p><small>Aceitavel</small></p>
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-
-        {% if pond.cycle %}
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Densidade de Peixes</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h2 class="font-bold">
-                                390,00
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-                {% if pond.cycle.population %}
-                    <div class="col-lg-4">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h5>Data da Despesca</h5>
-                            </div>
-                            <div class="ibox-content">
-                                <h2 class="font-bold">
-                                    {{ pond.cycle.date_despesca }}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h5>Proxima Biometria</h5>
-                            </div>
-                            <div class="ibox-content">
-                                <h2 class="font-bold">
-                                    {{ pond.cycle.date_biometria }}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-
-                {% else %}
-
-                    <div class="col-lg-4">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h5>Povoamento não realizado</h5>
-                            </div>
-                            <div class="ibox-footer">
-                                <a href="{% url 'population_create' pk_property pond.id %}" class="btn btn-warning">Realizar povoamento</a>
-                            </div>
-                        </div>
-                    </div>
-
-                {% endif %}
-            </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Quantidade de Ração</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h2 class="font-bold">
-                                390,00
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Taxa de Renovação</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h2 class="font-bold">
-                                390,00
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
     </div>
 
 
