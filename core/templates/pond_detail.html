@@ -16,11 +16,6 @@
                             {% if not pond.cycle %}
                                 <a href="{% url 'cycle_init' pk_property pond.id %}" class="btn btn-warning btn-outline btn-w-m">Iniciar Ciclo</a>
                             {% else %}
-                                {#                                {% if pond.cycle.type_system == 'SI' %}#}
-                                {##}
-                                {#                                    <a href="#" class="btn btn-success btn-outline btn-w-m">Calcular Qualidade da Água</a>#}
-                                {##}
-                                {#                                {% endif %}#}
 
                                 {% if not pond.cycle.population %}
 
@@ -50,9 +45,9 @@
                                 <div class="widget  p-lg text-center">
                                     <div class="m-b-md">
                                         <div class="col-xs-12 text-center">
-                                            <h1 class="m-xs">{{ pond.water_flow }}</h1>
+                                            <h1 class="m-xs">{{ pond.water_flow }} L/s</h1>
                                             <h3 class="font-bold no-margins">
-                                                Vazão de Agua
+                                                Vazão de Água
                                             </h3>
                                         </div>
                                     </div>
@@ -74,7 +69,7 @@
                                 <div class="widget  p-lg text-center">
                                     <div class="m-b-md">
                                         <div class="col-xs-12 text-center">
-                                            <h1 class="m-xs">{{ pond.volume }} m³</h1>
+                                            <h1 class="m-xs">{{ pond.volume }} L</h1>
                                             <h3 class="font-bold no-margins">
                                                 Volume
                                             </h3>
@@ -83,85 +78,115 @@
                                 </div>
                             </div>
                         </div>
-                        {% if pond.cycle %}
-                            <div class="hr-line-dashed"></div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="widget  p-lg text-center">
-                                        <div class="m-b-md">
-                                            <div class="col-xs-12 text-center">
-                                                <h1 class="m-xs">2,0 peixe/m²</h1>
-                                                <h3 class="font-bold no-margins">
-                                                    Densidade de Peixes
-                                                </h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% if pond.cycle.population %}
-                                    <div class="col-lg-6">
-                                        <div class="widget  p-lg text-center">
-                                            <div class="m-b-md">
-                                                <div class="col-xs-12 text-center">
-                                                    <h1 class="m-xs">1.5 kg</h1>
-                                                    <h3 class="font-bold no-margins">
-                                                        Arraçoamento
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="hr-line-dashed"></div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="widget  p-lg text-center">
-                                        <div class="m-b-md">
-                                            <div class="col-xs-12 text-center">
-                                                <h1 class="m-xs">{{ pond.cycle.date_biometria|date:'d M' }}</h1>
-                                                <h3 class="font-bold no-margins">
-                                                    Data da Biometria
-                                                </h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="widget p-lg text-center">
-                                        <div class="m-b-md">
-                                            <div class="col-xs-12 text-center">
-                                                <h1 class="m-xs">{{ pond.cycle.date_despesca|date:'d M' }}</h1>
-                                                <h3 class="font-bold no-margins">
-                                                    Data da Despesca
-                                                </h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% if pond.cycle.type_system == 'SI' %}
-                                <div class="hr-line-dashed"></div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="widget navy-bg p-lg text-center">
-                                            <div class="m-b-md">
-                                                <i class="fa fa-tint fa-4x"></i>
-                                                <h3 class="font-bold no-margins">
-                                                    Qualidade da Agua
-                                                </h3>
-                                                <p><small>Aceitavel</small></p>
-                                                <p></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
+
+        {% if pond.cycle %}
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="widget p-lg text-center">
+                        <div class="m-b-md">
+                            <div class="col-xs-12 text-center">
+                                <h1 class="m-xs">{{ pond.cycle.density }} peixe/m²</h1>
+                                <h3 class="font-bold no-margins">
+                                    Densidade de Peixes
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="widget p-lg text-center">
+                        <div class="m-b-md">
+                            <div class="col-xs-12 text-center">
+                                <h1 class="m-xs">{{ pond.cycle.amount_fish }} peixes</h1>
+                                <h3 class="font-bold no-margins">
+                                    Quantidade de Peixes
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {#            {% if pond.cycle.type_system == 'SI' %}#}
+            {#                <a class="row">#}
+            {#                    <div class="col-lg-6">#}
+            {#                        <div class="widget navy-bg p-lg text-center">#}
+            {#                            <div class="m-b-md">#}
+            {#                                <i class="fa fa-tint fa-4x"></i>#}
+            {#                                <h3 class="font-bold no-margins">#}
+            {#                                    Qualidade da Agua#}
+            {#                                </h3>#}
+            {#                                <p><small>Aceitavel</small></p>#}
+            {#                                <p>Click para calcular</p>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </a>#}
+            {#            {% endif %}#}
+            {##}
+            {#            <div class="row">#}
+            {#                <div class="col-lg-6">#}
+            {#                    <div class="widget  p-lg text-center">#}
+            {#                        <div class="m-b-md">#}
+            {#                            <div class="col-xs-12 text-center">#}
+            {#                                <h1 class="m-xs">2,0 peixe/m²</h1>#}
+            {#                                <h3 class="font-bold no-margins">#}
+            {#                                    Densidade de Peixes#}
+            {#                                </h3>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#                {% if pond.cycle.population %}#}
+            {#                    <div class="col-lg-6">#}
+            {#                        <div class="widget  p-lg text-center">#}
+            {#                            <div class="m-b-md">#}
+            {#                                <div class="col-xs-12 text-center">#}
+            {#                                    <h1 class="m-xs">1.5 kg</h1>#}
+            {#                                    <h3 class="font-bold no-margins">#}
+            {#                                        Arraçoamento#}
+            {#                                    </h3>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                {% endif %}#}
+            {#            </div>#}
+            {#            <div class="hr-line-dashed"></div>#}
+            {#            <div class="row">#}
+            {#                <div class="col-lg-6">#}
+            {#                    <div class="widget  p-lg text-center">#}
+            {#                        <div class="m-b-md">#}
+            {#                            <div class="col-xs-12 text-center">#}
+            {#                                <h1 class="m-xs">{{ pond.cycle.date_biometria|date:'d M' }}</h1>#}
+            {#                                <h3 class="font-bold no-margins">#}
+            {#                                    Data da Biometria#}
+            {#                                </h3>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#                <div class="col-lg-6">#}
+            {#                    <div class="widget p-lg text-center">#}
+            {#                        <div class="m-b-md">#}
+            {#                            <div class="col-xs-12 text-center">#}
+            {#                                <h1 class="m-xs">{{ pond.cycle.date_despesca|date:'d M' }}</h1>#}
+            {#                                <h3 class="font-bold no-margins">#}
+            {#                                    Data da Despesca#}
+            {#                                </h3>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#            </div>#}
+
+        {% endif %}
+
     </div>
 
 

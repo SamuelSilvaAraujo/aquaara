@@ -6,7 +6,7 @@ class PropertyForm(forms.ModelForm):
         model = Property
         fields = ['name', ]
         widgets = {
-            'name': forms.TextInput(attrs={'class':'form-control'})
+            'name': forms.TextInput(attrs={'class':'form-control', 'id': 'name'})
         }
 
 class AddressForm(forms.ModelForm):
@@ -14,11 +14,11 @@ class AddressForm(forms.ModelForm):
         model = Address
         fields = '__all__'
         widgets = {
-            'street': forms.TextInput(attrs={'class': 'form-control'}),
-            'number': forms.NumberInput(attrs={'class': 'form-control'}),
-            'district': forms.TextInput(attrs={'class': 'form-control'}),
-            'city': forms.TextInput(attrs={'class': 'form-control'}),
-            'state': forms.Select(attrs={'class': 'form-control m-b'}),
+            'street': forms.TextInput(attrs={'class': 'form-control', 'id': 'street'}),
+            'number': forms.NumberInput(attrs={'class': 'form-control', 'id': 'number'}),
+            'district': forms.TextInput(attrs={'class': 'form-control', 'id': 'district'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'id': 'city'}),
+            'state': forms.Select(attrs={'class': 'form-control m-b', 'id': 'state'}),
         }
 
 class PondForm(forms.ModelForm):
@@ -26,28 +26,27 @@ class PondForm(forms.ModelForm):
         model = Pond
         fields = ['identification', 'water_flow', 'width', 'length', ]
         widgets = {
-            'identification': forms.TextInput(attrs={'class': 'form-control'}),
-            'water_flow': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Vazão de Água'}),
-            'width': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Largura'}),
-            'length': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Comprimento'}),
+            'identification': forms.TextInput(attrs={'class': 'form-control', 'id': 'identification'}),
+            'water_flow': forms.NumberInput(attrs={'class': 'form-control', 'id': 'vazao'}),
+            'width': forms.NumberInput(attrs={'class': 'form-control', 'id': 'largura'}),
+            'length': forms.NumberInput(attrs={'class': 'form-control', 'id': 'comprimento'}),
         }
 
 class CycleForm(forms.ModelForm):
     class Meta:
         model = Cycle
-        fields = ['type_system', 'middleweight_despesca', ]
+        fields = ['system', 'middleweight_despesca', 'type_intensive', ]
         widgets = {
-            'type_system': forms.Select(attrs={'class': 'form-control'}),
-            'middleweight_despesca': forms.NumberInput(attrs={'class': 'form-control'})
+            'system': forms.Select(attrs={'class': 'form-control'}),
+            'middleweight_despesca': forms.Select(attrs={'class': 'form-control'}),
+            'type_intensive': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class PopulationForm(forms.ModelForm):
     class Meta:
         model = Population
-        fields = ['date', 'middleweight', 'amount', 'age', ]
+        fields = ['date', 'middleweight', ]
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
             'middleweight': forms.NumberInput(attrs={'class': 'form-control'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
-            'age': forms.NumberInput(attrs={'class': 'form-control'})
         }

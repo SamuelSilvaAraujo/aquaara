@@ -65,7 +65,7 @@ class Pond(models.Model):
         return self.identification
 
     def volume(self):
-        return self.width*self.length*1
+        return (self.width*self.length*1)*1000
 
     def area(self):
         return self.width*self.length
@@ -77,28 +77,60 @@ class Pond(models.Model):
         return self.cycle_set.filter(finalized=False).first()
 
 class Population(models.Model):
-    date = models.DateField("Data")
+    date = models.DateField("Data", default=datetime.now)
     middleweight = models.FloatField("Peso Medio")
-    amount = models.IntegerField("Quantidade de peixes")
-    age = models.FloatField("Idade do peixe")
 
 class Despesca(models.Model):
     date = models.DateField("Data")
     final_middleweight = models.FloatField("Peso Medio Final")
-    final_amount = models.IntegerField("Quantidade Final de peixes")
 
 class Cycle(models.Model):
-    TYPE_SYSTEM_CHOICES = [
+    SYSTEM_CHOICES = [
         ('IN', 'Intensivo'),
         ('SI', 'Semi-Intensivo')
     ]
 
+    TYPE_INTENSIVE = [
+        ('RC', 'Renovação Constante'),
+        ('RCA', 'Renovação Constante + Aeradores'),
+        ('ABAA', 'Água de boa qualidade + Alta renovação + Aeradores'),
+    ]
+
+    MIDDLEWEIGHT = [
+        (0.500, '0.500'),
+        (0.600, '0.600'),
+        (0.700, '0.700'),
+        (0.800, '0.800'),
+        (0.900, '0.900'),
+        (1.000, '1.000'),
+        (1.100, '1.100'),
+    ]
+
+    densidade = {
+        'SI': {0.500: 2.0, 0.600: 1.67, 0.700: 1.45, 0.800: 1.25, 0.900: 1.12, 1.000: 1.00, 1.100: 0.91},
+        'IN': {
+            'RC': {0.500: 4.0, 0.600: 3.34, 0.700: 2.86, 0.800: 2.50, 0.900: 2.23, 1.000: 2.00, 1.100: 1.82},
+            'RCA': {0.500: 6.0, 0.600: 5.0, 0.700: 4.30, 0.800: 3.75, 0.900: 3.34, 1.000: 3.00, 1.100: 2.73},
+            'ABAA': {0.500: 8.0, 0.600: 6.67, 0.700: 5.71, 0.800: 5.00, 0.900: 4.45, 1.000: 4.00, 1.100: 3.64},
+        }
+    }
+
     pond = models.ForeignKey(Pond, on_delete=models.CASCADE)
     population = models.ForeignKey(Population, on_delete=models.CASCADE, null=True, blank=True)
     despesca = models.ForeignKey(Despesca, on_delete=models.CASCADE, null=True, blank=True)
-    type_system = models.CharField("Tipo de Sistema", max_length=2, choices=TYPE_SYSTEM_CHOICES)
-    middleweight_despesca = models.FloatField("Peso Medio Esperado na Despeca")
+    system = models.CharField("Sistema", max_length=2, choices=SYSTEM_CHOICES)
+    type_intensive = models.CharField("Tipo de sistema intensivo", max_length=4, choices=TYPE_INTENSIVE, null=True, blank=True)
+    middleweight_despesca = models.FloatField("Peso Medio estimado para a Despeca", choices=MIDDLEWEIGHT)
     finalized = models.BooleanField(default=False)
+
+    def density(self):
+        if self.system == 'SI':
+            return self.densidade['SI'][self.middleweight_despesca]
+        elif self.system == 'IN':
+            return self.densidade['IN'][self.type_intensive][self.middleweight_despesca]
+
+    def amount_fish(self):
+        return self.density()*self.pond.area()
 
     def date_despesca(self):
         if not self.population:
@@ -117,19 +149,19 @@ class Cycle(models.Model):
             else:
                 return biometrias[0].date + timedelta(days=15)
 
-    def amount_fish(self):
-        if self.population:
-            amount = self.population.amount
-            if self.biometria_set.count() == 0:
-                return amount
-            else:
-                biometrias = self.biometria_set.all()
-                for biometria in biometrias:
-                    amount -= biometria.mortality
-                return amount
+class Mortality(models.Model):
+    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
+    date = models.DateField("Data", default=datetime.now)
+    amount = models.IntegerField("Quantidade")
 
 class Biometria(models.Model):
-    ciclo = models.ForeignKey(Cycle, on_delete=models.CASCADE)
+    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data")
     middleweight = models.FloatField("Peso Medio")
-    mortality = models.IntegerField("Mortalidade")
+
+class WaterQuality(models.Model):
+    date = models.DateField("Data", default=datetime.now)
+    transparency = models.FloatField("Transparência")
+    temperature = models.FloatField("Temperatura")
+    ph = models.FloatField("PH")
+    oxygen = models.FloatField("Oxigênio")

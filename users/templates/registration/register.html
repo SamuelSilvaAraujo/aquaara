@@ -52,6 +52,7 @@
 <script src="{% static 'js/popper.min.js' %}"></script>
 
 <script src="{% static 'js/plugins/jasny/jasny-bootstrap.min.js' %}"></script>
+<script src="{% static 'js/plugins/validate/jquery.validate.min.js' %}"></script>
 
 <script>
 
@@ -60,6 +61,27 @@
             var value = $('#cpf').val().replace(/[.\-]/g,'');
             $('#cpf').val(value);
         });
+
+        $('#formId').validate({
+            rules:{
+
+            },
+            messages: {
+                cpf: {
+                    required: "É necessário informar seu cpf"
+                },
+                name: {
+                    required: "Por favor, informe seu nome"
+                },
+                password1: {
+                    required: "Este campo &eacute; requerido."
+                },
+                password2: {
+                    required: "Este campo &eacute; requerido."
+                }
+            }
+        })
+
     })
 
 </script>

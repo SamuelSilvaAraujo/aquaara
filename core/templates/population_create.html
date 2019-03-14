@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Povoamento{% endblock %}
+
+{% block header %}
+
+    <link href="{% static 'css/plugins/datapicker/datepicker3.css' %}" rel="stylesheet">
+
+{% endblock %}
 
 {% block content %}
 
@@ -14,40 +21,24 @@
                     <form method="post" class="form-horizontal">
                         {% csrf_token %}
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">{{ form.date.label }}</label>
-
-                            <div class="col-sm-10">{{ form.date }}</div>
+                        <div class="form-group col-md-12" id="data_1">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <label class="font-normal">{{ form.date.label }}</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    {{ form.date }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <label class="font-normal">{{ form.middleweight.label }}</label>
+                                {{ form.middleweight }}
+                            </div>
                         </div>
 
-                        <div class="hr-line-dashed"></div>
-
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">{{ form.middleweight.label }}</label>
-
-                            <div class="col-sm-10">{{ form.middleweight }}</div>
-                        </div>
-
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">{{ form.amount.label }}</label>
-
-                            <div class="col-sm-10">{{ form.amount }}</div>
-                        </div>
-
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">{{ form.age.label }}</label>
-
-                            <div class="col-sm-10">{{ form.age }}</div>
-                        </div>
-
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group">
-                            <div class="col-sm-4 col-sm-offset-2">
+                            <div class="col-sm-4 col-sm-offset-1">
                                 <a class="btn btn-white" href="{% url 'pond_detail' pk_property pk_pond %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
@@ -57,5 +48,29 @@
             </div>
         </div>
     </div>
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#data_1 .input-group.date').datepicker({
+                format: "dd/mm/yyyy",
+                language: 'pt-BR',
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            });
+
+        });
+
+    </script>
 
 {% endblock %}
