@@ -71,7 +71,7 @@ class Pond(models.Model):
         return self.width*self.length
 
     def number_cycles(self):
-        return self.cycle_set.count()
+        return self.cycle_set.filter(finalized=True).count()
 
     def cycle(self):
         return self.cycle_set.filter(finalized=False).first()
@@ -115,6 +115,7 @@ class Cycle(models.Model):
         }
     }
 
+    date = models.DateField(auto_now_add=True)
     pond = models.ForeignKey(Pond, on_delete=models.CASCADE)
     population = models.ForeignKey(Population, on_delete=models.CASCADE, null=True, blank=True)
     despesca = models.ForeignKey(Despesca, on_delete=models.CASCADE, null=True, blank=True)
@@ -123,6 +124,9 @@ class Cycle(models.Model):
     middleweight_despesca = models.FloatField("Peso Medio estimado para a Despeca", choices=MIDDLEWEIGHT)
     finalized = models.BooleanField(default=False)
 
+    def __str__(self):
+        return "{} - {}".format(self.pond.identification, self.date)
+
     def density(self):
         if self.system == 'SI':
             return self.densidade['SI'][self.middleweight_despesca]
@@ -130,7 +134,140 @@ class Cycle(models.Model):
             return self.densidade['IN'][self.type_intensive][self.middleweight_despesca]
 
     def amount_fish(self):
-        return self.density()*self.pond.area()
+        amount = self.density()*self.pond.area()
+        for mortality in self.mortality_set.all():
+            amount -= mortality.amount
+        return amount
+
+    def peso_medio(self):
+        if self.population:
+            if self.biometria_set.count() > 0:
+                biometria = self.biometria_set.all().order_by('date')[0]
+                return biometria.middleweight
+            else:
+                return self.population.middleweight
+        else:
+            return None
+
+    def biomassa(self):
+        if self.population:
+            return self.peso_medio() * self.amount_fish()
+        else:
+            return None
+
+    def taxa_alimentar(self):
+        peso_medio = self.peso_medio()
+        if self.system == 'SI':
+            if 1 <= peso_medio <= 30:
+                return 0.10
+            elif 31 <= peso_medio <= 300:
+                return 0.5
+            elif 301 <= peso_medio <= 450:
+                return 0.4
+            elif 451 <= peso_medio <= 600:
+                return 0.3
+            elif 601 <= peso_medio <= 800:
+                return 0.2
+            elif 801 <= peso_medio <= 1100:
+                return 0.1
+        elif self.system == 'IN':
+            if 1 <= peso_medio <= 30:
+                return 0.10
+            elif 31 <= peso_medio <= 100:
+                return 0.7
+            elif 101 <= peso_medio <= 155:
+                return 0.5
+            elif 156 <= peso_medio <= 450:
+                return 0.4
+            elif 451 <= peso_medio <= 600:
+                return 0.3
+            elif 601 <= peso_medio <= 800:
+                return 0.2
+            elif 801 <= peso_medio <= 1100:
+                return 0.1
+
+    def number_refeicoes(self):
+        peso_medio = self.peso_medio()
+        if 1 <= peso_medio <= 300:
+            return 4
+        elif 301 <= peso_medio <= 600:
+            return 3
+        elif 601 <= peso_medio <= 1100:
+            return 2
+
+    def horario_refeicoes(self):
+        number_refeicoes = self.number_refeicoes()
+        if number_refeicoes == 4:
+            return "07:00, 11:00, 14:00, 17:00"
+        elif number_refeicoes == 3:
+            return "07:00, 12:00, 17:00"
+
+    def arracoamento(self):
+        return (self.amount_fish()*self.peso_medio()*self.taxa_alimentar())/100
+
+    def proteina_racao(self):
+        peso_medio = self.peso_medio()
+        if self.system == 'SI':
+            if 1 <= peso_medio <= 100:
+                return "36"
+            elif 101 <= peso_medio <= 155:
+                return "32 - 36"
+            elif 156 <= peso_medio <= 300:
+                return "32"
+            elif 301 <= peso_medio <= 450:
+                return "28 - 32"
+            elif 451 <= peso_medio <= 1100:
+                return "28"
+        elif self.system == 'IN':
+            if 1 <= peso_medio <= 30:
+                return "40"
+            elif 31 <= peso_medio <= 100:
+                return "36"
+            elif 101 <= peso_medio <= 155:
+                return "32 - 36"
+            elif 156 <= peso_medio <= 300:
+                return "32"
+            elif 301 <= peso_medio <= 450:
+                return "28 - 32"
+            elif 451 <= peso_medio <= 1100:
+                return "28"
+
+    def diametro_pelete(self):
+        peso_medio = self.peso_medio()
+        if self.system == 'SI':
+            if 1 <= peso_medio <= 30:
+                return "1 - 2"
+            elif 31 <= peso_medio <= 100:
+                return "4"
+            elif 101 <= peso_medio <= 155:
+                return "4 - 6"
+            elif 156 <= peso_medio <= 300:
+                return "6"
+            elif 301 <= peso_medio <= 450:
+                return "6 - 8"
+            elif 451 <= peso_medio <= 600:
+                return "8"
+            elif 601 <= peso_medio <= 800:
+                return "8 - 10"
+            elif 801 <= peso_medio <= 1100:
+                return "10"
+        elif self.system == 'IN':
+            if 1 <= peso_medio <= 30:
+                return "1 - 2"
+            elif 31 <= peso_medio <= 100:
+                return "2 - 4"
+            elif 101 <= peso_medio <= 155:
+                return "4 - 6"
+            elif 156 <= peso_medio <= 300:
+                return "6"
+            elif 301 <= peso_medio <= 450:
+                return "6 - 8"
+            elif 451 <= peso_medio <= 600:
+                return "8"
+            elif 601 <= peso_medio <= 800:
+                return "8 - 10"
+            elif 801 <= peso_medio <= 1100:
+                return "10"
 
     def date_despesca(self):
         if not self.population:
@@ -143,11 +280,11 @@ class Cycle(models.Model):
         if not self.population:
             return None
         else:
-            biometrias = self.biometria_set.all().order_by('date')
-            if not len(biometrias) > 0:
+            if not self.biometria_set.count() > 0:
                 return self.population.date + timedelta(days=15)
             else:
-                return biometrias[0].date + timedelta(days=15)
+                biometria = self.biometria_set.all().order_by('date')[0]
+                return biometria.date + timedelta(days=15)
 
 class Mortality(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
@@ -158,6 +295,15 @@ class Biometria(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data")
     middleweight = models.FloatField("Peso Medio")
+
+    def quant_peixe(self):
+        amount_fish = self.cycle.amount_fish()
+        if amount_fish <= 400:
+            return 0.10
+        elif 401 <= amount_fish <= 700:
+            return 0.7
+        elif 701 <= amount_fish <= 2000:
+            return 0.5
 
 class WaterQuality(models.Model):
     date = models.DateField("Data", default=datetime.now)

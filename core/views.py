@@ -160,3 +160,23 @@ class PopulationCreateView(LoginRequiredMixin, CreateView):
         context["pk_property"] = self.kwargs["pk_property"]
         context["pk_pond"] = self.kwargs["pk_pond"]
         return context
+
+class MortalityCreateView(LoginRequiredMixin, CreateView):
+    model = Mortality
+    form_class = MortalityForm
+    template_name = 'mortality_create.html'
+
+    def form_valid(self, form):
+        pk_pond = self.kwargs["pk_pond"]
+        pk_property = self.kwargs["pk_property"]
+        pond_obj = Pond.objects.get(pk=pk_pond)
+        obj = form.save(commit=False)
+        obj.cycle = pond_obj.cycle()
+        obj.save()
+        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
+
+    def get_context_data(self, **kwargs):
+        context = super(MortalityCreateView, self).get_context_data(**kwargs)
+        context["pk_property"] = self.kwargs["pk_property"]
+        context["pk_pond"] = self.kwargs["pk_pond"]
+        return context
