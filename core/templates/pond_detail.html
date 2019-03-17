@@ -8,105 +8,131 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <h2>{{ pond.identification }}</h2>
-                <ul class="list-group clear-list m-t">
-                    <li class="list-group-item fist-item">
-                                <span class="pull-right">
-                                    {{ pond.number_cycles }}
-                                </span>
-                        Ciclos Realizados
-                    </li>
-                    <li class="list-group-item">
-                                <span class="pull-right">
-                                    {{ pond.water_flow }} L/s
-                                </span>
-                        Vazão de Água
-                    </li>
-                    <li class="list-group-item">
-                                <span class="pull-right">
-                                    {{ pond.area }} m²
-                                </span>
-                        Área do viveiro
-                    </li>
-                    <li class="list-group-item">
-                                <span class="pull-right">
-                                    {{ pond.volume }} L
-                                </span>
-                        Volume de Água
-                    </li>
-                </ul>
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ pond.identification }}</h5>
+
+                        <div class="ibox-tools">
+                            {% if not pond.cycle %}
+                                <a href="{% url 'cycle_init' pk_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Novo Ciclo</a>
+                            {% else %}
+                                {% if not pond.cycle.population %}
+                                    <a href="{% url 'population' pk_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Povoamento</a>
+                                {% endif %}
+                                <a href="{% url 'mortality' pk_property pond.id %}" class="btn btn-info btn-outline btn-xs">Mortalidade</a>
+
+                            {% endif %}
+                            <a href="{% url 'pond_update' pk_property pond.id %}" class="btn btn-outline btn-success btn-xs">Editar</a>
+                            <a href="{% url 'pond_delete' pk_property pond.id %}" class="btn btn-outline btn-danger btn-xs">Excluir</a>
+                        </div>
+
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <small class="stats-label">Ciclos Realizados</small>
+                                <h4>{{ pond.number_cycles }}</h4>
+                            </div>
+
+                            <div class="col-md-3">
+                                <small class="stats-label">Vazão de Água</small>
+                                <h4>{{ pond.water_flow }} L/s</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="stats-label">Área do viveiro</small>
+                                <h4> {{ pond.area }} m²</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="stats-label"> Volume de Água</small>
+                                <h4> {{ pond.volume }} L</h4>
+                            </div>
+                        </div>
+                    </div>
+                    {% if not pond.cycle  %}
+
+                        {% if pond.allCycle.count > 0 %}
+
+                            <div class="ibox-content">
+                                <table class="footable table table-stripped toggle-arrow-tiny">
+                                    <thead>
+                                    <tr>
+                                        <th>Inicio</th>
+                                        <th>Sistema</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for cycle in pond.allCycle %}
+
+                                        <tr>
+                                            <td>{{ cycle.date }}</td>
+                                            <td>{{ cycle.system }}</td>
+                                        </tr>
+
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <div class="ibox-content">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <small class="stats-label">Densidade</small>
+                                    <h4>{{ pond.cycle.density }} peixe/m²</h4>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="stats-label">Quantidade de Peixes</small>
+                                    <h4>{{ pond.cycle.amount_fish }}</h4>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="stats-label">Sistema</small>
+                                    <h4>{{ pond.cycle.get_system_display }}</h4>
+                                    {% if pond.cycle.system == 'IN' %}
+                                        <h5>{{ pond.cycle.get_type_intensive_display }}</h5>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="stats-label">Peso Médio na despesca</small>
+                                    <h4> {{ pond.cycle.middleweight_despesca }} kg</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if pond.cycle.population %}
+
+                            <div class="ibox-content">
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <small class="stats-label">Data Biometria</small>
+                                        <h4>{{ pond.cycle.date_biometria }}</h4>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="stats-label">Biomassa</small>
+                                        <h4>{{ pond.cycle.biomassa }}</h4>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="stats-label">Arraçoamento</small>
+                                        <h4>{{ pond.cycle.arracoamento }} g</h4>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="stats-label">Peso Médio na despesca</small>
+                                        <h4> {{ pond.cycle.middleweight_despesca }} kg</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endif %}
+
+                    {% endif %}
+                </div>
             </div>
         </div>
-
-        {% if pond.cycle %}
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Densidade de Peixes</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">{{ pond.cycle.density }} peixe/m²</h1>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Quantidade de Peixes</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">{{ pond.cycle.amount_fish }} peixes</h1>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Sistema</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">{{ pond.cycle.get_system_display }}</h1>
-                            {% if pond.cycle.system == 'IN' %}
-                                <small>{{ pond.cycle.get_type_intensive_display }}</small>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Peso Medio na despesca</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">{{ pond.cycle.middleweight_despesca }} kg</h1>
-                            <small>Estimado</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-
-        {#    <div class="ibox-tools">#}
-        {#                            {% if not pond.cycle %}#}
-        {#                                <a href="{% url 'cycle_init' pk_property pond.id %}" class="btn btn-warning btn-outline btn-w-m">Iniciar Ciclo</a>#}
-        {#                            {% else %}#}
-        {##}
-        {#                                {% if not pond.cycle.population %}#}
-        {##}
-        {#                                    <a href="{% url 'population' pk_property pond.id %}" class="btn btn-success btn-outline btn-w-m">Realizar Povoamento</a>#}
-        {##}
-        {#                                {% endif %}#}
-        {##}
-        {#                                <a href="{% url 'mortality' pk_property pond.id %}" class="btn btn-info btn-outline btn-w-m">Mortalidade</a>#}
-        {##}
-        {#                            {% endif %}#}
-        {##}
-        {#                            <a href="{% url 'pond_update' pk_property pond.id %}" class="btn btn-info btn-outline btn-w-m">Editar</a>#}
-        {#                            <a href="{% url 'pond_delete' pk_property pond.id %}" class="btn btn-danger btn-outline btn-w-m">Exluir</a>#}
-        {#                        </div>#}
-
-
     </div>
 
 

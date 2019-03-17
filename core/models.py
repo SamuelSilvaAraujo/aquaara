@@ -76,6 +76,9 @@ class Pond(models.Model):
     def cycle(self):
         return self.cycle_set.filter(finalized=False).first()
 
+    def allCycle(self):
+        return self.cycle_set.filter(finalized=True)
+
 class Population(models.Model):
     date = models.DateField("Data", default=datetime.now)
     middleweight = models.FloatField("Peso Medio")
