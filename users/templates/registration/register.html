@@ -57,12 +57,15 @@
 <script>
 
     $(document).ready(function () {
-        $('#formId').submit(function () {
-            var value = $('#cpf').val().replace(/[.\-]/g,'');
-            $('#cpf').val(value);
+        var form = $('#formId');
+
+        form.submit(function () {
+            var cpf = $('#cpf'),
+                value = cpf.val().replace(/[.\-]/g,'');
+            cpf.val(value);
         });
 
-        $('#formId').validate({
+        form.validate({
             rules:{
 
             },

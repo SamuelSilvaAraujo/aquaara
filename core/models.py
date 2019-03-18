@@ -109,7 +109,7 @@ class Cycle(models.Model):
         (1.100, '1.100'),
     ]
 
-    densidade = {
+    densidade_values = {
         'SI': {0.500: 2.0, 0.600: 1.67, 0.700: 1.45, 0.800: 1.25, 0.900: 1.12, 1.000: 1.00, 1.100: 0.91},
         'IN': {
             'RC': {0.500: 4.0, 0.600: 3.34, 0.700: 2.86, 0.800: 2.50, 0.900: 2.23, 1.000: 2.00, 1.100: 1.82},
@@ -132,9 +132,9 @@ class Cycle(models.Model):
 
     def density(self):
         if self.system == 'SI':
-            return self.densidade['SI'][self.middleweight_despesca]
+            return self.densidade_values['SI'][self.middleweight_despesca]
         elif self.system == 'IN':
-            return self.densidade['IN'][self.type_intensive][self.middleweight_despesca]
+            return self.densidade_values['IN'][self.type_intensive][self.middleweight_despesca]
 
     def amount_fish(self):
         amount = self.density()*self.pond.area()
@@ -160,34 +160,35 @@ class Cycle(models.Model):
 
     def taxa_alimentar(self):
         peso_medio = self.peso_medio()
+        biomassa = self.biomassa()
         if self.system == 'SI':
             if 1 <= peso_medio <= 30:
-                return 0.10
+                return biomassa*0.10
             elif 31 <= peso_medio <= 300:
-                return 0.5
+                return biomassa*0.05
             elif 301 <= peso_medio <= 450:
-                return 0.4
+                return biomassa*0.04
             elif 451 <= peso_medio <= 600:
-                return 0.3
+                return biomassa*0.03
             elif 601 <= peso_medio <= 800:
-                return 0.2
+                return biomassa*0.02
             elif 801 <= peso_medio <= 1100:
-                return 0.1
+                return biomassa*0.01
         elif self.system == 'IN':
             if 1 <= peso_medio <= 30:
-                return 0.10
+                return biomassa * 0.10
             elif 31 <= peso_medio <= 100:
-                return 0.7
+                return biomassa*0.07
             elif 101 <= peso_medio <= 155:
-                return 0.5
+                return biomassa*0.05
             elif 156 <= peso_medio <= 450:
-                return 0.4
+                return biomassa*0.04
             elif 451 <= peso_medio <= 600:
-                return 0.3
+                return biomassa*0.03
             elif 601 <= peso_medio <= 800:
-                return 0.2
+                return biomassa*0.02
             elif 801 <= peso_medio <= 1100:
-                return 0.1
+                return biomassa*0.01
 
     def number_refeicoes(self):
         peso_medio = self.peso_medio()
@@ -206,7 +207,8 @@ class Cycle(models.Model):
             return "07:00, 12:00, 17:00"
 
     def arracoamento(self):
-        return (self.amount_fish()*self.peso_medio()*self.taxa_alimentar())/100
+        total = (self.amount_fish()*self.peso_medio()*self.taxa_alimentar())/100
+        return total/self.number_refeicoes()
 
     def proteina_racao(self):
         peso_medio = self.peso_medio()
@@ -271,6 +273,15 @@ class Cycle(models.Model):
                 return "8 - 10"
             elif 801 <= peso_medio <= 1100:
                 return "10"
+
+    def amount_fish_biometria(self):
+        amount = self.amount_fish()
+        if amount <= 400:
+            return amount*0.10
+        elif 401 <= amount <= 700:
+            return amount*0.07
+        elif 701 <= amount <= 2000:
+            return amount*0.5
 
     def date_despesca(self):
         if not self.population:

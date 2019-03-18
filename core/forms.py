@@ -37,9 +37,9 @@ class CycleForm(forms.ModelForm):
         model = Cycle
         fields = ['system', 'middleweight_despesca', 'type_intensive', ]
         widgets = {
-            'system': forms.Select(attrs={'class': 'form-control'}),
-            'middleweight_despesca': forms.Select(attrs={'class': 'form-control'}),
-            'type_intensive': forms.Select(attrs={'class': 'form-control'}),
+            'system': forms.Select(attrs={'class': 'form-control', 'id': 'system'}),
+            'middleweight_despesca': forms.Select(attrs={'class': 'form-control', 'id': 'middleweight_despesca'}),
+            'type_intensive': forms.Select(attrs={'class': 'form-control', 'id': 'type_intensive'}),
         }
 
 class PopulationForm(forms.ModelForm):

@@ -18,10 +18,17 @@
                             {% else %}
                                 {% if not pond.cycle.population %}
                                     <a href="{% url 'population' pk_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Povoamento</a>
+
+                                {% else %}
+
+                                    <a href="{% url 'mortality' pk_property pond.id %}" class="btn btn-info btn-outline btn-xs">Mortalidade</a>
+
                                 {% endif %}
-                                <a href="{% url 'mortality' pk_property pond.id %}" class="btn btn-info btn-outline btn-xs">Mortalidade</a>
 
                             {% endif %}
+
+                            <a href="#" class="btn btn-outline btn-info btn-xs">Todos os Ciclos</a>
+
                             <a href="{% url 'pond_update' pk_property pond.id %}" class="btn btn-outline btn-success btn-xs">Editar</a>
                             <a href="{% url 'pond_delete' pk_property pond.id %}" class="btn btn-outline btn-danger btn-xs">Excluir</a>
                         </div>
@@ -30,74 +37,46 @@
                     <div class="ibox-content">
                         <div class="row">
                             <div class="col-md-3">
-                                <small class="stats-label">Ciclos Realizados</small>
+                                <p class="stats-label">Ciclos Realizados</p>
                                 <h4>{{ pond.number_cycles }}</h4>
                             </div>
 
                             <div class="col-md-3">
-                                <small class="stats-label">Vazão de Água</small>
+                                <p class="stats-label">Vazão de Água</p>
                                 <h4>{{ pond.water_flow }} L/s</h4>
                             </div>
                             <div class="col-md-3">
-                                <small class="stats-label">Área do viveiro</small>
+                                <p class="stats-label">Área do viveiro</p>
                                 <h4> {{ pond.area }} m²</h4>
                             </div>
                             <div class="col-md-3">
-                                <small class="stats-label"> Volume de Água</small>
+                                <p class="stats-label"> Volume de Água</p>
                                 <h4> {{ pond.volume }} L</h4>
                             </div>
                         </div>
                     </div>
-                    {% if not pond.cycle  %}
-
-                        {% if pond.allCycle.count > 0 %}
-
-                            <div class="ibox-content">
-                                <table class="footable table table-stripped toggle-arrow-tiny">
-                                    <thead>
-                                    <tr>
-                                        <th>Inicio</th>
-                                        <th>Sistema</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    {% for cycle in pond.allCycle %}
-
-                                        <tr>
-                                            <td>{{ cycle.date }}</td>
-                                            <td>{{ cycle.system }}</td>
-                                        </tr>
-
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        {% endif %}
-
-                    {% else %}
+                    {% if  pond.cycle  %}
 
                         <div class="ibox-content">
 
                             <div class="row">
                                 <div class="col-md-3">
-                                    <small class="stats-label">Densidade</small>
+                                    <p class="stats-label">Densidade</p>
                                     <h4>{{ pond.cycle.density }} peixe/m²</h4>
                                 </div>
                                 <div class="col-md-3">
-                                    <small class="stats-label">Quantidade de Peixes</small>
+                                    <p class="stats-label">Quantidade de Peixes</p>
                                     <h4>{{ pond.cycle.amount_fish }}</h4>
                                 </div>
                                 <div class="col-md-3">
-                                    <small class="stats-label">Sistema</small>
+                                    <p class="stats-label">Sistema</p>
                                     <h4>{{ pond.cycle.get_system_display }}</h4>
                                     {% if pond.cycle.system == 'IN' %}
                                         <h5>{{ pond.cycle.get_type_intensive_display }}</h5>
                                     {% endif %}
                                 </div>
                                 <div class="col-md-3">
-                                    <small class="stats-label">Peso Médio na despesca</small>
+                                    <p class="stats-label">Peso Médio na despesca</p>
                                     <h4> {{ pond.cycle.middleweight_despesca }} kg</h4>
                                 </div>
                             </div>
@@ -106,23 +85,47 @@
                         {% if pond.cycle.population %}
 
                             <div class="ibox-content">
-
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <small class="stats-label">Data Biometria</small>
+                                        <p class="stats-label">Data Biometria</p>
                                         <h4>{{ pond.cycle.date_biometria }}</h4>
                                     </div>
                                     <div class="col-md-3">
-                                        <small class="stats-label">Biomassa</small>
+                                        <p class="stats-label">Quantidade de peixes na biometria</p>
+                                        <h4>{{ pond.cycle.amount_fish_biometria }}</h4>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p class="stats-label">Biomassa</p>
                                         <h4>{{ pond.cycle.biomassa }}</h4>
                                     </div>
                                     <div class="col-md-3">
-                                        <small class="stats-label">Arraçoamento</small>
-                                        <h4>{{ pond.cycle.arracoamento }} g</h4>
+                                        <p class="stats-label">Peso Médio</p>
+                                        <h4> {{ pond.cycle.peso_medio }} kg</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <p class="stats-label">Quantidade total de ração</p>
+                                        <h4>{{ pond.cycle.arracoamento|floatformat:2 }} g</h4>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p class="stats-label">Numero de refeições</p>
+                                        <h4>{{ pond.cycle.number_refeicoes }}</h4>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p class="stats-label">Proteina na ração</p>
+                                        <h4>{{ pond.cycle.proteina_racao }} %</h4>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p class="stats-label">Diametro do pelete</p>
+                                        <h4> {{ pond.cycle.diametro_pelete }} mm</h4>
                                     </div>
                                     <div class="col-md-3">
-                                        <small class="stats-label">Peso Médio na despesca</small>
-                                        <h4> {{ pond.cycle.middleweight_despesca }} kg</h4>
+                                        <p class="stats-label">Horario</p>
+                                        <h4> {{ pond.cycle.horario_refeicoes }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -133,6 +136,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
 

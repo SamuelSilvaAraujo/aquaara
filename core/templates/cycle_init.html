@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Novo ciclo{% endblock %}
 
@@ -11,7 +12,7 @@
                     <h5>Novo Ciclo</h5>
                 </div>
                 <div class="ibox-content">
-                    <form method="post" class="form-horizontal">
+                    <form id="formId" method="post" class="form-horizontal">
                         {% csrf_token %}
 
                         <div class="form-group col-md-12">
@@ -45,20 +46,42 @@
 
 {% block script %}
 
+    <script src="{% static 'js/plugins/jasny/jasny-bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/plugins/validate/jquery.validate.min.js' %}"></script>
+
     <script>
         $(document).ready(function () {
-            $('#type_intensive').hide();
+            var system = $('#system'),
+                type_intensive = $('#type_intensive'),
+                form = $('#formId');
 
-            $('#system').on('change', function (e) {
-                var val = $(e.target).val();
+            type_intensive.hide();
+
+            system.on('change', function (e) {
+                var val = $(e.target).val(),
+                    type_intensive = $('#type_intensive');
                 if(val === 'IN'){
-                    $('#type_intensive').show();
+                    type_intensive.show();
                 }else{
-                    $('#type_intensive').hide();
+                    type_intensive.hide();
+                }
+            });
+
+            form.validate({
+                messages: {
+                    middleweight_despesca: {
+                        required: "Defina o peso medio!"
+                    },
+                    system: {
+                        required: "Defina o sistema!"
+                    },
+                    type_intensive: {
+                        required: "Defina o tipo de sistema intensivo!"
+                    }
                 }
             })
-
         })
+
     </script>
 
 {% endblock %}

@@ -130,6 +130,8 @@ class CycleInitView(LoginRequiredMixin, CreateView):
         pk_pond = self.kwargs["pk_pond"]
         pk_property = self.kwargs["pk_property"]
         obj = form.save(commit=False)
+        if obj.system == 'IN' and not obj.type_intensive:
+            return super().form_invalid(form)
         obj.pond = Pond.objects.get(pk=pk_pond)
         obj.save()
         return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
