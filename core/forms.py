@@ -1,5 +1,5 @@
 from django import forms
-from .models import Property, Address, Pond, Cycle, Population, Mortality
+from .models import Property, Address, Pond, Cycle, Population, Mortality, Biometria
 
 class PropertyForm(forms.ModelForm):
     class Meta:
@@ -58,4 +58,13 @@ class MortalityForm(forms.ModelForm):
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+class BiometriaForm(forms.ModelForm):
+    class Meta:
+        model = Biometria
+        fields = ['date', 'middleweight', ]
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'form-control'}),
+            'middleweight': forms.NumberInput(attrs={'class': 'form-control'}),
         }

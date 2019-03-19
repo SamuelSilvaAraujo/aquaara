@@ -19,6 +19,7 @@ urlpatterns = [
                 path('ciclo/', CycleInitView.as_view(), name="cycle_init"),
                 path('povoamento/', PopulationCreateView.as_view(), name="population"),
                 path('mortalidade/', MortalityCreateView.as_view(), name="mortality"),
+                path('biometria/', BiometriaCreateView.as_view(), name="biometria"),
             ]))
         ])),
     ])),
