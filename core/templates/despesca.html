@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Mortalidade{% endblock %}
+{% block title %}Despesca{% endblock %}
 
 {% block header %}
 
@@ -15,7 +15,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Mortalidade</h5>
+                    <h5>Despesca</h5>
                 </div>
                 <div class="ibox-content">
                     <form method="post" class="form-horizontal">
@@ -32,8 +32,8 @@
                         </div>
                         <div class="form-group col-md-12">
                             <div class="col-sm-10 col-sm-offset-1">
-                                <label class="font-normal">{{ form.amount.label }}</label>
-                                {{ form.amount }}
+                                <label class="font-normal">{{ form.final_middleweight.label }}</label>
+                                {{ form.final_middleweight }}
                             </div>
                         </div>
 

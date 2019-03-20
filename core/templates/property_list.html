@@ -50,8 +50,8 @@
                                         <td>{{ propriedade.address.number }}</td>
                                         <td>{{ propriedade.address.city }} - {{ propriedade.address.state }}</td>
                                         <td class="project-actions">
-                                            <a href="{% url 'property_ponds' propriedade.id %}" class="btn btn-primary btn-outline btn-xs"><i class="fa fa-folder"></i> Abrir Propriedade </a>
-                                            <a href="{% url 'property_update' propriedade.id %}" class="btn btn-white btn-outline btn-xs"><i class="fa fa-pencil"></i> Editar </a>
+                                            <a href="{% url 'property_ponds' propriedade.slug %}" class="btn btn-primary btn-outline btn-xs"><i class="fa fa-folder"></i> Abrir Propriedade </a>
+                                            <a href="{% url 'property_update' propriedade.slug %}" class="btn btn-white btn-outline btn-xs"><i class="fa fa-pencil"></i> Editar </a>
                                         </td>
                                     </tr>
 

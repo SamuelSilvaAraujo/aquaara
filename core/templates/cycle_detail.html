@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ciclo{% endblock %}
+
+{% block header %}
+    <link href="{% static 'css/plugins/footable/footable.core.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+    <div class="animated fadeInUp">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Povoamento</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Data</h4>
+                                <p>{{cycle.population.date }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Peso Medio</h4>
+                                <p>{{ cycle.population.middleweight }} g</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Despesca</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Data</h4>
+                                <p>{{cycle.despesca.date }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Peso Medio Final</h4>
+                                <p>{{ cycle.despesca.final_middleweight }} g</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Biometria</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="footableB table table-stripped toggle-arrow-tiny" data-page-size="5">
+                            <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Peso medio</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for bio in cycle.all_biometria %}
+                                <tr>
+                                    <td>{{ bio.date }}</td>
+                                    <td>{{ bio.middleweight }} kg</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Mortalidade</h5>
+
+                    </div>
+                    <div class="ibox-content">
+
+                        {% if pond.cycle.all_mortality.count > 0 %}
+                            <table class="footableM table table-stripped toggle-arrow-tiny" data-page-size="5">
+                                <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Quantidade de peixes</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for mortalidade in cycle.all_mortality %}
+                                    <tr>
+                                        <td>{{ mortalidade.date }}</td>
+                                        <td>{{ mortalidade.amount }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+
+                        {% else %}
+
+                            <h4>Nenhuma Mortalidade registrada</h4>
+
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'js/plugins/footable/footable.all.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footableB').footable();
+            $('.footableM').footable();
+
+        });
+
+    </script>
+
+{% endblock %}

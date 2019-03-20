@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ pond.identification }}{% endblock %}
+
+{% block header %}
+    <link href="{% static 'css/plugins/footable/footable.core.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 
@@ -14,18 +19,22 @@
 
                         <div class="ibox-tools">
                             {% if not pond.cycle %}
-                                <a href="{% url 'cycle_init' pk_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Novo Ciclo</a>
+                                <a href="{% url 'cycle_init' slug_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Novo Ciclo</a>
                             {% else %}
                                 {% if not pond.cycle.population %}
 
-                                    <a href="{% url 'population' pk_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Povoamento</a>
+                                    <a href="{% url 'population' slug_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Povoamento</a>
+
+                                {% else %}
+
+                                    <a href="{% url 'despesca' slug_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Despesca</a>
 
                                 {% endif %}
 
                             {% endif %}
 
-                            <a href="{% url 'pond_update' pk_property pond.id %}" class="btn btn-outline btn-success btn-xs">Editar</a>
-                            <a href="{% url 'pond_delete' pk_property pond.id %}" class="btn btn-outline btn-danger btn-xs">Excluir</a>
+                            <a href="{% url 'pond_update' slug_property pond.id %}" class="btn btn-outline btn-success btn-xs">Editar</a>
+                            <a href="{% url 'pond_delete' slug_property pond.id %}" class="btn btn-outline btn-danger btn-xs">Excluir</a>
                         </div>
 
                     </div>
@@ -105,6 +114,59 @@
             {% if pond.cycle.population %}
 
                 <div class="row">
+                    <div class="col-lg-4">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Povoamento</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Data</h4>
+                                        <p>{{ pond.cycle.population.date }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h4>Peso Medio</h4>
+                                        <p>{{ pond.cycle.population.middleweight }} g</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Despesca</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h4>Data</h4>
+                                <p>{{ pond.cycle.date_despesca }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Biomassa</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h4>{{ pond.cycle.biomassa|floatformat:2 }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Peso Medio atual</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h4>{{ pond.cycle.peso_medio }} kg</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox">
                             <div class="ibox-title">
@@ -113,7 +175,7 @@
                             <div class="ibox-content">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <p class="stats-label">Quantidade total de ração</p>
+                                        <p class="stats-label">Quantidade de ração</p>
                                         <h4>{{ pond.cycle.arracoamento|floatformat:2 }} g</h4>
                                     </div>
                                     <div class="col-md-2">
@@ -144,7 +206,7 @@
                             <div class="ibox-title">
                                 <h5>Biometria</h5>
                                 <div class="ibox-tools">
-                                    <a href="{% url 'biometria' pk_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Nova Biometria</a>
+                                    <a href="{% url 'biometria' slug_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Nova Biometria</a>
                                 </div>
                             </div>
                             <div class="ibox-content">
@@ -162,7 +224,7 @@
 
                                 {% if pond.cycle.all_biometria.count > 0 %}
 
-                                    <table class="table">
+                                    <table class="footableB table table-stripped toggle-arrow-tiny" data-page-size="5">
                                         <thead>
                                         <tr>
                                             <th>Data</th>
@@ -177,6 +239,13 @@
                                             </tr>
                                         {% endfor %}
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="5">
+                                                <ul class="pagination pull-right"></ul>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
                                     </table>
 
                                 {% endif %}
@@ -188,13 +257,18 @@
                             <div class="ibox-title">
                                 <h5>Mortalidade</h5>
                                 <div class="ibox-tools">
-                                    <a href="{% url 'mortality' pk_property pond.id %}" class="btn btn-info btn-outline btn-xs">Novo registro</a>
+                                    <a href="{% url 'mortality' slug_property pond.id %}" class="btn btn-info btn-outline btn-xs">Novo registro</a>
                                 </div>
                             </div>
                             <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>Registre a mortalidade de peixes durante o ciclo!</h5>
+                                    </div>
+                                </div>
 
                                 {% if pond.cycle.all_mortality.count > 0 %}
-                                    <table class="table">
+                                    <table class="footableM table table-stripped toggle-arrow-tiny" data-page-size="5">
                                         <thead>
                                         <tr>
                                             <th>Data</th>
@@ -210,6 +284,13 @@
                                             </tr>
                                         {% endfor %}
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="5">
+                                                <ul class="pagination pull-right"></ul>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
                                     </table>
 
                                 {% else %}
@@ -224,8 +305,6 @@
 
             {% endif %}
 
-        {% else %}
-
             {% if pond.number_cycles > 0 %}
 
                 <div class="row">
@@ -235,7 +314,7 @@
                                 <h5>Ciclos Antigos</h5>
                             </div>
                             <div class="ibox-content">
-                                <table class="table">
+                                <table class="footableC table table-stripped toggle-arrow-tiny" data-page-size="10">
                                     <thead>
                                     <tr>
                                         <th>Data</th>
@@ -245,11 +324,20 @@
                                     <tbody>
                                     {% for cycle in pond.allCycle %}
                                         <tr>
-                                            <td>{{ cycle.date }}</td>
-                                            <td>{{ cycle.system }}</td>
+                                            <td>
+                                                <a href="{% url 'cycle_detail' slug_property pond.id cycle.id %}" class="client-link">{{ cycle.population.date }}</a>
+                                            </td>
+                                            <td>{{ cycle.get_system_display }}</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="5">
+                                            <ul class="pagination pull-right"></ul>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -257,9 +345,27 @@
                 </div>
 
             {% endif %}
+
         {% endif %}
 
     </div>
 
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'js/plugins/footable/footable.all.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footableB').footable();
+            $('.footableM').footable();
+            $('.footableC').footable();
+
+        });
+
+    </script>
 
 {% endblock %}
