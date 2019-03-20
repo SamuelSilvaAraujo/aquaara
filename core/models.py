@@ -140,7 +140,7 @@ class Cycle(models.Model):
         amount = self.density()*self.pond.area()
         for mortality in self.mortality_set.all():
             amount -= mortality.amount
-        return amount
+        return int(amount)
 
     def peso_medio(self):
         if self.population:
@@ -277,11 +277,11 @@ class Cycle(models.Model):
     def amount_fish_biometria(self):
         amount = self.amount_fish()
         if amount <= 400:
-            return amount*0.10
+            return int(amount*0.10)
         elif 401 <= amount <= 700:
-            return amount*0.07
+            return int(amount*0.07)
         elif 701 <= amount <= 2000:
-            return amount*0.5
+            return int(amount*0.05)
 
     def date_despesca(self):
         if not self.population:
@@ -299,6 +299,12 @@ class Cycle(models.Model):
             else:
                 biometria = self.biometria_set.all().order_by('date')[0]
                 return biometria.date + timedelta(days=15)
+
+    def all_mortality(self):
+        return self.mortality_set.all()
+
+    def all_biometria(self):
+        return self.biometria_set.all()
 
 class Mortality(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
