@@ -139,7 +139,7 @@ class Cycle(models.Model):
         amount = self.density()*self.pond.area()
         for mortality in self.mortality_set.all():
             amount -= mortality.amount
-        return int(amount)
+        return int(amount) + 1
 
     def peso_medio(self):
         if self.biometria_set.count() > 0:
@@ -204,7 +204,6 @@ class Cycle(models.Model):
 
     def arracoamento(self):
         total = (self.amount_fish()*self.peso_medio()*self.taxa_alimentar())/100
-        print(self.taxa_alimentar())
         return total/self.number_refeicoes()
 
     def proteina_racao(self):
