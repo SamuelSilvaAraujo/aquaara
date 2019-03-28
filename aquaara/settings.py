@@ -134,3 +134,8 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'property_list'
 LOGOUT_REDIRECT_URL = 'login'
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
