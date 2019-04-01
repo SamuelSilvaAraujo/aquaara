@@ -139,7 +139,7 @@ class CycleCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CycleCreateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
-        context["pk_pond"] = self.kwargs["pk_pond"]
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         return context
 
 class CycleDetailView(LoginRequiredMixin, DetailView):
@@ -171,7 +171,7 @@ class PopulationCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(PopulationCreateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
-        context["pk_pond"] = self.kwargs["pk_pond"]
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         return context
 
 class MortalityCreateView(LoginRequiredMixin, CreateView):
@@ -191,7 +191,7 @@ class MortalityCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(MortalityCreateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
-        context["pk_pond"] = self.kwargs["pk_pond"]
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         return context
 
 class BiometriaCreateView(LoginRequiredMixin, CreateView):

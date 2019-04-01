@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 
 {% block menu %}
-    <ul class="nav navbar-nav">
-        <li class="{{ active_page }}">
-            <a href="{% url 'property_ponds' slug_property %}">Viveiros</a>
-        </li>
-    </ul>
+    <li class="{{ active_page }}">
+        <a href="{% url 'property_ponds' slug_property %}">Viveiros</a>
+    </li>
 {% endblock %}

@@ -4,74 +4,76 @@
 
 {% block title %} Propriedade {% endblock %}
 
-{% block header %}
+{% block head %}
     <link href="{% static 'css/plugins/footable/footable.core.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    <div class="col-md-12">
+        <h2>Viveiros</h2>
+    </div>
 {% endblock %}
 
 {% block content %}
 
     {% with ponds=property.pond_set.all  %}
 
-        <div class="animated fadeInRight">
-            {% if ponds %}
+        {% if ponds %}
 
-                <div class="row ">
-                    <div class="col-lg-12">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h5>Viveiros</h5>
-                                <div class="ibox-tools">
-                                    <a href="{% url 'pond_create' property.slug %}" class="btn btn-success btn-outline btn-xs">+ Novo Viveiro</a>
-                                </div>
+            <div class="row ">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Viveiros</h5>
+                            <div class="ibox-tools">
+                                <a href="{% url 'pond_create' property.slug %}" class="btn btn-success btn-outline btn-xs">+ Novo Viveiro</a>
                             </div>
-                            <div class="ibox-content">
-                                <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Buscar">
+                        </div>
+                        <div class="ibox-content">
+                            <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Buscar">
 
-                                <table class="footable table table-stripped" data-page-size="20" data-filter=#filter>
-                                    <thead>
-                                    <tr>
-                                        <th>Identificação</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for pond in ponds %}
+                            <table class="footable table table-stripped" data-page-size="20" data-filter=#filter>
+                                <thead>
+                                <tr>
+                                    <th>Identificação</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for pond in ponds %}
 
-                                        <tr class="gradeX">
-                                            <td>
-                                                <a href="{% url 'pond_detail' property.slug pond.id %}" class="client-link">{{ pond.identification }}</a>
-                                            </td>
-                                        </tr>
-
-                                    {% endfor %}
-
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <td colspan="5">
-                                            <ul class="pagination pull-right"></ul>
+                                    <tr class="gradeX">
+                                        <td>
+                                            <a href="{% url 'pond_detail' property.slug pond.id %}" class="client-link">{{ pond.identification }}</a>
                                         </td>
                                     </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+
+                                {% endfor %}
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
+            </div>
 
-            {% else %}
+        {% else %}
 
-                <div class="row">
-                    <div class="middle-box text-center animated fadeInRightBig">
-                        <h3 class="font-bold">Nenhum Viveiro Cadastrado</h3>
-                        <div class="error-desc">
-                            Cadastre seus Viveiros.
-                            <br/><a href="{% url 'pond_create' property.slug %}" class="btn btn-primary m-t">+ Novo Viveiro</a>
-                        </div>
-                    </div>
+            <div class="middle-box text-center animated fadeInRightBig">
+                <h3 class="font-bold">Nenhum Viveiro Cadastrado</h3>
+                <div class="error-desc">
+                    Cadastre seus Viveiros.
+                    <br/><a href="{% url 'pond_create' property.slug %}" class="btn btn-primary m-t">+ Novo Viveiro</a>
                 </div>
+            </div>
 
-            {% endif %}
-        </div>
+        {% endif %}
 
     {% endwith %}
 

@@ -18,38 +18,47 @@
     <link href="{% static 'css/animate.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
-    {% block header %} {% endblock %}
+    {% block head %} {% endblock %}
 
 </head>
 
-<body class="top-navigation">
+<body class="full-width">
 
 <div id="wrapper">
-    <div id="page-wrapper" class="gray-bg">
-        <div class="row border-bottom white-bg">
-            <nav class="navbar navbar-static-top" role="navigation">
-                <div class="navbar-header">
-                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-                        <i class="fa fa-reorder"></i>
-                    </button>
-                    <a href="{% url 'property_list' %}" class="navbar-brand">Aqua Ara</a>
-                </div>
-                <div class="navbar-collapse collapse" id="navbar">
-                    {% block menu %}{% endblock %}
-                    <ul class="nav navbar-top-links navbar-right">
-                        <li>
-                            <a href="{% url 'logout' %}">
-                                <i class="fa fa-sign-out"></i> Sair
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <a href="{% url 'property_list' %}">
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold" style="color: white">{{ user.name }}</strong>
+                             </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="logo-element">
+                        Aquaara
+                    </div>
+                </li>
+                {% block menu %}{% endblock %}
+                <li>
+                    <a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Sair</a>
+                </li>
+
+            </ul>
+
         </div>
-        <div class="wrapper wrapper-content">
-            <div class="container">
-                {% block content %}{% endblock %}
-            </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg dashoard-1">
+        <div class="row border-bottom white-bg dashboard-header">
+            {% block header %}{% endblock %}
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            {% block content %}{% endblock %}
         </div>
         <div class="footer">
             <div>

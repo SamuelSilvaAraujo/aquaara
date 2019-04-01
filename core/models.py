@@ -158,49 +158,51 @@ class Cycle(models.Model):
         peso_medio = self.peso_medio()
         biomassa = self.biomassa()
         if self.system == 'SI':
-            if 0.001 <= peso_medio <= 0.03:
+            if 1 <= peso_medio <= 30:
                 return biomassa*0.10
-            elif 0.031 <= peso_medio <= 0.3:
+            elif 31 <= peso_medio <= 300:
                 return biomassa*0.05
-            elif 0.301 <= peso_medio <= 0.45:
+            elif 301 <= peso_medio <= 450:
                 return biomassa*0.04
-            elif 0.451 <= peso_medio <= 0.6:
+            elif 451 <= peso_medio <= 600:
                 return biomassa*0.03
-            elif 0.601 <= peso_medio <= 0.8:
+            elif 601 <= peso_medio <= 800:
                 return biomassa*0.02
-            elif 0.801 <= peso_medio <= 1.1:
+            elif 801 <= peso_medio <= 1100:
                 return biomassa*0.01
         elif self.system == 'IN':
-            if 0.001 <= peso_medio <= 0.03:
+            if 1 <= peso_medio <= 30:
                 return biomassa * 0.10
-            elif 0.31 <= peso_medio <= 0.1:
+            elif 31 <= peso_medio <= 100:
                 return biomassa*0.07
-            elif 0.101 <= peso_medio <= 0.155:
+            elif 101 <= peso_medio <= 155:
                 return biomassa*0.05
-            elif 0.156 <= peso_medio <= 0.45:
+            elif 156 <= peso_medio <= 450:
                 return biomassa*0.04
-            elif 0.451 <= peso_medio <= 0.6:
+            elif 451 <= peso_medio <= 600:
                 return biomassa*0.03
-            elif 0.601 <= peso_medio <= 0.8:
+            elif 601 <= peso_medio <= 800:
                 return biomassa*0.02
-            elif 0.801 <= peso_medio <= 1.1:
+            elif 801 <= peso_medio <= 1100:
                 return biomassa*0.01
 
     def number_refeicoes(self):
         peso_medio = self.peso_medio()
-        if 0.001 <= peso_medio <= 0.3:
+        if 1 <= peso_medio <= 300:
             return 4
-        elif 0.301 <= peso_medio <= 0.6:
+        elif 301 <= peso_medio <= 600:
             return 3
-        elif 0.601 <= peso_medio <= 1.1:
+        elif 601 <= peso_medio <= 1100:
             return 2
 
     def horario_refeicoes(self):
         number_refeicoes = self.number_refeicoes()
         if number_refeicoes == 4:
-            return "07:00, 11:00, 14:00, 17:00"
+            return "07:00 h, 11:00 h, 14:00 h, 17:00 h"
         elif number_refeicoes == 3:
-            return "07:00, 12:00, 17:00"
+            return "07:00 h, 12:00 h, 17:00 h"
+        elif number_refeicoes == 2:
+            return "08:00 h, 16:00 h"
 
     def arracoamento(self):
         total = (self.amount_fish()*self.peso_medio()*self.taxa_alimentar())/100
@@ -209,75 +211,77 @@ class Cycle(models.Model):
     def proteina_racao(self):
         peso_medio = self.peso_medio()
         if self.system == 'SI':
-            if 0.001 <= peso_medio <= 0.1:
+            if 1 <= peso_medio <= 100:
                 return "36"
-            elif 0.101 <= peso_medio <= 0.155:
+            elif 101 <= peso_medio <= 155:
                 return "32 - 36"
-            elif 0.156 <= peso_medio <= 0.3:
+            elif 156 <= peso_medio <= 300:
                 return "32"
-            elif 0.301 <= peso_medio <= 0.45:
+            elif 301 <= peso_medio <= 450:
                 return "28 - 32"
-            elif 0.451 <= peso_medio <= 1.1:
+            elif 451 <= peso_medio <= 1100:
                 return "28"
         elif self.system == 'IN':
-            if 0.001 <= peso_medio <= 0.03:
+            if 1 <= peso_medio <= 30:
                 return "40"
-            elif 0.031 <= peso_medio <= 0.1:
+            elif 31 <= peso_medio <= 100:
                 return "36"
-            elif 0.101 <= peso_medio <= 0.155:
+            elif 101 <= peso_medio <= 155:
                 return "32 - 36"
-            elif 0.156 <= peso_medio <= 0.3:
+            elif 156 <= peso_medio <= 300:
                 return "32"
-            elif 0.301 <= peso_medio <= 0.45:
+            elif 301 <= peso_medio <= 450:
                 return "28 - 32"
-            elif 0.451 <= peso_medio <= 1.1:
+            elif 451 <= peso_medio <= 1100:
                 return "28"
 
     def diametro_pelete(self):
         peso_medio = self.peso_medio()
         if self.system == 'SI':
-            if 0.001 <= peso_medio <= 0.03:
+            if 1 <= peso_medio <= 30:
                 return "1 - 2"
-            elif 0.031 <= peso_medio <= 0.1:
+            elif 31 <= peso_medio <= 100:
                 return "4"
-            elif 0.101 <= peso_medio <= 0.155:
+            elif 101 <= peso_medio <= 155:
                 return "4 - 6"
-            elif 0.156 <= peso_medio <= 0.3:
+            elif 156 <= peso_medio <= 300:
                 return "6"
-            elif 0.301 <= peso_medio <= 0.45:
+            elif 301 <= peso_medio <= 450:
                 return "6 - 8"
-            elif 0.451 <= peso_medio <= 0.6:
+            elif 451 <= peso_medio <= 600:
                 return "8"
-            elif 0.601 <= peso_medio <= 0.8:
+            elif 601 <= peso_medio <= 800:
                 return "8 - 10"
-            elif 0.801 <= peso_medio <= 1.1:
+            elif 801 <= peso_medio <= 1100:
                 return "10"
         elif self.system == 'IN':
-            if 0.001 <= peso_medio <= 0.03:
+            if 1 <= peso_medio <= 30:
                 return "1 - 2"
-            elif 0.031 <= peso_medio <= 0.1:
+            elif 31 <= peso_medio <= 100:
                 return "2 - 4"
-            elif 0.101 <= peso_medio <= 0.155:
+            elif 101 <= peso_medio <= 155:
                 return "4 - 6"
-            elif 0.156 <= peso_medio <= 0.3:
+            elif 156 <= peso_medio <= 300:
                 return "6"
-            elif 0.301 <= peso_medio <= 0.45:
+            elif 301 <= peso_medio <= 450:
                 return "6 - 8"
-            elif 0.451 <= peso_medio <= 0.6:
+            elif 451 <= peso_medio <= 600:
                 return "8"
-            elif 0.601 <= peso_medio <= 0.8:
+            elif 601 <= peso_medio <= 800:
                 return "8 - 10"
-            elif 0.801 <= peso_medio <= 1.1:
+            elif 801 <= peso_medio <= 1100:
                 return "10"
 
     def amount_fish_biometria(self):
         amount = self.amount_fish()
         if amount <= 400:
-            return int(amount*0.10)
+            return int(amount*0.10) + 1
         elif 401 <= amount <= 700:
-            return int(amount*0.07)
+            return int(amount*0.07) + 1
         elif 701 <= amount <= 2000:
-            return int(amount*0.05)
+            return int(amount*0.05) + 1
+        else:
+            return int(amount*0.05) + 1
 
     def date_despesca(self):
         return self.population.date + timedelta(6 * 365 / 12)
@@ -292,6 +296,15 @@ class Cycle(models.Model):
     def all_mortality(self):
         return self.mortality_set.all().order_by("-id")
 
+    def total_mortality(self):
+        total = 0
+        for mortality in self.all_mortality():
+            total += mortality.amount
+        return total
+
+    def last_biometria(self):
+        return self.biometria_set.all().order_by("-id")[0]
+
     def all_biometria(self):
         return self.biometria_set.all().order_by("-id")
 
@@ -304,15 +317,6 @@ class Biometria(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data")
     middleweight = models.FloatField("Peso Medio")
-
-    def quant_peixe(self):
-        amount_fish = self.cycle.amount_fish()
-        if amount_fish <= 400:
-            return 0.10
-        elif 401 <= amount_fish <= 700:
-            return 0.7
-        elif 701 <= amount_fish <= 2000:
-            return 0.5
 
 class WaterQuality(models.Model):
     date = models.DateField("Data", default=datetime.now)

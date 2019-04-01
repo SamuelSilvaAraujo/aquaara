@@ -5,7 +5,8 @@ from django.urls import reverse_lazy
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    path('', RedirectView.as_view(url=reverse_lazy('property_list')), name="index"),
+    # path('', RedirectView.as_view(url=reverse_lazy('property_list')), name="index"),
+    path('', Index.as_view(), name="index"),
     path('propriedades/', PropertyListView.as_view(), name="property_list"),
     path('propriedade/', include([
         path('cadastro/', PropertyCreateView.as_view(), name="property_create"),
