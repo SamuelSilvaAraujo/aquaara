@@ -38,24 +38,29 @@
                     <form method="post" class="form-horizontal">
                         {% csrf_token %}
 
-                        <div class="form-group col-md-12" id="data_1">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label class="font-normal">{{ form.date.label }}</label>
+                        <div class="form-group row" id="data_1">
+                            <label class="col-lg-2 col-form-label">{{ form.date.label }}</label>
+                            <div class="col-lg-10">
                                 <div class="input-group date">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
                                     {{ form.date }}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label class="font-normal">{{ form.amount.label }}</label>
-                                {{ form.amount }}
+                                <span class="form-text m-b-none">Data em que a mortalidade foi registrada</span>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-4 col-sm-offset-1">
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">{{ form.amount.label }}</label>
+                            <div class="col-sm-10">
+                                {{ form.amount }}
+                                <span class="form-text m-b-none">Numero de peixes mortos.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-4 col-sm-offset-2">
                                 <a class="btn btn-white" href="{% url 'pond_detail' slug_property pond.id %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>

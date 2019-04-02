@@ -81,11 +81,11 @@ class Pond(models.Model):
 
 class Population(models.Model):
     date = models.DateField("Data", default=datetime.now)
-    middleweight = models.FloatField("Peso Medio")
+    middleweight = models.FloatField("Peso Médio")
 
 class Despesca(models.Model):
     date = models.DateField("Data", default=datetime.now)
-    final_middleweight = models.FloatField("Peso Medio Final")
+    final_middleweight = models.FloatField("Peso Médio")
 
 class Cycle(models.Model):
     SYSTEM_CHOICES = [
@@ -100,21 +100,21 @@ class Cycle(models.Model):
     ]
 
     MIDDLEWEIGHT = [
-        (0.500, '0.500'),
-        (0.600, '0.600'),
-        (0.700, '0.700'),
-        (0.800, '0.800'),
-        (0.900, '0.900'),
-        (1.000, '1.000'),
-        (1.100, '1.100'),
+        (500, '500'),
+        (600, '600'),
+        (700, '700'),
+        (800, '800'),
+        (900, '900'),
+        (1000, '1000'),
+        (1100, '1100'),
     ]
 
     densidade_values = {
-        'SI': {0.500: 2.0, 0.600: 1.67, 0.700: 1.45, 0.800: 1.25, 0.900: 1.12, 1.000: 1.00, 1.100: 0.91},
+        'SI': {500: 2.0, 600: 1.67, 700: 1.45, 800: 1.25, 900: 1.12, 1000: 1.00, 1100: 0.91},
         'IN': {
-            'RC': {0.500: 4.0, 0.600: 3.34, 0.700: 2.86, 0.800: 2.50, 0.900: 2.23, 1.000: 2.00, 1.100: 1.82},
-            'RCA': {0.500: 6.0, 0.600: 5.0, 0.700: 4.30, 0.800: 3.75, 0.900: 3.34, 1.000: 3.00, 1.100: 2.73},
-            'ABAA': {0.500: 8.0, 0.600: 6.67, 0.700: 5.71, 0.800: 5.00, 0.900: 4.45, 1.000: 4.00, 1.100: 3.64},
+            'RC': {500: 4.0, 600: 3.34, 700: 2.86, 800: 2.50, 900: 2.23, 1000: 2.00, 1100: 1.82},
+            'RCA': {500: 6.0, 600: 5.0, 700: 4.30, 800: 3.75, 900: 3.34, 1000: 3.00, 1100: 2.73},
+            'ABAA': {500: 8.0, 600: 6.67, 700: 5.71, 800: 5.00, 900: 4.45, 1000: 4.00, 1100: 3.64},
         }
     }
 
@@ -124,7 +124,7 @@ class Cycle(models.Model):
     despesca = models.ForeignKey(Despesca, on_delete=models.CASCADE, null=True, blank=True)
     system = models.CharField("Sistema", max_length=2, choices=SYSTEM_CHOICES)
     type_intensive = models.CharField("Tipo de sistema intensivo", max_length=4, choices=TYPE_INTENSIVE, null=True, blank=True)
-    middleweight_despesca = models.FloatField("Peso Medio estimado para a Despeca", choices=MIDDLEWEIGHT)
+    middleweight_despesca = models.FloatField("Peso Médio", choices=MIDDLEWEIGHT)
 
     def __str__(self):
         return "{} - {}".format(self.pond.identification, self.date)
@@ -315,7 +315,7 @@ class Mortality(models.Model):
 
 class Biometria(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
-    date = models.DateField("Data")
+    date = models.DateField("Data", default=datetime.now)
     middleweight = models.FloatField("Peso Medio")
 
 class WaterQuality(models.Model):

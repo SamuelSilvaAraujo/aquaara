@@ -26,10 +26,10 @@ class PondForm(forms.ModelForm):
         model = Pond
         fields = ['identification', 'water_flow', 'width', 'length', ]
         widgets = {
-            'identification': forms.TextInput(attrs={'class': 'form-control', 'id': 'identification'}),
-            'water_flow': forms.NumberInput(attrs={'class': 'form-control', 'id': 'vazao'}),
-            'width': forms.NumberInput(attrs={'class': 'form-control', 'id': 'largura'}),
-            'length': forms.NumberInput(attrs={'class': 'form-control', 'id': 'comprimento'}),
+            'identification': forms.TextInput(attrs={'class': 'form-control', 'id': 'identification', 'placeholder': "Ex.: viveiro 01"}),
+            'water_flow': forms.NumberInput(attrs={'class': 'form-control', 'id': 'vazao', 'placeholder': "Ex.: 15 L/s"}),
+            'width': forms.NumberInput(attrs={'class': 'form-control', 'id': 'largura', 'placeholder': "Ex.: 50m"}),
+            'length': forms.NumberInput(attrs={'class': 'form-control', 'id': 'comprimento', 'placeholder': "Ex.: 80m"}),
         }
 
 class CycleForm(forms.ModelForm):
@@ -48,7 +48,7 @@ class PopulationForm(forms.ModelForm):
         fields = ['date', 'middleweight', ]
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
-            'middleweight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'middleweight': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': "Ex.: 3 g"}),
         }
 
 class MortalityForm(forms.ModelForm):
@@ -57,7 +57,7 @@ class MortalityForm(forms.ModelForm):
         fields = ['date', 'amount', ]
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': "Ex.: 10 peixes"}),
         }
 
 class BiometriaForm(forms.ModelForm):
@@ -66,7 +66,7 @@ class BiometriaForm(forms.ModelForm):
         fields = ['date', 'middleweight', ]
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
-            'middleweight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'middleweight': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': "Ex.: 50 g"}),
         }
 
 class DespescaForm(forms.ModelForm):
@@ -75,5 +75,5 @@ class DespescaForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
-            'final_middleweight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'final_middleweight': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': "Ex.: 500 g"}),
         }

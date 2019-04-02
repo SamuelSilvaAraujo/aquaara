@@ -23,7 +23,7 @@ class PropertyPondsView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(PropertyPondsView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
-        context["active_page"] = "active"
+        context["pond_page"] = "active"
         return context
 
 class PropertyCreateView(LoginRequiredMixin, CreateView):
@@ -71,6 +71,7 @@ class PondCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(PondCreateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
+        context["pond_page"] = "active"
         return context
 
     def form_valid(self, form):
@@ -88,6 +89,7 @@ class PondDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(PondDetailView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
+        context["pond_page"] = "active"
         return context
 
 class PondUpdateView(LoginRequiredMixin, UpdateView):
@@ -105,6 +107,7 @@ class PondUpdateView(LoginRequiredMixin, UpdateView):
         context = super(PondUpdateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
         context["pk_pond"] = self.kwargs["pk_pond"]
+        context["pond_page"] = "active"
         return context
 
 class PondDeleteView(LoginRequiredMixin, DeleteView):
@@ -119,6 +122,7 @@ class PondDeleteView(LoginRequiredMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super(PondDeleteView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
+        context["pond_page"] = "active"
         return context
 
 class CycleCreateView(LoginRequiredMixin, CreateView):
@@ -140,6 +144,7 @@ class CycleCreateView(LoginRequiredMixin, CreateView):
         context = super(CycleCreateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
         return context
 
 class CycleDetailView(LoginRequiredMixin, DetailView):
@@ -172,6 +177,7 @@ class PopulationCreateView(LoginRequiredMixin, CreateView):
         context = super(PopulationCreateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
         return context
 
 class MortalityCreateView(LoginRequiredMixin, CreateView):
@@ -192,6 +198,7 @@ class MortalityCreateView(LoginRequiredMixin, CreateView):
         context = super(MortalityCreateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
         return context
 
 class BiometriaCreateView(LoginRequiredMixin, CreateView):
@@ -211,7 +218,8 @@ class BiometriaCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(BiometriaCreateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
-        context["pk_pond"] = self.kwargs["pk_pond"]
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
         return context
 
 class DespescaCreateView(LoginRequiredMixin, CreateView):
@@ -232,5 +240,5 @@ class DespescaCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(DespescaCreateView, self).get_context_data(**kwargs)
         context["slug_property"] = self.kwargs["slug_property"]
-        context["pk_pond"] = self.kwargs["pk_pond"]
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         return context

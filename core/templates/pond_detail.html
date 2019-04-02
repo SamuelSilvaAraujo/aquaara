@@ -40,6 +40,9 @@
                 {% endif %}
             </li>
             <li>
+                <a href="#" style="color: #23c6c8">Ciclos antigos</a>
+            </li>
+            <li>
                 <a href="{% url 'pond_update' slug_property pond.id %}" style="color: #398439">Editar</a>
             </li>
             <li>
@@ -53,7 +56,7 @@
 {% block content %}
 
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-3 col-md-6 col-xs-6">
             <div class="ibox ">
                 <div class="ibox-title">
                     <h5>Ciclos Realizados</h5>
@@ -63,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-3 col-md-6 col-xs-6">
             <div class="ibox ">
                 <div class="ibox-title">
                     <h5>Vazão de Água</h5>
@@ -73,7 +76,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-3 col-md-6 col-xs-6">
+
             <div class="ibox ">
                 <div class="ibox-title">
                     <h5>Área do viveiro</h5>
@@ -83,7 +87,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-3 col-md-6 col-xs-6">
             <div class="ibox ">
                 <div class="ibox-title">
                     <h5>Volume de Água</h5>
@@ -124,9 +128,9 @@
                         <h5>Sistema</h5>
                     </div>
                     <div class="ibox-content">
-                        <h2>{{ pond.cycle.get_system_display }}</h2>
+                        <h2>{{ pond.cycle.get_system_display }} </h2>
                         {% if pond.cycle.system == 'IN' %}
-                            <small>{{ pond.cycle.get_type_intensive_display }}</small>
+                            <small class="m-r">{{ pond.cycle.get_type_intensive_display }}</small>
                         {% endif %}
                     </div>
                 </div>

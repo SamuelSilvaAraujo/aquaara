@@ -20,42 +20,46 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="ibox float-e-margins">
+            <div class="ibox">
                 <div class="ibox-title">
-                    <h5>Novo Viveiro</h5>
+                    <h5>Novo viveiro</h5>
                 </div>
                 <div class="ibox-content">
-                    <form method="post" class="form-horizontal">
+                    <form method="post">
                         {% csrf_token %}
 
-                        <div class="form-group">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label for="identification">{{ form.identification.label }}</label>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">{{ form.identification.label }}</label>
+                            <div class="col-lg-10">
                                 {{ form.identification }}
+                                <span class="form-text m-b-none">Identificação do viveiro.</span>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label for="vazao">{{ form.water_flow.label }}</label>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">{{ form.water_flow.label }}</label>
+                            <div class="col-lg-10">
                                 {{ form.water_flow }}
+                                <span class="form-text m-b-none">Vazão de Água em litros por segundo.</span>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label for="largura">{{ form.width.label }}</label>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">{{ form.width.label }}</label>
+                            <div class="col-lg-10">
                                 {{ form.width }}
+                                <span class="form-text m-b-none">Largura do viveiro em metros.</span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label for="comprimento">{{ form.length.label }}</label>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">{{ form.length.label }}</label>
+                            <div class="col-lg-10">
                                 {{ form.length }}
+                                <span class="form-text m-b-none">Comprimento do viveiro em metros.</span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-4 col-sm-offset-1">
+                        <div class="form-group row">
+                            <div class="col-lg-offset-2 col-lg-10">
                                 <a class="btn btn-white" href="{% url 'property_ponds' slug_property %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
