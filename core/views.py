@@ -18,11 +18,11 @@ class PropertyListView(LoginRequiredMixin, ListView):
 class PropertyPondsView(LoginRequiredMixin, DetailView):
     template_name = 'property_ponds.html'
     model = Property
-    slug_url_kwarg = 'slug_property'
+    pk_url_kwarg = 'pk_property'
 
     def get_context_data(self, **kwargs):
         context = super(PropertyPondsView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["pk_property"] = self.kwargs["pk_property"]
         context["pond_page"] = "active"
         return context
 
@@ -43,7 +43,7 @@ class PropertyCreateView(LoginRequiredMixin, CreateView):
         obj.address = address_obj
         obj.user = self.request.user
         obj.save()
-        return HttpResponseRedirect(reverse_lazy('property_ponds', kwargs={'slug_property': obj.slug}))
+        return HttpResponseRedirect(reverse_lazy('property_ponds', kwargs={'pk_property': obj.id}))
 
 class PropertyUpdateView(LoginRequiredMixin, UpdateView):
     model = Property
@@ -66,20 +66,19 @@ class PropertyUpdateView(LoginRequiredMixin, UpdateView):
 class PondCreateView(LoginRequiredMixin, CreateView):
     form_class = PondForm
     template_name = 'pond_create.html'
-    pk_url_kwarg = 'slug_property'
 
     def get_context_data(self, **kwargs):
         context = super(PondCreateView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond_page"] = "active"
         return context
 
     def form_valid(self, form):
-        slug_property = self.kwargs["slug_property"]
+        pk_property = self.kwargs["pk_property"]
         obj = form.save(commit=False)
-        obj.property = Property.objects.get(slug=slug_property)
+        obj.property = Property.objects.get(pk=pk_property)
         obj.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={"slug_property": slug_property, "pk_pond": obj.id}))
+        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={"pk_property": pk_property, "pk_pond": obj.id}))
 
 class PondDetailView(LoginRequiredMixin, DetailView):
     template_name = 'pond_detail.html'
@@ -88,7 +87,7 @@ class PondDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PondDetailView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond_page"] = "active"
         return context
 
@@ -99,14 +98,14 @@ class PondUpdateView(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'pk_pond'
 
     def get_success_url(self):
-        slug_property = self.kwargs["slug_property"]
+        pk_property = self.kwargs["pk_property"]
         pk_pond = self.kwargs["pk_pond"]
-        return  reverse_lazy('pond_detail', kwargs={"slug_property": slug_property, "pk_pond": pk_pond})
+        return reverse_lazy('pond_detail', kwargs={"pk_property": pk_property, "pk_pond": pk_pond})
 
     def get_context_data(self, **kwargs):
         context = super(PondUpdateView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
-        context["pk_pond"] = self.kwargs["pk_pond"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
 
@@ -116,12 +115,12 @@ class PondDeleteView(LoginRequiredMixin, DeleteView):
     pk_url_kwarg = 'pk_pond'
 
     def get_success_url(self):
-        slug_property = self.kwargs["slug_property"]
-        return  reverse('property_ponds', kwargs={"slug_property": slug_property})
+        pk_property = self.kwargs["pk_property"]
+        return  reverse('property_ponds', kwargs={"slug_property": pk_property})
 
     def get_context_data(self, **kwargs):
         context = super(PondDeleteView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond_page"] = "active"
         return context
 
@@ -132,17 +131,17 @@ class CycleCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
-        slug_property = self.kwargs["slug_property"]
+        pk_property = self.kwargs["pk_property"]
         obj = form.save(commit=False)
         if obj.system == 'IN' and not obj.type_intensive:
             return super().form_invalid(form)
         obj.pond = Pond.objects.get(pk=pk_pond)
         obj.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'slug_property': slug_property, 'pk_pond': pk_pond}))
+        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
 
     def get_context_data(self, **kwargs):
         context = super(CycleCreateView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
@@ -154,7 +153,7 @@ class CycleDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CycleDetailView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pk_pond"] = self.kwargs["pk_pond"]
         return context
 
@@ -165,17 +164,17 @@ class PopulationCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
-        slug_property = self.kwargs["slug_property"]
+        pk_property = self.kwargs["pk_property"]
         pond_obj = Pond.objects.get(pk=pk_pond)
         cycle = pond_obj.cycle()
         population_obj = form.save()
         cycle.population = population_obj
         cycle.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'slug_property': slug_property, 'pk_pond': pk_pond}))
+        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
 
     def get_context_data(self, **kwargs):
         context = super(PopulationCreateView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
@@ -187,16 +186,16 @@ class MortalityCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
-        slug_property = self.kwargs["slug_property"]
+        pk_property = self.kwargs["pk_property"]
         pond_obj = Pond.objects.get(pk=pk_pond)
         obj = form.save(commit=False)
         obj.cycle = pond_obj.cycle()
         obj.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'slug_property': slug_property, 'pk_pond': pk_pond}))
+        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
 
     def get_context_data(self, **kwargs):
         context = super(MortalityCreateView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
@@ -208,16 +207,16 @@ class BiometriaCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
-        slug_property = self.kwargs["slug_property"]
+        pk_property = self.kwargs["pk_property"]
         pond_obj = Pond.objects.get(pk=pk_pond)
         obj = form.save(commit=False)
         obj.cycle = pond_obj.cycle()
         obj.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'slug_property': slug_property, 'pk_pond': pk_pond}))
+        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
 
     def get_context_data(self, **kwargs):
         context = super(BiometriaCreateView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
@@ -229,16 +228,16 @@ class DespescaCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
-        slug_property = self.kwargs["slug_property"]
+        pk_property = self.kwargs["pk_property"]
         pond_obj = Pond.objects.get(pk=pk_pond)
         despesca_obj = form.save()
         cycle = pond_obj.cycle()
         cycle.despesca = despesca_obj
         cycle.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'slug_property': slug_property, 'pk_pond': pk_pond}))
+        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
 
     def get_context_data(self, **kwargs):
         context = super(DespescaCreateView, self).get_context_data(**kwargs)
-        context["slug_property"] = self.kwargs["slug_property"]
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         return context

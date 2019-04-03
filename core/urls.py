@@ -6,9 +6,9 @@ urlpatterns = [
     path('propriedades/', PropertyListView.as_view(), name="property_list"),
     path('propriedade/', include([
         path('cadastro/', PropertyCreateView.as_view(), name="property_create"),
-        path('<slug:slug>/editar/', PropertyUpdateView.as_view(), name="property_update")
+        path('<int:pk>/editar/', PropertyUpdateView.as_view(), name="property_update")
     ])),
-    path('<slug:slug_property>/', include([
+    path('<int:pk_property>/', include([
         path('viveiros/', PropertyPondsView.as_view(), name="property_ponds"),
         path('viveiro/', include([
             path('cadastro/', PondCreateView.as_view(), name="pond_create"),

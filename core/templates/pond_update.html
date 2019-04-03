@@ -6,10 +6,16 @@
     <div class="col-md-12">
         <h2>Editar viveiro</h2>
         <ol class="breadcrumb">
-            <li>
-                <a href="{% url 'property_ponds' slug_property %}">Viveiros</a>
+            <li class="breadcrumb-item">
+                <p>{{ property.name }}</p>
             </li>
-            <li class="active">
+            <li class="breadcrumb-item">
+                <a href="{% url 'property_ponds' property.id %}">Viveiros</a>
+            </li>
+            <li class="breadcrumb-item">
+                {{ pond.identification }}
+            </li>
+            <li class="breadcrumb-item active">
                 <strong>Editar viveiro</strong>
             </li>
         </ol>
@@ -56,7 +62,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-1">
-                                <a class="btn btn-white" href="{% url 'pond_detail' slug_property pk_pond %}">Cancelar</a>
+                                <a class="btn btn-white" href="{% url 'pond_detail' property.id pond.id %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
                         </div>

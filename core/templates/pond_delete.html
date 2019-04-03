@@ -1,17 +1,35 @@
 {% extends 'menu.html' %}
 
+{% block header %}
+    <div class="col-md-12">
+        <h2>Excluir viveiro</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <p>{{ property.name }}</p>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'property_ponds' property.id %}">Viveiros</a>
+            </li>
+            <li class="breadcrumb-item">
+                {{ object.identification }}
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Excluir viveiro</strong>
+            </li>
+        </ol>
+    </div>
+{% endblock %}
+
 {% block content %}
 
     <form method="post">
         {% csrf_token %}
-        <div class="wrapper wrapper-content">
-            <div class="middle-box text-center animated fadeInRightBig">
-                <h3 class="font-bold">Excluir {{ object }}</h3>
-                <div class="error-desc">
-                    Se você excluir esse viveiro, todas as informações seram perdidas
-                    <br/><button type="submit" class="btn btn-danger m-t"><i class="fa fa-trash"></i> Excluir</button>
-                    <a href="{% url 'pond_detail' slug_property object.id %}" class="btn btn-primary m-t">Cancelar</a>
-                </div>
+        <div class="middle-box text-center">
+            <h3 class="font-bold">Excluir {{ object }}</h3>
+            <div class="error-desc">
+                Se você excluir esse viveiro, todas as informações seram perdidas
+                <br/><button type="submit" class="btn btn-danger m-t"><i class="fa fa-trash"></i> Excluir</button>
+                <a href="{% url 'pond_detail' property.id object.id %}" class="btn btn-primary m-t">Cancelar</a>
             </div>
         </div>
     </form>

@@ -13,13 +13,13 @@
     <div class="col-md-12">
         <h2>Despesca</h2>
         <ol class="breadcrumb">
-            <li>
-                <a href="{% url 'property_ponds' slug_property %}">Viveiros</a>
+            <li class="breadcrumb-item">
+                <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
             </li>
-            <li>
-                <a href="{% url 'pond_detail' slug_property pond.id %}">{{ pond.identification }}</a>
+            <li class="breadcrumb-item">
+                <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
             </li>
-            <li class="active">
+            <li class="breadcrumb-item active">
                 <strong>Despesca</strong>
             </li>
         </ol>
@@ -61,7 +61,7 @@
 
                         <div class="form-group row">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <a class="btn btn-white" href="{% url 'pond_detail' slug_property pond.id %}">Cancelar</a>
+                                <a class="btn btn-white" href="{% url 'pond_detail' property.id pond.id %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
                         </div>

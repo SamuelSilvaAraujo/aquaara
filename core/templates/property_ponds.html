@@ -11,6 +11,14 @@
 {% block header %}
     <div class="col-md-12">
         <h2>Viveiros</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <p>{{ property.name }}</p>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Viveiros</strong>
+            </li>
+        </ol>
     </div>
 {% endblock %}
 
@@ -26,7 +34,7 @@
                         <div class="ibox-title">
                             <h5>Viveiros</h5>
                             <div class="ibox-tools">
-                                <a href="{% url 'pond_create' property.slug %}" class="btn btn-success btn-outline btn-xs">+ Novo Viveiro</a>
+                                <a href="{% url 'pond_create' property.id %}" class="btn btn-success btn-outline btn-xs">+ Novo Viveiro</a>
                             </div>
                         </div>
                         <div class="ibox-content">
@@ -43,7 +51,7 @@
 
                                     <tr class="gradeX">
                                         <td>
-                                            <a href="{% url 'pond_detail' property.slug pond.id %}" class="client-link">{{ pond.identification }}</a>
+                                            <a href="{% url 'pond_detail' property.id pond.id %}" class="client-link">{{ pond.identification }}</a>
                                         </td>
                                     </tr>
 
@@ -69,7 +77,7 @@
                 <h3 class="font-bold">Nenhum Viveiro Cadastrado</h3>
                 <div class="error-desc">
                     Cadastre seus Viveiros.
-                    <br/><a href="{% url 'pond_create' property.slug %}" class="btn btn-primary m-t">+ Novo Viveiro</a>
+                    <br/><a href="{% url 'pond_create' property.id %}" class="btn btn-primary m-t">+ Novo Viveiro</a>
                 </div>
             </div>
 

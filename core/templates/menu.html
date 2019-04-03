@@ -2,6 +2,6 @@
 
 {% block menu %}
     <li class="{{ pond_page }}">
-        <a href="{% url 'property_ponds' slug_property %}">Viveiros</a>
+        <a href="{% url 'property_ponds' property.id %}">Viveiros</a>
     </li>
 {% endblock %}

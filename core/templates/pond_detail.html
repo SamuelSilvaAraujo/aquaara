@@ -13,10 +13,10 @@
             <div class="col-md-12">
                 <h2>{{ pond.identification }}</h2>
                 <ol class="breadcrumb">
-                    <li>
-                        <a href="{% url 'property_ponds' slug_property %}">Viveiros</a>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
                     </li>
-                    <li class="active">
+                    <li class="breadcrumb-item active">
                         <strong>{{ pond.identification }}</strong>
                     </li>
                 </ol>
@@ -25,15 +25,15 @@
         <ul class="nav navbar-top-links navbar-right">
             <li>
                 {% if not pond.cycle %}
-                    <a href="{% url 'cycle_init' slug_property pond.id %}" style="color: #ec971f">Novo Ciclo</a>
+                    <a href="{% url 'cycle_init' property.id pond.id %}" style="color: #ec971f">Novo Ciclo</a>
                 {% else %}
                     {% if not pond.cycle.population %}
 
-                        <a href="{% url 'population' slug_property pond.id %}" style="color: #ec971f">Povoamento</a>
+                        <a href="{% url 'population' property.id pond.id %}" style="color: #ec971f">Povoamento</a>
 
                     {% else %}
 
-                        <a href="{% url 'despesca' slug_property pond.id %}" style="color: #ec971f">Despesca</a>
+                        <a href="{% url 'despesca' property.id pond.id %}" style="color: #ec971f">Despesca</a>
 
                     {% endif %}
 
@@ -43,10 +43,10 @@
                 <a href="#" style="color: #23c6c8">Ciclos antigos</a>
             </li>
             <li>
-                <a href="{% url 'pond_update' slug_property pond.id %}" style="color: #398439">Editar</a>
+                <a href="{% url 'pond_update' property.id pond.id %}" style="color: #398439">Editar</a>
             </li>
             <li>
-                <a href="{% url 'pond_delete' slug_property pond.id %}" style="color: #c9302c">Excluir</a>
+                <a href="{% url 'pond_delete' property.id pond.id %}" style="color: #c9302c">Excluir</a>
             </li>
         </ul>
 
@@ -186,7 +186,7 @@
                         <div class="ibox-title">
                             <h5>Biometria</h5>
                             <div class="ibox-tools">
-                                <a href="{% url 'biometria' slug_property pond.id %}" class="btn btn-warning btn-outline btn-xs">Nova Biometria</a>
+                                <a href="{% url 'biometria' property.id pond.id %}" class="btn btn-warning btn-outline btn-xs">Nova Biometria</a>
                                 {% if pond.cycle.all_biometria.count > 0 %}
                                     <a href="#" class="btn btn-success btn-outline btn-xs" data-toggle="modal" data-target="#allBiometriaModal">Todas as Biometrias</a>
                                 {% endif %}
@@ -273,7 +273,7 @@
                         <div class="ibox-title">
                             <h5>Mortalidade</h5>
                             <div class="ibox-tools">
-                                <a href="{% url 'mortality' slug_property pond.id %}" class="btn btn-info btn-outline btn-xs">Novo registro</a>
+                                <a href="{% url 'mortality' property.id pond.id %}" class="btn btn-info btn-outline btn-xs">Novo registro</a>
 
                                 {% if pond.cycle.all_mortality.count > 0 %}
                                     <a href="#" class="btn btn-success btn-outline btn-xs" data-toggle="modal" data-target="#allMortalidadeModal">Todos os registro</a>

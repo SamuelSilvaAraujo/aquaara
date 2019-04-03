@@ -54,8 +54,8 @@
                                     <td>{{ propriedade.address.number }}</td>
                                     <td>{{ propriedade.address.city }} - {{ propriedade.address.state }}</td>
                                     <td class="project-actions">
-                                        <a href="{% url 'property_ponds' propriedade.slug %}" class="btn btn-primary btn-outline btn-xs"><i class="fa fa-folder"></i> Abrir Propriedade </a>
-                                        <a href="{% url 'property_update' propriedade.slug %}" class="btn btn-white btn-outline btn-xs"><i class="fa fa-pencil"></i> Editar </a>
+                                        <a href="{% url 'property_ponds' propriedade.id %}" class="btn btn-primary btn-outline btn-xs"><i class="fa fa-folder"></i> Abrir Propriedade </a>
+                                        <a href="{% url 'property_update' propriedade.id %}" class="btn btn-white btn-outline btn-xs"><i class="fa fa-pencil"></i> Editar </a>
                                     </td>
                                 </tr>
 
@@ -78,15 +78,11 @@
 
     {% else %}
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="middle-box text-center animated fadeInRightBig">
-                    <h3 class="font-bold">Nenhuma Propriedade Cadastrada</h3>
-                    <div class="error-desc">
-                        Cadastre suas Propriedades para que possa Utilizar o sistema.
-                        <br/><a href="{% url 'property_create' %}" class="btn btn-primary m-t">+ Nova Propriedade</a>
-                    </div>
-                </div>
+        <div class="middle-box text-center">
+            <h3 class="font-bold">Nenhuma Propriedade Cadastrada</h3>
+            <div class="error-desc">
+                Cadastre suas Propriedades para que possa Utilizar o sistema.
+                <br/><a href="{% url 'property_create' %}" class="btn btn-primary m-t">+ Nova Propriedade</a>
             </div>
         </div>
 

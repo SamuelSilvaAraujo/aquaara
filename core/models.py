@@ -45,7 +45,7 @@ class Property(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField("Nome", max_length=50)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

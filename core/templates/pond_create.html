@@ -6,10 +6,10 @@
     <div class="col-md-12">
         <h2>Novo viveiro</h2>
         <ol class="breadcrumb">
-            <li>
-                <a href="{% url 'property_ponds' slug_property %}">Viveiros</a>
+            <li class="breadcrumb-item">
+                <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
             </li>
-            <li class="active">
+            <li class="breadcrumb-item active">
                 <strong>Novo viveiro</strong>
             </li>
         </ol>
@@ -60,7 +60,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-offset-2 col-lg-10">
-                                <a class="btn btn-white" href="{% url 'property_ponds' slug_property %}">Cancelar</a>
+                                <a class="btn btn-white" href="{% url 'property_ponds' property.id %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
                         </div>
