@@ -4,7 +4,7 @@ from .models import User
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'CPF', 'data-mask': '999.999.999-99', 'id': 'username'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'CPF', 'data-mask': '999.999.999-99', 'id': 'cpf'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
 
 

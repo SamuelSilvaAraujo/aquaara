@@ -1,30 +1,12 @@
 <!DOCTYPE html>
+{% extends 'base_autentication.html' %}
 
-{% load static %}
+{% block title %}Cadastro{% endblock %}
 
-<html lang="pt-br">
+{% block content %}
 
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Cadastro</title>
-
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
-    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-
-</head>
-
-<body class="gray-bg">
-
-<div class="middle-box text-center loginscreen animated fadeInDown">
-
-    <h1 class="logo-name">AQ</h1>
-
-    <h3>Cadastrar-se</h3>
+    <h3>Cadastrar-se no AquaAra</h3>
+    <p>Crie uma conta para ver em ação.</p>
 
     <form id="formId" class="m-t" role="form" method="post" action="">
         {% csrf_token %}
@@ -32,8 +14,14 @@
         {% for field in form %}
             <div class="form-group">
                 {{ field }}
-                {{ field.errors }}
             </div>
+
+            {% if field.errors %}
+                {% for erro in field.errors %}
+                    <p class="text-danger">{{ erro }}</p>
+                {% endfor %}
+            {% endif %}
+
         {% endfor %}
 
         <button type="submit" class="btn btn-primary block full-width m-b">Cadastrar</button>
@@ -42,53 +30,4 @@
         <a class="btn btn-sm btn-white btn-block" href="{% url 'login' %}">Entre no sistema</a>
     </form>
 
-    <p class="m-t"> <small>AquaAra &copy; 2019</small> </p>
-
-</div>
-
-<!-- Mainly scripts -->
-<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/popper.min.js' %}"></script>
-
-<script src="{% static 'js/plugins/jasny/jasny-bootstrap.min.js' %}"></script>
-<script src="{% static 'js/plugins/validate/jquery.validate.min.js' %}"></script>
-
-<script>
-
-    $(document).ready(function () {
-        var form = $('#formId');
-
-        form.submit(function () {
-            var cpf = $('#cpf'),
-                value = cpf.val().replace(/[.\-]/g,'');
-            cpf.val(value);
-        });
-
-        form.validate({
-            rules:{
-
-            },
-            messages: {
-                cpf: {
-                    required: "É necessário informar seu cpf"
-                },
-                name: {
-                    required: "Por favor, informe seu nome"
-                },
-                password1: {
-                    required: "Este campo &eacute; requerido."
-                },
-                password2: {
-                    required: "Este campo &eacute; requerido."
-                }
-            }
-        })
-
-    })
-
-</script>
-
-</body>
-
-</html>
+{% endblock %}
