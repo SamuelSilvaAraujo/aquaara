@@ -18,21 +18,40 @@
     <link href="{% static 'css/animate.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
-    {% block head %} {% endblock %}
+    {% block head %}{% endblock %}
 
 </head>
 
 <body class="fixed-sidebar">
 
 <div id="wrapper">
-
-    {% block menu %}{% endblock %}
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <a href="{% url 'property_list' %}">
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold" style="color: white">{{ user.name }}</strong>
+                             </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="logo-element">
+                        Aquaara
+                    </div>
+                </li>
+                {% block menu %}{% endblock %}
+            </ul>
+        </div>
+    </nav>
 
     <div id="page-wrapper" class="gray-bg">
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
-                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#">
                         <i class="fa fa-bars"></i>
                     </a>
                 </div>
@@ -61,9 +80,10 @@
 
 <!-- Mainly scripts -->
 <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
-<script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.js' %}"></script>
 
 <!-- Custom and plugin javascript -->
 <script src="{% static 'js/inspinia.js' %}"></script>

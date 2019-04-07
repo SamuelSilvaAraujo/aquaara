@@ -58,20 +58,16 @@
     <div class="row">
         <div class="col-lg-3 col-md-6 col-xs-6">
             <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>Ciclos Realizados</h5>
-                </div>
                 <div class="ibox-content">
+                    <h5>Ciclos Realizados</h5>
                     <h2 class="no-margins">{{ pond.number_cycles }}</h2>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-6 col-xs-6">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>Vazão de Água</h5>
-                </div>
+            <div class="ibox">
                 <div class="ibox-content">
+                    <h5>Vazão de Água</h5>
                     <h2 class="no-margins">{{ pond.water_flow }} L/s</h2>
                 </div>
             </div>
@@ -79,20 +75,16 @@
         <div class="col-lg-3 col-md-6 col-xs-6">
 
             <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>Área do viveiro</h5>
-                </div>
                 <div class="ibox-content">
+                    <h5>Área do viveiro</h5>
                     <h2 class="no-margins">{{ pond.area }} m²</h2>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-6 col-xs-6">
             <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>Volume de Água</h5>
-                </div>
                 <div class="ibox-content">
+                    <h5>Volume de Água</h5>
                     <h2 class="no-margins">{{ pond.volume }} L</h2>
                 </div>
             </div>
@@ -104,30 +96,24 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="ibox">
-                    <div class="ibox-title">
-                        <h5>Densidade</h5>
-                    </div>
                     <div class="ibox-content">
+                        <h5>Densidade</h5>
                         <h2>{{ pond.cycle.density }} peixe/m²</h2>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="ibox">
-                    <div class="ibox-title">
-                        <h5>Quantidade de Peixes</h5>
-                    </div>
                     <div class="ibox-content">
+                        <h5>Quantidade de Peixes</h5>
                         <h2>{{ pond.cycle.amount_fish }} peixes</h2>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="ibox">
-                    <div class="ibox-title">
-                        <h5>Sistema</h5>
-                    </div>
                     <div class="ibox-content">
+                        <h5>Sistema</h5>
                         <h2>{{ pond.cycle.get_system_display }} </h2>
                         {% if pond.cycle.system == 'IN' %}
                             <small class="m-r">{{ pond.cycle.get_type_intensive_display }}</small>
@@ -185,7 +171,7 @@
                     <div class="ibox">
                         <div class="ibox-title">
                             <h5>Biometria</h5>
-                            <div class="ibox-tools">
+                            <div class="pull-right">
                                 <a href="{% url 'biometria' property.id pond.id %}" class="btn btn-warning btn-outline btn-xs">Nova Biometria</a>
                                 {% if pond.cycle.all_biometria.count > 0 %}
                                     <a href="#" class="btn btn-success btn-outline btn-xs" data-toggle="modal" data-target="#allBiometriaModal">Todas as Biometrias</a>
@@ -272,7 +258,7 @@
                     <div class="ibox">
                         <div class="ibox-title">
                             <h5>Mortalidade</h5>
-                            <div class="ibox-tools">
+                            <div class="pull-right">
                                 <a href="{% url 'mortality' property.id pond.id %}" class="btn btn-info btn-outline btn-xs">Novo registro</a>
 
                                 {% if pond.cycle.all_mortality.count > 0 %}
@@ -392,7 +378,6 @@
         {% endif %}
 
     {% endif %}
-
 
 {% endblock %}
 
