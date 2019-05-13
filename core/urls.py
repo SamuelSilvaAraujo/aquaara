@@ -6,7 +6,8 @@ urlpatterns = [
     path('propriedades/', PropertyListView.as_view(), name="property_list"),
     path('propriedade/', include([
         path('cadastro/', PropertyCreateView.as_view(), name="property_create"),
-        path('<int:pk>/editar/', PropertyUpdateView.as_view(), name="property_update")
+        path('<int:pk>/editar/', PropertyUpdateView.as_view(), name="property_update"),
+        path('<int:pk>/excluir/', PropertyDeleteView.as_view(), name="property_delete")
     ])),
     path('<int:pk_property>/', include([
         path('viveiros/', PropertyPondsView.as_view(), name="property_ponds"),

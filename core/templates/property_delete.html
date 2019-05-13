@@ -1,0 +1,28 @@
+{% extends 'property_menu.html' %}
+
+{% block header %}
+    <div class="col-md-12">
+        <h2>Excluir Propriedade</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <p>{{ object.name }}</p>
+            </li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="middle-box text-center">
+            <h3 class="font-bold">Excluir {{ object }}</h3>
+            <div class="error-desc">
+                Se você excluir essa propriedade, todas as informações seram perdidas
+                <br/><button type="submit" class="btn btn-danger m-t"><i class="fa fa-trash"></i> Excluir</button>
+                <a href="{% url 'property_list' %}" class="btn btn-primary m-t">Cancelar</a>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

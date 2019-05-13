@@ -56,6 +56,8 @@
                             </div>
                         </div>
 
+                        <div class="hr-line-dashed"></div>
+
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <a class="btn btn-white" href="{% url 'pond_detail' property.id pond.id %}">Cancelar</a>
@@ -81,7 +83,11 @@
                 type_intensive = $('#type_intensive'),
                 form = $('#formId');
 
-            type_intensive.hide();
+            if($('#system :selected').val() === 'IN'){
+                type_intensive.show()
+            }else {
+                type_intensive.hide();
+            };
 
             system.on('change', function (e) {
                 var val = $(e.target).val(),

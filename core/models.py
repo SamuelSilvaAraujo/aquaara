@@ -150,7 +150,7 @@ class Cycle(models.Model):
 
     def biomassa(self):
         if self.population:
-            return self.peso_medio() * self.amount_fish()
+            return (self.peso_medio() * self.amount_fish())/1000
         else:
             return None
 
