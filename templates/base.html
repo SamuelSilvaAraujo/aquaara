@@ -22,60 +22,44 @@
 
 </head>
 
-<body class="fixed-sidebar">
+<body class="top-navigation">
 
 <div id="wrapper">
-    <nav class="navbar-default navbar-static-side" role="navigation">
-        <div class="sidebar-collapse">
-            <ul class="nav metismenu" id="side-menu">
-                <li class="nav-header">
-                    <div class="dropdown profile-element">
-                        <a href="{% url 'property_list' %}">
-                                <span class="clear">
-                                    <span class="block m-t-xs">
-                                        <strong class="font-bold" style="color: white">{{ user.name }}</strong>
-                                 </span>
-                                </span>
-                        </a>
-                    </div>
-                    <div class="logo-element">
-                        Aquaara
-                    </div>
-                </li>
-                {% block menu %}{% endblock %}
-            </ul>
+  <div id="page-wrapper" class="gray-bg">
+    <div class="row border-bottom white-bg">
+      <nav class="navbar navbar-expand-lg navbar-static-top" role="navigation">
+        <a href="{% url 'index' %}" class="navbar-brand">{{user.name}}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fa fa-reorder"></i>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar">
+          <ul class="nav navbar-nav mr-auto">
+            <li class="active">
+              {% block menu %}{% endblock %}
+            </li>
+          </ul>
+          <ul class="nav navbar-top-links navbar-right">
+            <li>
+              <a href="{% url 'logout' %}">
+                <i class="fa fa-sign-out"></i> Log out
+              </a>
+            </li>
+          </ul>
         </div>
-    </nav>
-
-    <div id="page-wrapper" class="gray-bg">
-        <div class="row border-bottom">
-            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#">
-                        <i class="fa fa-bars"></i>
-                    </a>
-                </div>
-                <ul class="nav navbar-top-links navbar-right">
-                    <li>
-                        <a href="{% url 'logout' %}">
-                            <i class="fa fa-sign-out"></i>Sair
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div class="row border-bottom white-bg page-heading">
-            {% block header %}{% endblock %}
-        </div>
-        <div class="wrapper wrapper-content animated fadeInRightBig">
-            {% block content %}{% endblock %}
-        </div>
-        <div class="footer">
-            <div>
-                <strong>Copyright</strong> Aqua Ara &copy; 2019
-            </div>
-        </div>
+      </nav>
     </div>
+    <div class="row border-bottom white-bg page-heading">
+      {% block header %}{% endblock %}
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRightBig">
+      {% block content %}{% endblock %}
+    </div>
+    <div class="footer">
+      <div>
+        <strong>Copyright</strong> Aqua Ara &copy; 2019
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Mainly scripts -->
