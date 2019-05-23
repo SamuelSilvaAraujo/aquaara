@@ -28,7 +28,7 @@
   <div id="page-wrapper" class="gray-bg">
     <div class="row border-bottom white-bg">
       <nav class="navbar navbar-expand-lg navbar-static-top" role="navigation">
-        <a href="{% url 'index' %}" class="navbar-brand">{{user.name}}</a>
+        <a href="{% url 'index' %}" class="navbar-brand">AquaAra</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fa fa-reorder"></i>
         </button>
@@ -39,10 +39,12 @@
             </li>
           </ul>
           <ul class="nav navbar-top-links navbar-right">
-            <li>
-              <a href="{% url 'logout' %}">
-                <i class="fa fa-sign-out"></i> Log out
-              </a>
+            <li class="dropdown">
+                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.name}} <i class="fa fa-caret-down"></i></a>
+                <ul role="menu" class="dropdown-menu">
+                    <li><a href="#">Meu Perfil</a></li>
+                    <li><a href="{% url 'logout' %}">Sair</a></li>
+                </ul>
             </li>
           </ul>
         </div>
@@ -52,7 +54,9 @@
       {% block header %}{% endblock %}
     </div>
     <div class="wrapper wrapper-content animated fadeInRightBig">
-      {% block content %}{% endblock %}
+      <div class="container">
+        {% block content %}{% endblock %}
+      </div>
     </div>
     <div class="footer">
       <div>
