@@ -5,3 +5,5 @@ venv/
 env/
 
 inspinia-master/
+
+\.vscode/

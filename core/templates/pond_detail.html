@@ -8,49 +8,48 @@
 {% endblock %}
 
 {% block header %}
-    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-            <div class="col-md-12">
-                <h2>{{ pond.identification }}</h2>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
-                    </li>
-                    <li class="breadcrumb-item active">
-                        <strong>{{ pond.identification }}</strong>
-                    </li>
-                </ol>
+
+    <div class="col-md-12">
+        <h2>Despesca</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Despesca</strong>
+            </li>
+        </ol>
+    </div>
+    <h3>
+        <div class="col">
+            <div class="row">
+                <div class="col-md-auto">
+                    {% if not pond.cycle %}
+                        <a href="{% url 'cycle_init' property.id pond.id %}"  class="btn-outline btn-link"><strong>Novo ciclo</strong></a>
+                    {% else %}
+                        {% if not pond.cycle.population %}
+                            <a href="{% url 'population' property.id pond.id %}"  class="btn-outline btn-link"><strong>Povoamento</strong></a>
+                        {% else %}
+                            <a href="{% url 'despesca' property.id pond.id %}" class="btn-outline btn-link"><strong>Despesca</strong></a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="col-md-auto">
+                    <a href="#"  class="btn-outline btn-link"><strong>Ciclos antigos</strong></a>
+                </div>
+                <div class="col-md-auto">
+                    <a href="{% url 'pond_update' property.id pond.id %}"  class="btn-outline btn-link"><strong>Editar</strong></a>                            
+                </div>
+                <div class="col-md-auto">
+                    <a href="{% url 'pond_delete' property.id pond.id %}"  class="btn-outline btn-link"><strong>Excluir</strong></a>                            
+                </div>                            
             </div>
         </div>
-        <ul class="nav navbar-top-links navbar-right">
-            <li>
-                {% if not pond.cycle %}
-                    <a href="{% url 'cycle_init' property.id pond.id %}" style="color: #ec971f">Novo Ciclo</a>
-                {% else %}
-                    {% if not pond.cycle.population %}
-
-                        <a href="{% url 'population' property.id pond.id %}" style="color: #ec971f">Povoamento</a>
-
-                    {% else %}
-
-                        <a href="{% url 'despesca' property.id pond.id %}" style="color: #ec971f">Despesca</a>
-
-                    {% endif %}
-
-                {% endif %}
-            </li>
-            <li>
-                <a href="#" style="color: #23c6c8">Ciclos antigos</a>
-            </li>
-            <li>
-                <a href="{% url 'pond_update' property.id pond.id %}" style="color: #398439">Editar</a>
-            </li>
-            <li>
-                <a href="{% url 'pond_delete' property.id pond.id %}" style="color: #c9302c">Excluir</a>
-            </li>
-        </ul>
-
-    </nav>
+    </h3>
+    
 {% endblock %}
 
 {% block content %}
