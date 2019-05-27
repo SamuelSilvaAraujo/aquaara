@@ -10,7 +10,7 @@
 {% block header %}
 
     <div class="col-md-12">
-        <h2>Despesca</h2>
+        <h2>{{ pond.identification }}</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
@@ -19,7 +19,7 @@
                 <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Despesca</strong>
+                <strong>{{ pond.identification }}</strong>
             </li>
         </ol>
     </div>
