@@ -163,11 +163,11 @@
                 </div>
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h1 class="no-margins">Mortalidade
-                            <div class="pull-right">
+                        <h1>Mortalidade
+                            <div class="m-t-xs pull-right">
                                 <a href="{% url 'mortality' property.id pond.id %}" class="btn btn-info btn-outline btn-xs">Novo registro</a>
                                 {% if pond.cycle.all_mortality.count > 0 %}
-                                    <a href="#" class="btn btn-success btn-outline btn-xs" data-toggle="modal" data-target="#allMortalidadeModal">Todos os registro</a>
+                                    <a href="#" class="btn btn-success btn-outline btn-xs" data-toggle="modal" data-target="#allMortalidadeModal">Todos os registros</a>
                                 {% endif %}
                             </div>
                         </h1>
@@ -187,6 +187,85 @@
     </div>
     {% if pond.cycle.population %}
     <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h1>Biometria
+                        <div class="pull-right">
+                            <a href="{% url 'biometria' property.id pond.id %}" class="btn btn-warning btn-outline btn-xs">Nova Biometria</a>
+                            {% if pond.cycle.all_biometria.count > 0 %}
+                            <a href="#" class="btn btn-success btn-outline btn-xs" data-toggle="modal" data-target="#allBiometriaModal">Todas as Biometrias</a>
+                            {% endif %}
+                        </div>
+                    </h1>                            
+                </div>
+                {% if pond.cycle.all_biometria.count > 0 %}
+                <div class="ibox-content">
+                    <div class="row">
+                       <div class="col-6">
+                            <h5>Data da última biometria</h5>
+                            <h2 class="no-margins"><strong>{{ pond.cycle.last_biometria.date }}</strong></h2>
+                        </div>
+                        <div class="col-6">
+                            <h5>Peso Médio</h2>
+                            <h2 class="no-margins"><strong>{{ pond.cycle.last_biometria.middleweight }} g</strong</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>Data da próxima biometria</h5>
+                            <h2 class="no-margins"><strong>{{ pond.cycle.date_biometria }}</strong></h2>
+                        </div>
+                        <div class="col-6">
+                            <h5>Total de peixes</h5>
+                            <h2 class="no-margins"><strong>{{ pond.cycle.amount_fish_biometria }} peixes</strong></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+   
+
+    <div class="modal inmodal" id="allBiometriaModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <h4 class="modal-title">Biometrias</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="footableB table table-stripped toggle-arrow-tiny" data-page-size="5">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Peso medio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for bio in pond.cycle.all_biometria %}
+                            <tr>
+                                <td>{{ bio.date }}</td>
+                                <td>{{ bio.middleweight }} kg</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
     </div>
     {% endif%}
 
