@@ -86,7 +86,7 @@
                 </div>
             </div>
             
-            <div class="ibox ">
+            <div class="ibox">
                 <div class="ibox-title">
                     <h1>Capacidade do viveiro</h1>
                 </div>
@@ -117,74 +117,79 @@
                 {% endif %}    
             </div>
 
+            
+
         </div>
         {% if pond.cycle.population%}
-            <div class="col-lg-6">
-                <div class="ibox ">
-                    <div class="ibox-title">
-                        <h1>Arraçoamento</h1>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-6">
-                                <h5>Quantidade de ração:</h5>
-                                <h2 class="no-margins">{{ pond.cycle.arracoamento|floatformat:2 }} g</h2>
-                            </div>
-                            <div class="col-6">
-                                <h5>Refeições por dia:</h5>
-                                <h2 class="no-margins">{{ pond.cycle.number_refeicoes }}</h2>
-                            </div>
+        <div class="col-lg-6">
+
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h1>Arraçoamento</h1>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>Quantidade de ração:</h5>
+                            <h2 class="no-margins">{{ pond.cycle.arracoamento|floatformat:2 }} g</h2>
                         </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-auto">
-                                <h5>Proteina na ração:</h5>
-                                <h2 class="no-margins">{{ pond.cycle.proteina_racao }} %</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-auto">
-                                <h5>Diâmetro do pelete:</h5>
-                                <h2 class="no-margins">{{ pond.cycle.diametro_pelete }} mm</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-auto">
-                                <h5>Horários da ração:</h5>
-                                <h2 class="no-margins">{{ pond.cycle.horario_refeicoes }}</h2>
-                            </div>
+                        <div class="col-6">
+                            <h5>Refeições por dia:</h5>
+                            <h2 class="no-margins">{{ pond.cycle.number_refeicoes }}</h2>
                         </div>
                     </div>
                 </div>
-                <div class="ibox">
-                    <div class="ibox-title">
-                        <h1>Mortalidade
-                            <div class="m-t-xs pull-right">
-                                <a href="{% url 'mortality' property.id pond.id %}" class="btn btn-info btn-outline btn-xs">Novo registro</a>
-                                {% if pond.cycle.all_mortality.count > 0 %}
-                                    <a href="#" class="btn btn-success btn-outline btn-xs" data-toggle="modal" data-target="#allMortalidadeModal">Todos os registros</a>
-                                {% endif %}
-                            </div>
-                        </h1>
-                        
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-auto">
+                            <h5>Proteina na ração:</h5>
+                            <h2 class="no-margins">{{ pond.cycle.proteina_racao }} %</h2>
+                        </div>
                     </div>
-                    <div class="ibox-content">
-                        {% if pond.cycle.all_mortality.count > 0 %}
-                            <h5>Quantidade de peixes mortos:</h5>
-                            <h2>{{ pond.cycle.total_mortality }}</h2>
-                        {% else %}
-                            <h2>Nenhuma Mortalidade registrada</h2>
-                        {% endif %}
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-auto">
+                            <h5>Diâmetro do pelete:</h5>
+                            <h2 class="no-margins">{{ pond.cycle.diametro_pelete }} mm</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-auto">
+                            <h5>Horários da ração:</h5>
+                            <h2 class="no-margins">{{ pond.cycle.horario_refeicoes }}</h2>
+                        </div>
                     </div>
                 </div>
             </div>
-        {% endif %}
+            
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h1>Mortalidade
+                        <div class="m-t-xs pull-right">
+                            <a href="{% url 'mortality' property.id pond.id %}" class="btn btn-info btn-outline btn-xs">Novo registro</a>
+                            {% if pond.cycle.all_mortality.count > 0 %}
+                                <a href="#" class="btn btn-success btn-outline btn-xs" data-toggle="modal" data-target="#allMortalidadeModal">Todos os registros</a>
+                            {% endif %}
+                        </div>
+                    </h1>   
+                </div>
+                <div class="ibox-content">
+                    {% if pond.cycle.all_mortality.count > 0 %}
+                        <h5>Quantidade de peixes mortos:</h5>
+                        <h2>{{ pond.cycle.total_mortality }}</h2>
+                    {% else %}
+                        <h2>Nenhuma Mortalidade registrada</h2>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
     </div>
+    {% endif %}
+
     {% if pond.cycle.population %}
     <div class="row">
         <div class="col-lg-6">
@@ -202,33 +207,48 @@
                 {% if pond.cycle.all_biometria.count > 0 %}
                 <div class="ibox-content">
                     <div class="row">
-                       <div class="col-6">
+                       <div class="col-lg-6">
                             <h5>Data da última biometria</h5>
                             <h2 class="no-margins"><strong>{{ pond.cycle.last_biometria.date }}</strong></h2>
                         </div>
-                        <div class="col-6">
+                        <div class="col-lg-6">
                             <h5>Peso Médio</h2>
-                            <h2 class="no-margins"><strong>{{ pond.cycle.last_biometria.middleweight }} g</strong</h2>
+                            <h2 class="no-margins"><strong>{{ pond.cycle.last_biometria.middleweight }} g</strong></h2>
                         </div>
                     </div>
                 </div>
+
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-lg-6">
                             <h5>Data da próxima biometria</h5>
                             <h2 class="no-margins"><strong>{{ pond.cycle.date_biometria }}</strong></h2>
                         </div>
-                        <div class="col-6">
+                        <div class="col-lg-6">
                             <h5>Total de peixes</h5>
                             <h2 class="no-margins"><strong>{{ pond.cycle.amount_fish_biometria }} peixes</strong></h2>
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
-    </div>
-    {% endif %}
-   
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h1>Povoamento</h1>
+                </div>
+                <div class="ibox-content">
+                    <h3>Data</h3>
+                    <h2 class="no-margins">{{ pond.cycle.population.date }}</h2>
+                </div>
+                <div class="ibox-content">
+                    <h3>Peso Médio</h3>
+                    <h2 class="no-margins">{{ pond.cycle.population.middleweight }} g</h2>
+                </div>
+            </div>
+        </div>
+    </div>   
 
     <div class="modal inmodal" id="allBiometriaModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
