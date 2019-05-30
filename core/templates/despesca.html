@@ -1,7 +1,5 @@
-{% extends 'menu.html' %}
+{% extends 'pond_base.html' %}
 {% load static %}
-
-{% block title %}Despesca{% endblock %}
 
 {% block head %}
 
@@ -9,61 +7,65 @@
 
 {% endblock %}
 
-{% block header %}
-    <div class="col-md-12">
-        <h2>Despesca</h2>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
-            </li>
-            <li class="breadcrumb-item active">
-                <strong>Despesca</strong>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
-
 {% block content %}
 
-    <div class="row wrapper-content animated fadeInRight">
+    <div class="row">
         <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Despesca</h5>
+            <div class="ibox">
+                <div class="ibox-title p-md">
+                    <h2><span class="text-navy">Despesca</span></h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>Despesca</strong>
+                        </li>
+                    </ol>
                 </div>
-                <div class="ibox-content">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content p-md">
                     <form method="post" class="form-horizontal">
                         {% csrf_token %}
 
-                        <div class="form-group row" id="data_1">
-                            <label class="col-lg-2 col-form-label">{{ form.date.label }}</label>
-                            <div class="col-lg-10">
-                                <div class="input-group date">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </span>
-                                    {{ form.date }}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group"  id="data_id">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.date.label }}</h3>
+                                    </label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        {{ form.date }}
+                                    </div>
+                                    <span class="form-text m-b-none">Data em que a despesca foi realizado.</span>
                                 </div>
-                                <span class="form-text m-b-none">Data em que a despesca foi realizado.</span>
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">{{ form.final_middleweight.label }}</label>
-                            <div class="col-lg-10">
-                                {{ form.final_middleweight }}
-                                <span class="form-text m-b-none">Peso médio dos peixes na despesca.</span>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.final_middleweight.label }}</h3>
+                                    </label>
+                                    {{ form.final_middleweight }}
+                                    <span class="form-text m-b-none">Peso médio dos peixes na despesca.</span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="hr-line-dashed"></div>
 
-                        <div class="form-group row">
-                            <div class="col-sm-4 col-sm-offset-2">
-                                <a class="btn btn-white" href="{% url 'pond_detail' property.id pond.id %}">Cancelar</a>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-white btn-link" href="{% url 'pond_detail' property.id pond.id %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
                         </div>
@@ -83,7 +85,7 @@
 
         $(document).ready(function () {
 
-            $('#data_1 .input-group.date').datepicker({
+            $('#data_id .input-group.date').datepicker({
                 format: "dd/mm/yyyy",
                 language: 'pt-BR',
                 todayBtn: "linked",

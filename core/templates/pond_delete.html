@@ -1,24 +1,4 @@
-{% extends 'menu.html' %}
-
-{% block header %}
-    <div class="col-md-12">
-        <h2>Excluir viveiro</h2>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <p>{{ property.name }}</p>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{% url 'property_ponds' property.id %}">Viveiros</a>
-            </li>
-            <li class="breadcrumb-item">
-                {{ object.identification }}
-            </li>
-            <li class="breadcrumb-item active">
-                <strong>Excluir viveiro</strong>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
+{% extends 'pond_base.html' %}
 
 {% block content %}
 

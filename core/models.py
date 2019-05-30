@@ -316,7 +316,7 @@ class Mortality(models.Model):
 class Biometria(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
-    middleweight = models.FloatField("Peso Medio")
+    middleweight = models.FloatField("Peso Médio")
 
 class WaterQuality(models.Model):
     date = models.DateField("Data", default=datetime.now)

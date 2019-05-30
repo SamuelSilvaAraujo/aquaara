@@ -1,43 +1,60 @@
-{% extends 'property_menu.html' %}
+{% extends 'base.html' %}
 
 {% load static %}
 
 {% block title %}Propriedades{% endblock %}
 
-{% block header %}
-    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-            <div class="col-md-12">
-                <h2>Propriedades</h2>
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h2><span class="text-navy">Propriedades</span></h2>
+                    <div class="pull-right">
+                        <a href="{% url 'property_create' %}" class="btn btn-success btn-outline btn-link">Cadastrar Propriedade</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </nav>
-{% endblock %}
-
-{% block content %}
+    </div>
 
     {% if object_list %}
 
         <div class="row">
-            {% for property in object_list %}
-                <div class="col-lg-3">
-                    <div class="contact-box center-version">
-                        <a href="{% url 'property_ponds' property.id %}">
-                            <h3 class="m-b-xs"><strong>{{ property.name }}</strong></h3>
-                            <address class="m-t-md">
-                                {{ property.address.number }} {{ property.address.street }}, {{ property.address.district }}<br>
-                                {{ property.address.city }}, {{ property.address.get_state_display }}<br>
-                            </address>
-                        </a>
-                        <div class="contact-box-footer">
-                            <div class="m-t-xs btn-group">
-                                <a href="{% url 'property_update' property.id %}"  class="btn btn-xs btn-white"><i class="fa fa-pencil"></i> Editar </a>
-                                <a href="{% url 'property_delete' property.id %}"  class="btn btn-xs btn-danger"><i class="fa fa-trash"></i> Excluir</a>
-                            </div>
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="project-list">
+
+                            <table class="table table-hover">
+                                <tbody>
+
+                                {% for property in object_list %}
+                                    <tr>
+                                        <td class="project-title">
+                                            <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
+                                        </td>
+                                        <td class="project-title">
+                                            <small>
+                                                Rua {{ property.address.street }}, {{ property.address.number }} - {{ property.address.district }} <br>
+                                                {{ property.address.city }}, {{ property.address.get_state_display }}
+                                            </small>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a href="{% url 'property_update' property.id %}" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Editar </a>
+                                            <a href="{% url 'property_delete' property.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Excluir </a>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            {% endfor %}
+            </div>
         </div>
 
     {% else %}

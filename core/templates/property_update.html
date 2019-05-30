@@ -1,89 +1,112 @@
 {% extends 'base.html' %}
 
-{% block title %}Editar Propriedade{% endblock %}
-
-{% block header %}
-    <div class="col-md-12">
-        <h2>Editar Propriedade</h2>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{% url 'property_list' %}">Propriedades</a>
-            </li>
-            <li class="breadcrumb-item active">
-                <strong>Editar Propriedade</strong>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
-
 {% block content %}
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Editar Propriedade</h5>
+            <div class="ibox">
+                <div class="ibox-title p-md">
+                    <h2><span class="text-navy">Editar Propriedade</span></h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'property_list' %}">Propriedades</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>Editar Propriedade</strong>
+                        </li>
+                    </ol>
                 </div>
-                <form method="post" class="form-horizontal">
-                    {% csrf_token %}
-                    <div class="ibox-content">
+            </div>
+        </div>
+    </div>
 
-                        <div class="form-group row">
-                            <label class="control-label col-sm-2">{{ form.name.label }}</label>
-                            <div class="col-sm-10">
-                                {{ form.name }}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content p-md">
+                    <form method="post" class="form-horizontal">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.name.label }}</h3>
+                                    </label>
+                                    {{ form.name }}
+                                    <span>Nome da Propriedade.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-form-label">
+                                    <h3>Endereço</h3>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ address_form.street.label }}</h3>
+                                    </label>
+                                    {{ address_form.street }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ address_form.number.label }}</h3>
+                                    </label>
+                                    {{ address_form.number }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ address_form.district.label }}</h3>
+                                    </label>
+                                    {{ address_form.district }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3> {{ address_form.city.label }}</h3>
+                                    </label>
+                                    {{ address_form.city }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3> {{ address_form.state.label }}</h3>
+                                    </label>
+                                    {{ address_form.state }}
+                                </div>
                             </div>
                         </div>
 
                         <div class="hr-line-dashed"></div>
 
-                        <div class="form-group row">
-                            <h3 class="control-label col-sm-2">Endereço</h3>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="control-label col-sm-2">{{ address_form.street.label }}</label>
-                            <div class="col-sm-4">
-                                {{ address_form.street }}
-                            </div>
-
-                            <label class="control-label col-sm-2">{{ address_form.number.label }}</label>
-
-                            <div class="col-sm-4">
-                                {{ address_form.number }}
-                            </div>
-
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="control-label col-sm-2">{{ address_form.district.label }}</label>
-                            <div class="col-sm-10">
-                                {{ address_form.district }}
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="control-label col-sm-2">{{ address_form.city.label }}</label>
-                            <div class="col-sm-4">
-                                {{ address_form.city }}
-                            </div>
-                            <label class="control-label col-sm-2">{{ address_form.state.label }}</label>
-                            <div class="col-sm-4">
-                                {{ address_form.state }}
-                            </div>
-                        </div>
-
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-4 col-sm-offset-2">
-                                <a href="{% url 'property_list' %}" class="btn btn-white">Cancelar</a>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="{% url 'property_list' %}" class="btn btn-white btn-link">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
                         </div>
-                    </div>
 
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

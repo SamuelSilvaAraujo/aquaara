@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>AquaAra</title>
 
     {#    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">#}
 
@@ -34,9 +34,10 @@
                 </button>
                 <div class="navbar-collapse collapse" id="navbar">
                     <ul class="nav navbar-nav mr-auto">
-                        <li class="active">
-                            {% block menu %}{% endblock %}
+                        <li class="{{ propertys_page }}">
+                            <a href="{% url 'property_list' %}">Propriedades</a>
                         </li>
+                        {% block menu %}{% endblock %}
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li class="dropdown">
@@ -50,9 +51,6 @@
                 </div>
             </nav>
         </div>
-        {#    <div class="row border-bottom white-bg page-heading">#}
-        {#      {% block header %}{% endblock %}#}
-        {#    </div>#}
         <div class="wrapper wrapper-content">
             <div class="container">
                 {% block content %}{% endblock %}

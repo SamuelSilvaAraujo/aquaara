@@ -1,54 +1,10 @@
-{% extends 'menu.html' %}
+{% extends 'pond_base.html' %}
 {% load static %}
-
-{% block title %}{{ pond.identification }}{% endblock %}
 
 {% block head %}
     <link href="{% static 'css/plugins/footable/footable.core.css' %}" rel="stylesheet">
 
     <link href="{% static 'css/plugins/morris/morris-0.4.3.min.css' %}" rel="stylesheet">
-
-{% endblock %}
-
-{% block header %}
-
-    <div class="col-md-12">
-        <h2>{{ pond.identification }}</h2>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
-            </li>
-            <li class="breadcrumb-item active">
-                <strong>{{ pond.identification }}</strong>
-            </li>
-        </ol>
-    </div>
-    <h5>
-        <div class="col">
-            <div class="row">
-                <div class="col-md-auto col-sm-auto">
-                    {% if not pond.cycle %}
-                        <a href="{% url 'cycle_init' property.id pond.id %}"  class="btn-outline btn-link"><strong>Novo ciclo</strong></a>
-                    {% else %}
-                        {% if not pond.cycle.population %}
-                            <a href="{% url 'population' property.id pond.id %}"  class="btn-outline btn-link"><strong>Povoamento</strong></a>
-                        {% else %}
-                            <a href="{% url 'despesca' property.id pond.id %}" class="btn-outline btn-link"><strong>Despesca</strong></a>
-                        {% endif %}
-                    {% endif %}
-                </div>
-                <div class="col-md-auto col-sm-auto">
-                    <a href="#"  class="btn-outline btn-link"><strong>Ciclos antigos</strong></a>
-                </div>
-                <div class="col-md-auto col-sm-auto">
-                    <a href="{% url 'pond_update' property.id pond.id %}"  class="btn-outline btn-link"><strong>Editar</strong></a>
-                </div>
-                <div class="col-md-auto col-sm-auto">
-                    <a href="{% url 'pond_delete' property.id pond.id %}"  class="btn-outline btn-link"><strong>Excluir</strong></a>
-                </div>
-            </div>
-        </div>
-    </h5>
 
 {% endblock %}
 
@@ -81,14 +37,14 @@
                                         <a href="{% url 'despesca' property.id pond.id %}" class="btn btn-warning btn-outline btn-link"><strong>Despesca</strong></a>
                                     {% endif %}
                                 {% endif %}
+                                <a href="#" class="btn btn-primary btn-outline btn-link">
+                                    Ciclos antigos
+                                </a>
                                 <a href="{% url 'pond_update' property.id pond.id %}" class="btn btn-success btn-outline btn-link">
                                     Editar
                                 </a>
                                 <a href="{% url 'pond_delete' property.id pond.id %}" class="btn btn-danger btn-outline btn-link">
                                     Excluir
-                                </a>
-                                <a href="#" class="btn btn-primary btn-outline btn-link">
-                                    Ciclos antigos
                                 </a>
                             </div>
                         </div>
@@ -257,7 +213,11 @@
                                 </div>
                             </div>
                         {% else %}
-                            <h3>Nenhuma biometria realizada!</h3>
+
+                            <div class="ibox-content">
+                                <h3>Nenhuma biometria realizada!</h3>
+                            </div>
+
                         {% endif %}
 
                     {% endwith %}
@@ -314,7 +274,9 @@
 
                         {% else %}
 
-                            <h3>Nenhuma Mortalidade registrada!</h3>
+                            <div class="ibox-content">
+                                <h3>Nenhuma Mortalidade registrada!</h3>
+                            </div>
 
                         {% endif %}
 

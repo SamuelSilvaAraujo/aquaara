@@ -1,65 +1,73 @@
-{% extends 'menu.html' %}
+{% extends 'pond_base.html' %}
 {% load static %}
-
-{% block title %}Novo ciclo{% endblock %}
-
-{% block header %}
-    <div class="col-md-12">
-        <h2>Novo ciclo</h2>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
-            </li>
-            <li class="breadcrumb-item active">
-                <strong>Novo ciclo</strong>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
 
 {% block content %}
 
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
-                <div class="ibox-title">
-                    <h5>Novo Ciclo</h5>
+                <div class="ibox-title p-md">
+                    <h2><span class="text-navy">Novo Ciclo</span></h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>Novo Ciclo</strong>
+                        </li>
+                    </ol>
                 </div>
-                <div class="ibox-content">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">>
+                <div class="ibox-content p-md">
                     <form id="formId" method="post" class="form-horizontal">
                         {% csrf_token %}
 
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">{{ form.middleweight_despesca.label }}</label>
-                            <div class="col-lg-10">
-                                {{ form.middleweight_despesca }}
-                                <span class="form-text m-b-none">Peso médio esperado na despesca em gramas.</span>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.middleweight_despesca.label }}</h3>
+                                    </label>
+                                    {{ form.middleweight_despesca }}
+                                    <span class="form-text m-b-none">Peso médio esperado em gramas.</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div id="system" class="form-group row">
-                            <label class="col-lg-2 col-form-label">{{ form.system.label }}</label>
-                            <div class="col-lg-10">
-                                {{ form.system }}
-                                <span class="form-text m-b-none">Sistema de cultivo</span>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.system.label }}</h3>
+                                    </label>
+                                    {{ form.system }}
+                                    <span class="form-text m-b-none">Sistema de cultivo</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div id="type_intensive" class="form-group row">
-                            <label class="col-lg-2 col-form-label">{{ form.type_intensive.label }}</label>
-                            <div class="col-lg-10">
-                                {{ form.type_intensive }}
-                                <span class="form-text m-b-none">Tipo de sistema intensivo</span>
+                        <div class="row" id="type_intensive">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.type_intensive.label }}</h3>
+                                    </label>
+                                    {{ form.type_intensive }}
+                                    <span class="form-text m-b-none">Tipo de sistema intensivo</span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="hr-line-dashed"></div>
 
-                        <div class="form-group">
-                            <div class="col-sm-4 col-sm-offset-2">
+                        <div class="row">
+                            <div class="col-md-12">
                                 <a class="btn btn-white" href="{% url 'pond_detail' property.id pond.id %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
@@ -87,7 +95,7 @@
                 type_intensive.show()
             }else {
                 type_intensive.hide();
-            };
+            }
 
             system.on('change', function (e) {
                 var val = $(e.target).val(),

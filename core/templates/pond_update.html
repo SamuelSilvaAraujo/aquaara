@@ -1,74 +1,86 @@
-{% extends 'menu.html' %}
-
-{% block title %} Editar Viveiro {% endblock %}
-
-{% block header %}
-    <div class="col-md-12">
-        <h2>Editar viveiro</h2>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <p>{{ property.name }}</p>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{% url 'property_ponds' property.id %}">Viveiros</a>
-            </li>
-            <li class="breadcrumb-item">
-                {{ pond.identification }}
-            </li>
-            <li class="breadcrumb-item active">
-                <strong>Editar viveiro</strong>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
+{% extends 'pond_base.html' %}
 
 {% block content %}
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Editar Viveiro</h5>
+            <div class="ibox">
+                <div class="ibox-title p-md">
+                    <h2><span class="text-navy">Editar Viveiro</span></h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>Editar viveiro</strong>
+                        </li>
+                    </ol>
                 </div>
-                <div class="ibox-content">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content p-md">
                     <form method="post" class="form-horizontal">
                         {% csrf_token %}
 
-                        <div class="form-group">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label for="identification">{{ form.identification.label }}</label>
-                                {{ form.identification }}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.identification.label }}</h3>
+                                    </label>
+                                    {{ form.identification }}
+                                    <span class="form-text m-b-none">Nome ou Numero que identifique o viveiro.</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label for="vazao">{{ form.water_flow.label }}</label>
-                                {{ form.water_flow }}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.water_flow.label }}</h3>
+                                    </label>
+                                    {{ form.water_flow }}
+                                    <span class="form-text m-b-none">Vazão de Água em litros por segundo.</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label for="largura">{{ form.width.label }}</label>
-                                {{ form.width }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.width.label }}</h3>
+                                    </label>
+                                    {{ form.width }}
+                                    <span class="form-text m-b-none">Largura do viveiro em metros.</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <label for="comprimento">{{ form.length.label }}</label>
-                                {{ form.length }}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.length.label }}</h3>
+                                    </label>
+                                    {{ form.length }}
+                                    <span class="form-text m-b-none">Comprimento do viveiro em metros.</span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="hr-line-dashed"></div>
 
-                        <div class="form-group">
-                            <div class="col-sm-4 col-sm-offset-1">
-                                <a class="btn btn-white" href="{% url 'pond_detail' property.id pond.id %}">Cancelar</a>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-link btn-white" href="{% url 'property_ponds' property.id %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>

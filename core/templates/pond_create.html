@@ -1,69 +1,82 @@
-{% extends 'menu.html' %}
-
-{% block title %}Novo Viveiro{% endblock %}
-
-{% block header %}
-    <div class="col-md-12">
-        <h2>Novo viveiro</h2>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
-            </li>
-            <li class="breadcrumb-item active">
-                <strong>Novo viveiro</strong>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
+{% extends 'pond_base.html' %}
 
 {% block content %}
 
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
-                <div class="ibox-title">
-                    <h5>Novo viveiro</h5>
+                <div class="ibox-title p-md">
+                    <h2><span class="text-navy">Cadastrar Viveiro</span></h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>Cadastrar Viveiro</strong>
+                        </li>
+                    </ol>
                 </div>
-                <div class="ibox-content">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content p-md">
                     <form method="post">
                         {% csrf_token %}
 
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">{{ form.identification.label }}</label>
-                            <div class="col-lg-10">
-                                {{ form.identification }}
-                                <span class="form-text m-b-none">Identificação do viveiro.</span>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.identification.label }}</h3>
+                                    </label>
+                                    {{ form.identification }}
+                                    <span class="form-text m-b-none">Nome ou Numero que identifique o viveiro.</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">{{ form.water_flow.label }}</label>
-                            <div class="col-lg-10">
-                                {{ form.water_flow }}
-                                <span class="form-text m-b-none">Vazão de Água em litros por segundo.</span>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.water_flow.label }}</h3>
+                                    </label>
+                                    {{ form.water_flow }}
+                                    <span class="form-text m-b-none">Vazão de Água em litros por segundo.</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">{{ form.width.label }}</label>
-                            <div class="col-lg-10">
-                                {{ form.width }}
-                                <span class="form-text m-b-none">Largura do viveiro em metros.</span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.width.label }}</h3>
+                                    </label>
+                                    {{ form.width }}
+                                    <span class="form-text m-b-none">Largura do viveiro em metros.</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">{{ form.length.label }}</label>
-                            <div class="col-lg-10">
-                                {{ form.length }}
-                                <span class="form-text m-b-none">Comprimento do viveiro em metros.</span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.length.label }}</h3>
+                                    </label>
+                                    {{ form.length }}
+                                    <span class="form-text m-b-none">Comprimento do viveiro em metros.</span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="hr-line-dashed"></div>
 
-                        <div class="form-group row">
-                            <div class="col-lg-offset-2 col-lg-10">
-                                <a class="btn btn-white" href="{% url 'property_ponds' property.id %}">Cancelar</a>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-link btn-white" href="{% url 'property_ponds' property.id %}">Cancelar</a>
                                 <button class="btn btn-primary" type="submit">Salvar</button>
                             </div>
                         </div>

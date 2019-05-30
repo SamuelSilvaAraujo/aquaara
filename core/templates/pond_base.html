@@ -2,9 +2,6 @@
 
 {% block menu %}
 
-    <li>
-        <a href="{% url 'property_list' %}">Propriedades</a>
-    </li>
     <li class="{{ pond_page }}">
         <a href="{% url 'property_ponds' property.id %}">Viveiros</a>
     </li>
