@@ -24,53 +24,110 @@
 
 {% block content %}
 
-    {% with ponds=property.pond_set.all  %}
-
-        {% if ponds %}
-
-            <div class="row ">
-                <div class="col-lg-12">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Viveiros</h5>
-                            <div class="pull-right">
-                                <a href="{% url 'pond_create' property.id %}" class="btn btn-success btn-outline btn-xs">
-                                    <i class="fa fa-plus"></i> Novo Viveiro</a>
-                            </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-content p-md">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2><span class="text-navy">Viveiros</span></h2>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    {{ property.name }}
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <strong>Viveiros</strong>
+                                </li>
+                            </ol>
                         </div>
-                        <div class="ibox-content">
-                            <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Buscar">
-
-                            <table class="footable table table-stripped" data-page-size="20" data-filter=#filter>
-                                <thead>
-                                <tr>
-                                    <th>Identificação</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for pond in ponds %}
-
-                                    <tr class="gradeX">
-                                        <td>
-                                            <a href="{% url 'pond_detail' property.id pond.id %}" class="client-link">{{ pond.identification }}</a>
-                                        </td>
-                                    </tr>
-
-                                {% endfor %}
-
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination pull-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+                        <div class="col-md-6">
+                            <div class="pull-right">
+                                <a href="{% url 'pond_create' property.id %}" class="btn btn-success btn-outline btn-link">
+                                    Cadastrar Viveiro
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    {% with ponds=property.pond_set.all  %}
+
+        {% if ponds %}
+
+            {% for pond in ponds %}
+
+                <div class="vote-item">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="vote-actions">
+                                <a>
+                                    <i class="fa fa-chevron-up"> </i>
+                                </a>
+                                <div>{{forloop.counter}}</div>
+                                <a>
+                                    <i class="fa fa-chevron-down"> </i>
+                                </a>
+                            </div>
+                            <a href="{% url 'pond_detail' property.id pond.id %}" class="vote-title">
+                                {{ pond.identification }}
+                            </a>
+                            <div class="vote-info">
+                                Ciclos: {{ pond.number_cycles }}
+                                Área do viveiro: {{ pond.area }} m²
+                                Vazão de Água: {{ pond.water_flow }} l/s
+                                Volume de Água: {{ pond.volume }} L
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {#            <div class="row ">#}
+            {#                <div class="col-lg-12">#}
+            {#                    <div class="ibox float-e-margins">#}
+            {#                        <div class="ibox-title">#}
+            {#                            <h5>Viveiros</h5>#}
+            {#                            <div class="pull-right">#}
+            {#                                <a href="{% url 'pond_create' property.id %}" class="btn btn-success btn-outline btn-xs">#}
+            {#                                    <i class="fa fa-plus"></i> Novo Viveiro</a>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                        <div class="ibox-content">#}
+            {#                            <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Buscar">#}
+            {##}
+            {#                            <table class="footable table table-stripped" data-page-size="20" data-filter=#filter>#}
+            {#                                <thead>#}
+            {#                                <tr>#}
+            {#                                    <th>Identificação</th>#}
+            {#                                </tr>#}
+            {#                                </thead>#}
+            {#                                <tbody>#}
+            {#                                {% for pond in ponds %}#}
+            {##}
+            {#                                    <tr class="gradeX">#}
+            {#                                        <td>#}
+            {#                                            <a href="{% url 'pond_detail' property.id pond.id %}" class="client-link">{{ pond.identification }}</a>#}
+            {#                                        </td>#}
+            {#                                    </tr>#}
+            {##}
+            {#                                {% endfor %}#}
+            {##}
+            {#                                </tbody>#}
+            {#                                <tfoot>#}
+            {#                                <tr>#}
+            {#                                    <td colspan="5">#}
+            {#                                        <ul class="pagination pull-right"></ul>#}
+            {#                                    </td>#}
+            {#                                </tr>#}
+            {#                                </tfoot>#}
+            {#                            </table>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#            </div>#}
 
         {% else %}
 
