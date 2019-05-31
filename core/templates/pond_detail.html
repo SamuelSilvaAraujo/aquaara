@@ -181,7 +181,7 @@
                     {% with all_biometria=pond.cycle.all_biometria  %}
                         {% if all_biometria|length > 0 %}
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 no-margins">
                                 <div class="ibox-content">
                                     <table class="footableB table table-stripped toggle-arrow-tiny" data-page-size="5">
                                         <thead>
@@ -208,7 +208,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-8 no-margins">
+                            <div class="col-lg-8">
                                 <div class="ibox-content">
                                     <div class="ibox-content">
                                         <div id="biometria-chart"></div>
@@ -270,7 +270,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-lg-8 no-margins">
+                            <div class="col-lg-8">
                                 <div class="ibox-content">
                                     <div class="ibox-content">
                                         <div id="mortality-chart"></div>
@@ -346,6 +346,7 @@
                     lineColors: ['#1ab394'],
                     pointSize:5,
                     parseTime: false,
+                    hideHover: 'auto',
                 })
             })
 
