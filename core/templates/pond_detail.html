@@ -317,29 +317,35 @@
                 Morris.Line({
                     element: 'biometria-chart',
                     data: [
-                        { day: '05', month: '01' , value: 100},
-                        { day: '06', month: '01', value: 100},
+                    {% for item in pond.cycle.all_biometria reversed %}
+                        { day: '{{item.date}}', weight: '{{item.middleweight}}' },
+                    {% endfor %}
                     ],
                     xkey: 'day',
-                    ykeys: ['value'],
-                    labels: ['2015', '2014'],
+                    ykeys: ['weight'],
+                    labels: ['Peso médio'],
+                    xLabels: 'month',
                     hideHover: 'auto',
                     resize: true,
+                    parseTime: false,
                 });
 
                 Morris.Line({
                     element: 'mortality-chart',
                     data: [
-                        { date: '8 de junho de 2019', value: 50.0 },
-                        { date: '6 de junho de 2019', value: 20.0 },
+                    {% for item in pond.cycle.all_mortality reversed %}
+                        { day: '{{item.date}}', mortality: '{{item.amount}}' },
+                    {% endfor %}
                     ],
-                    xkey: 'date',
-                    ykeys: ['value'],
+                    xkey: 'day',
+                    ykeys: ['mortality'],
                     resize: true,
                     lineWidth:4,
-                    labels: ['Value'],
+                    labels: ['Taxa de mortalidade'],
+                    xLabels: 'month',
                     lineColors: ['#1ab394'],
                     pointSize:5,
+                    parseTime: false,
                 })
             })
 
