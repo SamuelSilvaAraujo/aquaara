@@ -318,7 +318,7 @@
                     element: 'biometria-chart',
                     data: [
                     {% for item in pond.cycle.all_biometria reversed %}
-                        { day: '{{item.date}}', weight: '{{item.middleweight}}' },
+                        { day: '{{item.date|date:'Y-M'}}', weight: '{{item.middleweight}}' },
                     {% endfor %}
                     ],
                     xkey: 'day',
@@ -334,7 +334,7 @@
                     element: 'mortality-chart',
                     data: [
                     {% for item in pond.cycle.all_mortality reversed %}
-                        { day: '{{item.date}}', mortality: '{{item.amount}}' },
+                        { day: '{{item.date|date:'Y-M'}}', mortality: '{{item.amount}}' },
                     {% endfor %}
                     ],
                     xkey: 'day',
