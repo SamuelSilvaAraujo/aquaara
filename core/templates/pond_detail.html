@@ -49,12 +49,13 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-3">
-            <div class="ibox">
-                <div class="ibox-title" style="background-color: #0a6aa1">
-                    <h2 style="color: white"><strong>VIVEIRO</strong></h2>
+        <div class="col-lg-4">
+
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h2><strong>VIVEIRO</strong></h2>
                 </div>
-                <div class="ibox-content">
+                <div class="panel-body">
                     <h3>
                         Ciclos realizados:
                         <small> {{ pond.number_cycles }}</small>
@@ -77,12 +78,13 @@
 
         {% if pond.cycle %}
             <div class="col-lg-4">
-                <div class="ibox">
-                    <div class="ibox-title" style="background-color: #008000">
-                        <h2 style="color: white"><strong>CICLO</strong></h2>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h2><strong>CICLO</strong></h2>
                     </div>
-                    <div class="ibox-content">
-                        <h3>Sistema:
+                    <div class="panel-body">
+                        <h3>
+                            Sistema:
                             <small> {{ pond.cycle.get_system_display }}
                                 {% if pond.cycle.system == 'IN' %}
                                     <h5>{{ pond.cycle.get_type_intensive_display }}</h5>
@@ -97,41 +99,47 @@
                             Quantidade de Peixes:
                             <small>{{ pond.cycle.amount_fish }} peixes</small>
                         </h3>
-
                     </div>
                 </div>
             </div>
 
             {% if pond.cycle.population %}
-                <div class="col-lg-5">
-                    <div class="ibox ">
-                        <div class="ibox-title" style="background-color: #DAA520">
-                            <h2 style="color: white"><strong>ARRAÇOAMENTO</strong></h2>
-                        </div>
-                        <div class="ibox-content">
-                            <h3>Quantidade de ração:
-                                <small>{{ pond.cycle.arracoamento|floatformat:2 }} g</small>
-                            </h3>
 
+                <div class="col-lg-4">
+
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h2><strong>POVOAMENTO</strong></h2>
+                        </div>
+                        <div class="panel-body">
                             <h3>
-                                Refeições por dia:
-                                <small>{{ pond.cycle.number_refeicoes }}</small>
+                                Data :
+                                <small> {{ pond.cycle.population.date|date:'d/m/Y' }}</small>
                             </h3>
                             <h3>
-                                Horários da ração:
-                                <small>{{ pond.cycle.horario_refeicoes }}</small>
+                                Peso médio:
+                                <small> {{ pond.cycle.population.middleweight }} g</small>
                             </h3>
                             <h3>
-                                Proteina na ração:
-                                <small>{{ pond.cycle.proteina_racao }} %</small>
+                                Data estimada para despesca:
+                                <small> {{ pond.cycle.date_despesca|date:'d/m/Y' }}</small>
                             </h3>
                             <h3>
-                                Diâmetro do pelete:
-                                <small>{{ pond.cycle.diametro_pelete }} mm</small>
+                                Peso médio esperado na despesca:
+                                <small> {{ pond.cycle.middleweight_despesca }} g</small>
+                            </h3>
+                            <h3>
+                                Biomassa:
+                                <small> {{ pond.cycle.biomassa|floatformat:2 }} kg</small>
+                            </h3>
+                            <h3>
+                                Peso Médio atual:
+                                <small> {{ pond.cycle.peso_medio }} g</small>
                             </h3>
                         </div>
                     </div>
                 </div>
+
             {% endif %}
         {% endif %}
     </div>
@@ -139,154 +147,42 @@
     {% if pond.cycle and pond.cycle.population %}
 
         <div class="row">
-            <div class="col-lg-5">
-                <div class="ibox">
-                    <div class="ibox-title" style="background-color: #B22222">
-                        <h2 style="color: white"><strong>POVOAMENTO</strong></h2>
+            <div class="col-lg-6">
+
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h2><strong>ARRAÇOAMENTO</strong></h2>
                     </div>
-                    <div class="ibox-content">
+                    <div class="panel-body">
+                        <h3>Quantidade de ração:
+                            <small>{{ pond.cycle.arracoamento|floatformat:2 }} g</small>
+                        </h3>
+
                         <h3>
-                            Data :
-                            <small> {{ pond.cycle.population.date }}</small>
+                            Refeições por dia:
+                            <small>{{ pond.cycle.number_refeicoes }}</small>
                         </h3>
                         <h3>
-                            Peso médio:
-                            <small> {{ pond.cycle.population.middleweight }} g</small>
+                            Horários da ração:
+                            <small>{{ pond.cycle.horario_refeicoes }}</small>
                         </h3>
                         <h3>
-                            Data estimada para despesca:
-                            <small> {{ pond.cycle.date_despesca }}</small>
+                            Proteina na ração:
+                            <small>{{ pond.cycle.proteina_racao }} %</small>
                         </h3>
                         <h3>
-                            Peso médio esperado na despesca:
-                            <small> {{ pond.cycle.middleweight_despesca }} g</small>
-                        </h3>
-                        <h3>
-                            Biomassa:
-                            <small> {{ pond.cycle.biomassa|floatformat:2 }} kg</small>
-                        </h3>
-                        <h3>
-                            Peso Médio atual:
-                            <small> {{ pond.cycle.peso_medio }} g</small>
+                            Diâmetro do pelete:
+                            <small>{{ pond.cycle.diametro_pelete }} mm</small>
                         </h3>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7">
-                <div class="ibox">
-                    <div class="ibox-title" style="background-color: #9400D3">
-                        <h2 style="color: white"><strong>BIOMETRIA</strong></h2>
-                        <div class="pull-right">
-                            <a href="{% url 'biometria' property.id pond.id %}" class="btn btn-warning btn-outline btn-xs">Nova Biometria</a>
-                        </div>
+            <div class="col-lg-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h2>Qualidade da Água</h2>
                     </div>
-                    {% with all_biometria=pond.cycle.all_biometria  %}
-                        {% if all_biometria|length > 0 %}
-                            <div class="row">
-                                <div class="col-md-4 no-margins">
-                                    <div class="ibox-content">
-                                        <table class="footableB table table-stripped toggle-arrow-tiny" data-page-size="5">
-                                            <thead>
-                                            <tr>
-                                                <th>Data</th>
-                                                <th>Peso medio</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for bio in all_biometria %}
-                                                <tr>
-                                                    <td>{{ bio.date }}</td>
-                                                    <td>{{ bio.middleweight }} g</td>
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                            <tfoot>
-                                            <tr>
-                                                <td colspan="5">
-                                                    <ul class="pagination pull-right"></ul>
-                                                </td>
-                                            </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="ibox-content">
-                                        <div class="ibox-content">
-                                            <div id="biometria-chart"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% else %}
-
-                            <div class="ibox-content">
-                                <h3>Nenhuma biometria realizada!</h3>
-                            </div>
-
-                        {% endif %}
-
-                    {% endwith %}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox">
-                    <div class="ibox-title" style="background-color: #9400D3">
-                        <h2 style="color: white"><strong>BIOMETRIA</strong></h2>
-                        <div class="pull-right">
-                            <a href="{% url 'biometria' property.id pond.id %}" class="btn btn-warning btn-outline btn-xs">Nova Biometria</a>
-                        </div>
-                    </div>
-                    {% with all_biometria=pond.cycle.all_biometria  %}
-                        {% if all_biometria|length > 0 %}
-                            <div class="row">
-                                <div class="col-lg-4 no-margins">
-                                    <div class="ibox-content">
-                                        <table class="footableB table table-stripped toggle-arrow-tiny" data-page-size="5">
-                                            <thead>
-                                            <tr>
-                                                <th>Data</th>
-                                                <th>Peso medio</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for bio in all_biometria %}
-                                                <tr>
-                                                    <td>{{ bio.date }}</td>
-                                                    <td>{{ bio.middleweight }} g</td>
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                            <tfoot>
-                                            <tr>
-                                                <td colspan="5">
-                                                    <ul class="pagination pull-right"></ul>
-                                                </td>
-                                            </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="ibox-content">
-                                        <div class="ibox-content">
-                                            <div id="biometria-chart"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% else %}
-
-                            <div class="ibox-content">
-                                <h3>Nenhuma biometria realizada!</h3>
-                            </div>
-
-                        {% endif %}
-
-                    {% endwith %}
+                    <div class="panel-body"></div>
                 </div>
             </div>
         </div>
@@ -295,61 +191,81 @@
             <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-title" style="background-color: #2F4F4F">
-                        <h2 style="color: white"><strong>MORTALIDADE</strong></h2>
-                        <div class="pull-right">
-                            <a href="{% url 'mortality' property.id pond.id %}" class="btn btn-info btn-outline btn-xs">Novo registro</a>
+                        <h2 class="text-light"><strong>BIOMETRIA</strong></h2>
+                        <a href="{% url 'biometria' property.id pond.id %}" class="btn btn-link btn-light pull-right text-light">
+                            Nova Biometria
+                        </a>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <ul class="list-group clear-list m-t">
+                                    {% with all_biometria=pond.cycle.all_biometria  %}
+                                        {% if all_biometria|length > 0 %}
+                                            {% for bio in all_biometria %}
+                                                <li class="list-group-item">
+                                                    <span class="float-right">{{ bio.middleweight }}</span>
+                                                    {{ bio.date }}
+                                                </li>
+                                            {% endfor %}
+
+                                        {% else %}
+                                            <h3>Nenhuma biometria realizada!</h3>
+                                        {% endif %}
+
+                                    {% endwith %}
+                                </ul>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="flot-chart dashboard-chart">
+                                    <div class="flot-chart-content" id="biometria-chart"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    {% with all_mortality=pond.cycle.all_mortality %}
-                        {% if all_mortality|length > 0 %}
-                            <div class="row">
-                                <div class="col-lg-4 no-margins">
-                                    <div class="ibox-content">
+                </div>
+            </div>
+        </div>
 
-                                        <table class="footableM table table-stripped toggle-arrow-tiny" data-page-size="5">
-                                            <thead>
-                                            <tr>
-                                                <th>Data</th>
-                                                <th>Quantidade</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title" style="background-color: #2F4F4F">
+                        <h2 class="text-light"><strong>MORTALIDADE</strong></h2>
+                        <a href="{% url 'mortality' property.id pond.id %}" class="btn btn-link btn-light pull-right text-light">Novo registro</a>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <ul class="list-group clear-list m-t">
+                                    {% with all_mortality=pond.cycle.all_mortality %}
+                                        {% if all_mortality|length > 0 %}
+
                                             {% for mortality in all_mortality %}
-                                                <tr>
-                                                    <td>{{ mortality.date }}</td>
-                                                    <td>{{ mortality.amount }} kg</td>
-                                                </tr>
+                                                <li class="list-group-item">
+                                                    <span class="float-right">{{ bio.middleweight }}</span>
+                                                    {{ mortality.date }}
+                                                </li>
                                             {% endfor %}
-                                            </tbody>
-                                            <tfoot>
-                                            <tr>
-                                                <td colspan="5">
-                                                    <ul class="pagination pull-right"></ul>
-                                                </td>
-                                            </tr>
-                                            </tfoot>
-                                        </table>
 
-                                    </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="ibox-content">
-                                        <div class="ibox-content">
-                                            <div id="mortality-chart"></div>
-                                        </div>
+                                        {% else %}
+
+                                            <h3>Nenhuma Mortalidade registrada!</h3>
+
+                                        {% endif %}
+
+                                    {% endwith %}
+                                </ul>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="col-md-9">
+                                    <div class="flot-chart dashboard-chart">
+                                        <div class="flot-chart-content" id="mortality-chart"></div>
                                     </div>
                                 </div>
                             </div>
-
-                        {% else %}
-
-                            <div class="ibox-content">
-                                <h3>Nenhuma Mortalidade registrada!</h3>
-                            </div>
-
-                        {% endif %}
-
-                    {% endwith %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
