@@ -70,9 +70,12 @@
                                             <td class="project-title">
                                                 <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
                                             </td>
+                                            <td class="project-actions">
+                                                <a href="{% url 'pond_update' property.id pond.id %}" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Editar </a>
+                                                <a href="{% url 'pond_delete' property.id pond.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Excluir </a>
+                                            </td>
                                         </tr>
                                     {% endfor %}
-
                                     </tbody>
                                 </table>
                             </div>

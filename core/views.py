@@ -112,8 +112,7 @@ class PondUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         pk_property = self.kwargs["pk_property"]
-        pk_pond = self.kwargs["pk_pond"]
-        return reverse_lazy('pond_detail', kwargs={"pk_property": pk_property, "pk_pond": pk_pond})
+        return reverse_lazy('property_ponds', kwargs={"pk_property": pk_property})
 
     def get_context_data(self, **kwargs):
         context = super(PondUpdateView, self).get_context_data(**kwargs)
