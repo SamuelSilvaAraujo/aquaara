@@ -51,11 +51,16 @@
     <div class="row">
         <div class="col-lg-4">
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h2><strong>VIVEIRO</strong></h2>
+            <div class="ibox">
+                <div class="ibox-title bg-success">
+                    <h2 class="font-bold"><strong>VIVEIRO</strong></h2>
+                    <div class="ibox-tools">
+                        <a class="collapse-link btn-link btn-lg">
+                            <i class="fa fa-chevron-up text-light"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="panel-body">
+                <div class="ibox-content">
                     <h3>
                         Ciclos realizados:
                         <small> {{ pond.number_cycles }}</small>
@@ -78,11 +83,19 @@
 
         {% if pond.cycle %}
             <div class="col-lg-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h2><strong>CICLO</strong></h2>
+                <div class="ibox">
+                    <div class="ibox-title bg-primary">
+                        <h2 class="font-bold"><strong>CICLO</strong></h2>
+                        <div class="ibox-tools">
+                            <a class="btn-link btn-lg" title="Editar">
+                                <i class="fa fa-pencil text-light"></i>
+                            </a>
+                            <a class="collapse-link btn-link btn-lg">
+                                <i class="fa fa-chevron-up text-light"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="ibox-content">
                         <h3>
                             Sistema:
                             <small> {{ pond.cycle.get_system_display }}
@@ -106,12 +119,19 @@
             {% if pond.cycle.population %}
 
                 <div class="col-lg-4">
-
-                    <div class="panel panel-danger">
-                        <div class="panel-heading">
-                            <h2><strong>POVOAMENTO</strong></h2>
+                    <div class="ibox">
+                        <div class="ibox-title bg-danger">
+                            <h2 class="font-bold"><strong>POVOAMENTO</strong></h2>
+                            <div class="ibox-tools">
+                                <a class="btn-link btn-lg" title="Editar">
+                                    <i class="fa fa-pencil text-light"></i>
+                                </a>
+                                <a class="collapse-link btn-link btn-lg">
+                                    <i class="fa fa-chevron-up text-light"></i>
+                                </a>
+                            </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="ibox-content">
                             <h3>
                                 Data :
                                 <small> {{ pond.cycle.population.date|date:'d/m/Y' }}</small>
@@ -148,12 +168,16 @@
 
         <div class="row">
             <div class="col-lg-6">
-
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        <h2><strong>ARRAÇOAMENTO</strong></h2>
+                <div class="ibox">
+                    <div class="ibox-title bg-warning">
+                        <h2 class="font-bold"><strong>ARRAÇOAMENTO</strong></h2>
+                        <div class="ibox-tools">
+                            <a class="collapse-link btn-link btn-lg">
+                                <i class="fa fa-chevron-up text-light"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="ibox-content">
                         <h3>Quantidade de ração:
                             <small>{{ pond.cycle.arracoamento|floatformat:2 }} g</small>
                         </h3>
@@ -178,23 +202,34 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h2>Qualidade da Água</h2>
+                <div class="ibox">
+                    <div class="ibox-title bg-info">
+                        <h2 class="font-bold"><strong>QUALIDADE DA ÁGUA</strong></h2>
+                        <div class="ibox-tools">
+                            <a class="collapse-link btn-link btn-lg">
+                                <i class="fa fa-chevron-up text-light"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="panel-body"></div>
+                    <div class="ibox-content"></div>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-12">
+
                 <div class="ibox">
-                    <div class="ibox-title" style="background-color: #2F4F4F">
-                        <h2 class="text-light"><strong>BIOMETRIA</strong></h2>
-                        <a href="{% url 'biometria' property.id pond.id %}" class="btn btn-link btn-light pull-right text-light">
-                            Nova Biometria
-                        </a>
+                    <div class="ibox-title bg-dark">
+                        <h2 class="font-bold text-light"><strong>BIOMETRIA</strong></h2>
+                        <div class="ibox-tools">
+                            <a class="btn-link btn-lg" href="{% url 'biometria' property.id pond.id %}" title="NOVA BIOMETRIA">
+                                <i class="fa fa-plus text-light"></i>
+                            </a>
+                            <a class="collapse-link btn-link btn-lg">
+                                <i class="fa fa-chevron-up text-light"></i>
+                            </a>
+                        </div>
                     </div>
                     <div class="ibox-content">
                         <div class="row">
@@ -230,9 +265,16 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox">
-                    <div class="ibox-title" style="background-color: #2F4F4F">
-                        <h2 class="text-light"><strong>MORTALIDADE</strong></h2>
-                        <a href="{% url 'mortality' property.id pond.id %}" class="btn btn-link btn-light pull-right text-light">Novo registro</a>
+                    <div class="ibox-title bg-dark">
+                        <h2 class="text-light font-bold"><strong>MORTALIDADE</strong></h2>
+                        <div class="ibox-tools">
+                            <a class="btn-link btn-lg" href="{% url 'mortality' property.id pond.id %}" title="NOVO REGISTRO DE MORTALIDADE">
+                                <i class="fa fa-plus text-light"></i>
+                            </a>
+                            <a class="collapse-link btn-link btn-lg">
+                                <i class="fa fa-chevron-up text-light"></i>
+                            </a>
+                        </div>
                     </div>
                     <div class="ibox-content">
                         <div class="row">
