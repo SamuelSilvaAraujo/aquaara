@@ -67,6 +67,7 @@ class PropertyUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(PropertyUpdateView, self).get_context_data(**kwargs)
         context["address_form"] = self.second_form_class(instance=self.object.address)
+        context["propertys_page"] = "active"
         return context
 
 class PropertyDeleteView(LoginRequiredMixin, DeleteView):
@@ -75,6 +76,11 @@ class PropertyDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('property_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(PropertyDeleteView, self).get_context_data(**kwargs)
+        context["propertys_page"] = "active"
+        return context
 
 class PondCreateView(LoginRequiredMixin, CreateView):
     form_class = PondForm

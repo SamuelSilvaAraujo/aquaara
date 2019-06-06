@@ -5,12 +5,15 @@
     <form method="post">
         {% csrf_token %}
         <div class="middle-box text-center">
-            <h3 class="font-bold">Excluir {{ object }}</h3>
+            <h2 class="font-bold">Excluir <strong class="text-navy">{{ object.name|upper }}</strong> ?</h2>
             <div class="error-desc">
-                Se você excluir essa propriedade, todas as informações seram perdidas
-                <br/><button type="submit" class="btn btn-danger m-t"><i class="fa fa-trash"></i> Excluir</button>
-                <a href="{% url 'property_list' %}" class="btn btn-primary m-t">Cancelar</a>
+                <h4>Se você excluir essa propriedade, todas as informações seram perdidas!</h4>
             </div>
+            <p>
+                <button type="submit" class="btn btn-danger m-t"><i class="fa fa-trash"></i> Excluir</button>
+                <a href="{% url 'property_list' %}" class="btn btn-primary m-t">
+                    <i class="fa fa-close"></i> Cancelar</a>
+            </p>
         </div>
     </form>
 

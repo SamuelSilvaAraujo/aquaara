@@ -12,25 +12,18 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
-                <div class="ibox-title p-md">
-                    <h2><span class="text-navy">Biometria</span></h2>
+                <div class="ibox-title p-m">
+                    <h2><span class="text-navy font-bold"><strong>Biometria</strong></span></h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
+                            <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification|upper }}</a>
                         </li>
                         <li class="breadcrumb-item active">
                             <strong>Biometria</strong>
                         </li>
                     </ol>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox">
-                <div class="ibox-content p-md">
+                <div class="ibox-content p-m">
                     <form method="post" class="form-horizontal">
                         {% csrf_token %}
 
@@ -80,6 +73,7 @@
 {% block script %}
 
     <script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.pt-BR.js' %}"></script>
 
     <script>
 
@@ -87,7 +81,7 @@
 
             $('#data_id .input-group.date').datepicker({
                 format: "dd/mm/yyyy",
-                language: 'pt-br',
+                language: 'pt-BR',
                 todayBtn: "linked",
                 keyboardNavigation: false,
                 forceParse: false,

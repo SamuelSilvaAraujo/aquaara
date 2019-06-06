@@ -6,25 +6,20 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
-                <div class="ibox-title p-md">
-                    <h2><span class="text-navy">Novo Ciclo</span></h2>
+                <div class="ibox-title p-m">
+                    <h2><span class="text-navy font-bold"><strong>Novo Ciclo</strong></span></h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
+                            <a href="{% url 'pond_detail' property.id pond.id %}">
+                                {{ pond.identification|upper }}
+                            </a>
                         </li>
                         <li class="breadcrumb-item active">
                             <strong>Novo Ciclo</strong>
                         </li>
                     </ol>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox">>
-                <div class="ibox-content p-md">
+                <div class="ibox-content p-m">
                     <form id="formId" method="post" class="form-horizontal">
                         {% csrf_token %}
 
@@ -82,14 +77,10 @@
 
 {% block script %}
 
-    <script src="{% static 'js/plugins/jasny/jasny-bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/plugins/validate/jquery.validate.min.js' %}"></script>
-
     <script>
         $(document).ready(function () {
             var system = $('#system'),
-                type_intensive = $('#type_intensive'),
-                form = $('#formId');
+                type_intensive = $('#type_intensive');
 
             if($('#system :selected').val() === 'IN'){
                 type_intensive.show()
@@ -106,20 +97,6 @@
                     type_intensive.hide();
                 }
             });
-
-            form.validate({
-                messages: {
-                    middleweight_despesca: {
-                        required: "Defina o peso medio!"
-                    },
-                    system: {
-                        required: "Defina o sistema!"
-                    },
-                    type_intensive: {
-                        required: "Defina o tipo de sistema intensivo!"
-                    }
-                }
-            })
         })
 
     </script>

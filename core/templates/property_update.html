@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
-                <div class="ibox-title p-md">
-                    <h2><span class="text-navy">Editar Propriedade</span></h2>
+                <div class="ibox-title p-m">
+                    <h2><span class="text-navy font-bold"><strong>Editar Propriedade</strong></span></h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="{% url 'property_list' %}">Propriedades</a>
@@ -16,14 +16,7 @@
                         </li>
                     </ol>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox">
-                <div class="ibox-content p-md">
+                <div class="ibox-content p-m">
                     <form method="post" class="form-horizontal">
                         {% csrf_token %}
 
@@ -34,15 +27,17 @@
                                         <h3>{{ form.name.label }}</h3>
                                     </label>
                                     {{ form.name }}
-                                    <span>Nome da Propriedade.</span>
+                                    {#                                    <span>Nome da Propriedade.</span>#}
                                 </div>
                             </div>
                         </div>
 
+                        <div class="hr-line-dashed"></div>
+
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="col-form-label">
-                                    <h3>Endereço</h3>
+                                    <h2>Endereço</h2>
                                 </label>
                             </div>
                         </div>

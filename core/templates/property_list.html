@@ -6,48 +6,48 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox">
-                <div class="ibox-title">
-                    <h2><span class="text-navy">Propriedades</span></h2>
-                    <div class="pull-right">
-                        <a href="{% url 'property_create' %}" class="btn btn-success btn-outline btn-link">Cadastrar Propriedade</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     {% if object_list %}
 
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox">
+                    <div class="ibox-title">
+                        <h2><span class="text-navy font-bold"><strong>Propriedades</strong></span></h2>
+                        <div class="pull-right">
+                            <a href="{% url 'property_create' %}" class="btn btn-primary btn-link btn-outline">
+                                <i class="fa fa-plus"></i>
+                                Cadastrar Propriedade
+                            </a>
+                        </div>
+                    </div>
                     <div class="ibox-content">
                         <div class="project-list">
-
-                            <table class="table table-hover">
+                            <table class="table table-hover issue-tracker">
                                 <tbody>
 
                                 {% for property in object_list %}
                                     <tr>
-                                        <td class="project-title">
-                                            <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
+                                        <td class="issue-info">
+                                            <a href="{% url 'property_ponds' property.id %}">
+                                                <h3>{{ property.name }}</h3>
+                                                <h4>
+                                                    <small>
+                                                        {{ property.address.street }}, {{ property.address.number }} - {{ property.address.district }} -
+                                                        {{ property.address.city }}, {{ property.address.get_state_display }}
+                                                    </small>
+                                                </h4>
+                                            </a>
                                         </td>
-                                        <td class="project-title">
-                                            <small>
-                                                Rua {{ property.address.street }}, {{ property.address.number }} - {{ property.address.district }} <br>
-                                                {{ property.address.city }}, {{ property.address.get_state_display }}
-                                            </small>
-                                        </td>
-                                        <td class="project-actions">
-                                            <a href="{% url 'property_update' property.id %}" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Editar </a>
-                                            <a href="{% url 'property_delete' property.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Excluir </a>
+                                        <td class="text-right">
+                                            <a href="{% url 'property_update' property.id %}" class="btn btn-white btn-sm">
+                                                <i class="fa fa-pencil"></i> Editar</a>
+                                            <a href="{% url 'property_delete' property.id %}" class="btn btn-danger btn-sm">
+                                                <i class="fa fa-trash"></i> Excluir</a>
                                         </td>
                                     </tr>
 
                                 {% endfor %}
+
 
                                 </tbody>
                             </table>
@@ -59,11 +59,16 @@
 
     {% else %}
 
-        <div class="middle-box text-center">
-            <h3 class="font-bold">Nenhuma Propriedade Cadastrada</h3>
+        <div class="middle-box text-center animated fadeInRightBig">
+            <h3 class="font-bold">Nenhuma Propriedade Cadastrada!</h3>
             <div class="error-desc">
-                Cadastre suas Propriedades para que possa utilizar o sistema.
-                <br/><a href="{% url 'property_create' %}" class="btn btn-primary m-t">+ Nova Propriedade</a>
+                Cadastre suas Propriedades Aqui.
+                <br/>
+                <br/>
+                <a href="{% url 'property_create' %}" class="btn btn-primary">
+                    <i class="fa fa-plus"></i>
+                    Cadastrar Propriedade
+                </a>
             </div>
         </div>
 
