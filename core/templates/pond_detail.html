@@ -231,27 +231,37 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-3">
-                                <ul class="list-group clear-list m-t">
+                            <div class="col-md-4">
+                                <table class="table table-hover no-margins">
+                                    <thead>
+                                    <tr>
+                                        <th>Peso Médio</th>
+                                        <th>Data</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                     {% with all_biometria=pond.cycle.all_biometria  %}
                                         {% if all_biometria|length > 0 %}
                                             {% for bio in all_biometria %}
-                                                <li class="list-group-item">
-                                                    <span class="float-right">{{ bio.middleweight }}</span>
-                                                    {{ bio.date }}
-                                                </li>
+                                                <tr>
+                                                    <td>{{ bio.middleweight }} g</td>
+                                                    <td>{{ bio.date|date:'d-m-Y' }}</td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-primary btn-xs" title="Editar Biometria"><i class="fa fa-edit"></i> Editar</a>
+                                                    </td>
+                                                </tr>
                                             {% endfor %}
-
                                         {% else %}
                                             <h3>Nenhuma biometria realizada!</h3>
                                         {% endif %}
-
                                     {% endwith %}
-                                </ul>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-9">
-                                <div class="flot-chart dashboard-chart">
-                                    <div class="flot-chart-content" id="biometria-chart"></div>
+                            <div class="col-md-8">
+                                <div class="dashboard-chart">
+                                    <canvas id="bioChart" height="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -276,32 +286,40 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-3">
-                                <ul class="list-group clear-list m-t">
-                                    {% with all_mortality=pond.cycle.all_mortality %}
+                            <div class="col-md-4">
+
+                                <table  class="table table-hover no-margins">
+                                    <thead>
+                                    <tr>
+                                        <th>Quantidade</th>
+                                        <th>Data</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% with all_mortality=pond.cycle.all_mortality  %}
                                         {% if all_mortality|length > 0 %}
-
                                             {% for mortality in all_mortality %}
-                                                <li class="list-group-item">
-                                                    <span class="float-right">{{ bio.middleweight }}</span>
-                                                    {{ mortality.date }}
-                                                </li>
+                                                <tr>
+                                                    <td>{{ mortality.amount }}</td>
+                                                    <td>{{ mortality.date|date:'d-m-Y' }}</td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-danger btn-xs" title="Editar Biometria"><i class="fa fa-trash"></i> Excluir</a>
+                                                    </td>
+                                                </tr>
                                             {% endfor %}
-
                                         {% else %}
-
                                             <h3>Nenhuma Mortalidade registrada!</h3>
-
                                         {% endif %}
-
                                     {% endwith %}
-                                </ul>
+
+
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-9">
-                                <div class="col-md-9">
-                                    <div class="flot-chart dashboard-chart">
-                                        <div class="flot-chart-content" id="mortality-chart"></div>
-                                    </div>
+                            <div class="col-md-8">
+                                <div class="dashboard-chart">
+                                    <canvas id="morChart" height="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -316,51 +334,73 @@
 
 {% block script %}
 
-    <script src="{% static 'js/plugins/morris/raphael-2.1.0.min.js' %}"></script>
-    <script src="{% static 'js/plugins/morris/morris.js' %}"></script>
+    <script src="{% static 'js/plugins/chartJs/Chart.min.js' %}"></script>
 
     <script>
-        $(document).ready(function() {
 
-            $('.footableB').footable();
-            $('.footableM').footable();
+        $(function () {
 
-            $(function () {
-                Morris.Line({
-                    element: 'biometria-chart',
-                    data: [
-                        {% for item in pond.cycle.all_biometria reversed %}
-                            { day: '{{item.date|date:'Y-M'}}', weight: '{{item.middleweight}}' },
-                        {% endfor %}
-                    ],
-                    xkey: 'day',
-                    ykeys: ['weight'],
-                    labels: ['Peso médio'],
-                    xLabels: 'month',
-                    hideHover: 'auto',
-                    resize: true,
-                    parseTime: false,
-                });
+            var bioLabels = [],
+                bioData = [];
 
-                Morris.Line({
-                    element: 'mortality-chart',
-                    data: [
-                        {% for item in pond.cycle.all_mortality reversed %}
-                            { day: '{{item.date|date:'Y-M'}}', mortality: '{{item.amount}}' },
-                        {% endfor %}
-                    ],
-                    xkey: 'day',
-                    ykeys: ['mortality'],
-                    resize: true,
-                    lineWidth:4,
-                    labels: ['Taxa de mortalidade'],
-                    xLabels: 'month',
-                    lineColors: ['#1ab394'],
-                    pointSize:5,
-                    parseTime: false,
-                    hideHover: 'auto',
-                })
-            })
+            {% for bio in pond.cycle.all_biometria.reverse %}
+                bioLabels.push('{{ bio.date|date:'d/m' }}');
+                bioData.push({{ bio.middleweight }});
+            {% endfor %}
+
+            var biolineData = {
+                labels: bioLabels,
+                datasets: [
+
+                    {
+                        label: "Biometria",
+                        backgroundColor: 'rgba(26,179,148,0.5)',
+                        borderColor: "rgba(26,179,148,0.7)",
+                        pointBackgroundColor: "rgba(26,179,148,1)",
+                        pointBorderColor: "#fff",
+                        data: bioData
+                    }
+                ]
+            };
+
+            var biolineOptions = {
+                responsive: true
+            };
+
+
+            var bioctx = document.getElementById("bioChart").getContext("2d");
+            new Chart(bioctx, {type: 'line', data: biolineData, options: biolineOptions});
+
+            var morLabels = [],
+                morData = [];
+
+            {% for mor in pond.cycle.all_mortality.reverse %}
+                morLabels.push('{{ mor.date|date:'d/m' }}');
+                morData.push({{ mor.amount }});
+            {% endfor %}
+
+            var morlineData = {
+                labels: morLabels,
+                datasets: [
+
+                    {
+                        label: "Mortalidade",
+                        backgroundColor: 'rgba(26,179,148,0.5)',
+                        borderColor: "rgba(26,179,148,0.7)",
+                        pointBackgroundColor: "rgba(26,179,148,1)",
+                        pointBorderColor: "#fff",
+                        data: morData
+                    }
+                ]
+            };
+
+            var morlineOptions = {
+                responsive: true
+            };
+
+
+            var morctx = document.getElementById("morChart").getContext("2d");
+            new Chart(morctx, {type: 'line', data: morlineData, options: morlineOptions});
 
         });
 
