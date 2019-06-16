@@ -144,7 +144,7 @@ class PondDeleteView(LoginRequiredMixin, DeleteView):
 
 class CycleCreateView(LoginRequiredMixin, CreateView):
     model = Cycle
-    template_name = 'cycle_create.html'
+    template_name = 'cycle_form.html'
     form_class = CycleForm
 
     def form_valid(self, form):
@@ -161,13 +161,31 @@ class CycleCreateView(LoginRequiredMixin, CreateView):
         context = super(CycleCreateView, self).get_context_data(**kwargs)
         context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["title"] = "Iniciar Ciclo"
+        context["pond_page"] = "active"
+        return context
+
+class CycleUpdateView(LoginRequiredMixin, UpdateView):
+    model = Cycle
+    template_name = 'cycle_form.html'
+    pk_url_kwarg = 'pk_cycle'
+    form_class = CycleForm
+
+    def get_success_url(self):
+        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
+    def get_context_data(self, **kwargs):
+        context = super(CycleUpdateView, self).get_context_data(**kwargs)
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["title"] = "Editar Ciclo"
         context["pond_page"] = "active"
         return context
 
 class PopulationCreateView(LoginRequiredMixin, CreateView):
     model = Population
     form_class = PopulationForm
-    template_name = 'population_create.html'
+    template_name = 'population_form.html'
 
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
@@ -183,6 +201,24 @@ class PopulationCreateView(LoginRequiredMixin, CreateView):
         context = super(PopulationCreateView, self).get_context_data(**kwargs)
         context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["title"] = "Povoamento"
+        context["pond_page"] = "active"
+        return context
+
+class PopulationUpdateView(LoginRequiredMixin, UpdateView):
+    model = Population
+    template_name = 'population_form.html'
+    form_class = PopulationForm
+    pk_url_kwarg = 'pk_population'
+
+    def get_success_url(self):
+        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
+    def get_context_data(self, **kwargs):
+        context = super(PopulationUpdateView, self).get_context_data(**kwargs)
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["title"] = "Editar Povoamento"
         context["pond_page"] = "active"
         return context
 

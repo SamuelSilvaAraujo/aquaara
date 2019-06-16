@@ -4,6 +4,7 @@
 {% block head %}
 
     <link href="{% static 'css/plugins/morris/morris-0.4.3.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/footable/footable.core.css' %}" rel="stylesheet">
 
 {% endblock %}
 
@@ -28,14 +29,9 @@
                         <div class="col-md-6">
                             <div class="pull-right">
                                 {% if not pond.cycle %}
-                                    <a href="{% url 'cycle_init' property.id pond.id %}"  class="btn btn-warning btn-outline btn-link"><strong>Novo ciclo</strong></a>
-                                {% else %}
-                                    {% if not pond.cycle.population %}
-                                        <a href="{% url 'population' property.id pond.id %}"  class="btn btn-warning btn-outline btn-link"><strong>Povoamento</strong></a>
-                                    {% else %}
-                                        <a href="{% url 'despesca' property.id pond.id %}" class="btn btn-warning btn-outline btn-link"><strong>Despesca</strong></a>
-                                    {% endif %}
-                                {% endif %}
+                                    <a href="{% url 'cycle_init' property.id pond.id %}" class="btn btn-warning btn-outline btn-link"><strong>Novo ciclo</strong></a> {% else %} {% if not pond.cycle.population %}
+                                    <a href="{% url 'population' property.id pond.id %}" class="btn btn-warning btn-outline btn-link"><strong>Povoamento</strong></a> {% else %}
+                                    <a href="{% url 'despesca' property.id pond.id %}" class="btn btn-warning btn-outline btn-link"><strong>Despesca</strong></a> {% endif %} {% endif %}
                                 <a href="#" class="btn btn-primary btn-outline btn-link">
                                     Ciclos antigos
                                 </a>
@@ -85,7 +81,7 @@
                     <div class="ibox-title bg-primary">
                         <h2 class="font-bold"><strong>CICLO</strong></h2>
                         <div class="ibox-tools">
-                            <a class="btn-link btn-lg" title="Editar">
+                            <a href="{% url 'cycle_update' property.id pond.id pond.cycle.id %}" class="btn-link btn-lg" title="Editar">
                                 <i class="fa fa-pencil text-light"></i>
                             </a>
                             <a class="collapse-link btn-link btn-lg">
@@ -121,7 +117,7 @@
                         <div class="ibox-title bg-danger">
                             <h2 class="font-bold"><strong>POVOAMENTO</strong></h2>
                             <div class="ibox-tools">
-                                <a class="btn-link btn-lg" title="Editar">
+                                <a href="{% url 'population_update' property.id pond.id pond.cycle.population.id %}" class="btn-link btn-lg" title="Editar">
                                     <i class="fa fa-pencil text-light"></i>
                                 </a>
                                 <a class="collapse-link btn-link btn-lg">
@@ -158,8 +154,7 @@
                     </div>
                 </div>
 
-            {% endif %}
-        {% endif %}
+            {% endif %} {% endif %}
     </div>
 
     {% if pond.cycle and pond.cycle.population %}
@@ -231,39 +226,50 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-4">
-                                <table class="table table-hover no-margins">
-                                    <thead>
-                                    <tr>
-                                        <th>Peso Médio</th>
-                                        <th>Data</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% with all_biometria=pond.cycle.all_biometria  %}
-                                        {% if all_biometria|length > 0 %}
+                            {% with all_biometria=pond.cycle.all_biometria %}
+                                {% if all_biometria|length > 0 %}
+                                    <div class="col-md-4">
+                                        <table class="biotable table table-hover no-margins" data-page-size="5">
+                                            <thead>
+                                            <tr>
+                                                <th>Peso Médio</th>
+                                                <th>Data</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
                                             {% for bio in all_biometria %}
                                                 <tr>
                                                     <td>{{ bio.middleweight }} g</td>
                                                     <td>{{ bio.date|date:'d-m-Y' }}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-primary btn-xs" title="Editar Biometria"><i class="fa fa-edit"></i> Editar</a>
+                                                        <a href="#" class="btn btn-outline-secondary btn-xs" title="Editar Biometria"><i class="fa fa-pencil"></i> Editar</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
-                                        {% else %}
-                                            <h3>Nenhuma biometria realizada!</h3>
-                                        {% endif %}
-                                    {% endwith %}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="dashboard-chart">
-                                    <canvas id="bioChart" height="100%"></canvas>
-                                </div>
-                            </div>
+
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <ul class="pagination float-right"></ul>
+                                                </td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="dashboard-chart">
+                                            <canvas id="bioChart" height="100%"></canvas>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-12">
+                                        <h3 class="text-center">Nenhuma Biometria realizada!</h3>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
                         </div>
                     </div>
                 </div>
@@ -286,66 +292,81 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-4">
+                            {% with all_mortality=pond.cycle.all_mortality %}
+                                {% if all_mortality|length > 0 %}
+                                    <div class="col-md-4">
 
-                                <table  class="table table-hover no-margins">
-                                    <thead>
-                                    <tr>
-                                        <th>Quantidade</th>
-                                        <th>Data</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% with all_mortality=pond.cycle.all_mortality  %}
-                                        {% if all_mortality|length > 0 %}
+                                        <table class="mortatable table table-hover no-margins" data-page-size="5">
+                                            <thead>
+                                            <tr>
+                                                <th>Quantidade</th>
+                                                <th>Data</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
                                             {% for mortality in all_mortality %}
                                                 <tr>
                                                     <td>{{ mortality.amount }}</td>
                                                     <td>{{ mortality.date|date:'d-m-Y' }}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-danger btn-xs" title="Editar Biometria"><i class="fa fa-trash"></i> Excluir</a>
+                                                        <a href="#" class="btn btn-outline-secondary btn-xs" title="Exluir Mortalidade"><i class="fa fa-trash"></i> Excluir</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
-                                        {% else %}
-                                            <h3>Nenhuma Mortalidade registrada!</h3>
-                                        {% endif %}
-                                    {% endwith %}
 
 
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="dashboard-chart">
-                                    <canvas id="morChart" height="100%"></canvas>
-                                </div>
-                            </div>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <ul class="pagination float-right"></ul>
+                                                </td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="dashboard-chart">
+                                            <canvas id="morChart" height="100%"></canvas>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-12">
+                                        <h3 class="text-center">Nenhuma Mortalidade registrada!</h3>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-    {% endif %}
-
-{% endblock %}
-
-{% block script %}
+    {% endif %} {% endblock %} {% block script %}
 
     <script src="{% static 'js/plugins/chartJs/Chart.min.js' %}"></script>
+    <script src="{% static 'js/plugins/footable/footable.all.min.js' %}"></script>
 
     <script>
 
-        $(function () {
+        $(document).ready(function() {
+
+            $('.biotable').footable();
+            $('.mortatable').footable();
+
+        });
+
+        $(function() {
 
             var bioLabels = [],
                 bioData = [];
 
             {% for bio in pond.cycle.all_biometria.reverse %}
-                bioLabels.push('{{ bio.date|date:'d/m' }}');
-                bioData.push({{ bio.middleweight }});
+                bioLabels.push('{{ bio.date|date:'d / m ' }}');
+                bioData.push({{bio.middleweight}});
             {% endfor %}
 
             var biolineData = {
@@ -369,14 +390,18 @@
 
 
             var bioctx = document.getElementById("bioChart").getContext("2d");
-            new Chart(bioctx, {type: 'line', data: biolineData, options: biolineOptions});
+            new Chart(bioctx, {
+                type: 'line',
+                data: biolineData,
+                options: biolineOptions
+            });
 
             var morLabels = [],
                 morData = [];
 
             {% for mor in pond.cycle.all_mortality.reverse %}
-                morLabels.push('{{ mor.date|date:'d/m' }}');
-                morData.push({{ mor.amount }});
+                morLabels.push('{{ mor.date|date:'d / m ' }}');
+                morData.push({{mor.amount}});
             {% endfor %}
 
             var morlineData = {
@@ -400,9 +425,14 @@
 
 
             var morctx = document.getElementById("morChart").getContext("2d");
-            new Chart(morctx, {type: 'line', data: morlineData, options: morlineOptions});
+            new Chart(morctx, {
+                type: 'line',
+                data: morlineData,
+                options: morlineOptions
+            });
 
         });
+
 
     </script>
 

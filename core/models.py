@@ -100,13 +100,13 @@ class Cycle(models.Model):
     ]
 
     MIDDLEWEIGHT = [
-        (500, '500'),
-        (600, '600'),
-        (700, '700'),
-        (800, '800'),
-        (900, '900'),
-        (1000, '1000'),
-        (1100, '1100'),
+        (500, 500),
+        (600, 600),
+        (700, 700),
+        (800, 800),
+        (900, 900),
+        (1000, 1000),
+        (1100, 1100),
     ]
 
     densidade_values = {
@@ -124,7 +124,7 @@ class Cycle(models.Model):
     despesca = models.ForeignKey(Despesca, on_delete=models.CASCADE, null=True, blank=True)
     system = models.CharField("Sistema", max_length=2, choices=SYSTEM_CHOICES)
     type_intensive = models.CharField("Tipo de sistema intensivo", max_length=4, choices=TYPE_INTENSIVE, null=True, blank=True)
-    middleweight_despesca = models.FloatField("Peso Médio", choices=MIDDLEWEIGHT)
+    middleweight_despesca = models.IntegerField("Peso Médio", choices=MIDDLEWEIGHT)
 
     def __str__(self):
         return "{} - {}".format(self.pond.identification, self.date)
