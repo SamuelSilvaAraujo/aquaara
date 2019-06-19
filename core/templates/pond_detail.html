@@ -103,8 +103,12 @@
                             <small> {{ pond.cycle.density }} peixe/m²</small>
                         </h3>
                         <h3>
-                            Quantidade de Peixes:
+                            Quantidade de Peixes Inicial:
                             <small>{{ pond.cycle.amount_fish }} peixes</small>
+                        </h3>
+                        <h3>
+                            Quantidade de Peixes Atual:
+                            <small>{{ pond.cycle.amount_fish_current }} peixes</small>
                         </h3>
                     </div>
                 </div>
@@ -127,19 +131,24 @@
                         </div>
                         <div class="ibox-content">
                             <h3>
-                                Data :
+                                Data do Povoamento:
                                 <small> {{ pond.cycle.population.date|date:'d/m/Y' }}</small>
                             </h3>
                             <h3>
-                                Peso médio:
-                                <small> {{ pond.cycle.population.middleweight }} g</small>
-                            </h3>
-                            <h3>
-                                Data estimada para despesca:
+                                Data da despesca:
                                 <small> {{ pond.cycle.date_despesca|date:'d/m/Y' }}</small>
                             </h3>
                             <h3>
-                                Peso médio esperado na despesca:
+                                Peso médio Inicial:
+                                <small> {{ pond.cycle.population.middleweight }} g</small>
+                            </h3>
+                            <h3>
+                                Peso Médio Atual:
+                                <small> {{ pond.cycle.peso_medio }} g</small>
+                            </h3>
+
+                            <h3>
+                                Peso médio final:
                                 <small> {{ pond.cycle.middleweight_despesca }} g</small>
                             </h3>
                             <h3>
@@ -147,9 +156,10 @@
                                 <small> {{ pond.cycle.biomassa|floatformat:2 }} kg</small>
                             </h3>
                             <h3>
-                                Peso Médio atual:
-                                <small> {{ pond.cycle.peso_medio }} g</small>
+                                Biomassa Atual:
+                                <small> {{ pond.cycle.biomassa_current|floatformat:2 }} kg</small>
                             </h3>
+
                         </div>
                     </div>
                 </div>
@@ -225,6 +235,19 @@
                         </div>
                     </div>
                     <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>
+                                    Data da Proxima Biometria:
+                                    <small>{{ pond.cycle.date_biometria|date:'d/m/Y' }}</small>
+                                </h3>
+                                <h3>
+                                    Quantidade de Peixes da Proxima Biometria:
+                                    <small>{{ pond.cycle.amount_fish_biometria }}</small>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
                         <div class="row">
                             {% with all_biometria=pond.cycle.all_biometria %}
                                 {% if all_biometria|length > 0 %}
@@ -366,7 +389,7 @@
 
             {% for bio in pond.cycle.all_biometria.reverse %}
                 bioLabels.push('{{ bio.date|date:'d / m ' }}');
-                bioData.push({{bio.middleweight}});
+                bioData.push(parseFloat({{bio.middleweight}}));
             {% endfor %}
 
             var biolineData = {

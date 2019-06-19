@@ -137,6 +137,10 @@ class Cycle(models.Model):
 
     def amount_fish(self):
         amount = self.density()*self.pond.area()
+        return int(amount) + 1
+
+    def amount_fish_current(self):
+        amount = self.density() * self.pond.area()
         for mortality in self.mortality_set.all():
             amount -= mortality.amount
         return int(amount) + 1
@@ -151,6 +155,12 @@ class Cycle(models.Model):
     def biomassa(self):
         if self.population:
             return (self.peso_medio() * self.amount_fish())/1000
+        else:
+            return None
+
+    def biomassa_current(self):
+        if self.population:
+            return (self.peso_medio() * self.amount_fish_current())/1000
         else:
             return None
 
@@ -273,7 +283,7 @@ class Cycle(models.Model):
                 return "10"
 
     def amount_fish_biometria(self):
-        amount = self.amount_fish()
+        amount = self.amount_fish_current()
         if amount <= 400:
             return int(amount*0.10) + 1
         elif 401 <= amount <= 700:
