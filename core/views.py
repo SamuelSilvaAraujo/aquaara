@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -243,10 +244,15 @@ class MortalityCreateView(LoginRequiredMixin, CreateView):
         context["pond_page"] = "active"
         return context
 
+def mortality_remove_view(request, pk_property, pk_pond, pk_mortality):
+    mortality = Mortality.objects.get(pk=pk_mortality)
+    mortality.delete()
+    return redirect('pond_detail', pk_property, pk_pond)
+
 class BiometriaCreateView(LoginRequiredMixin, CreateView):
     model = Biometria
     form_class = BiometriaForm
-    template_name = 'biometria.html'
+    template_name = 'biometria_form.html'
 
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
@@ -259,6 +265,22 @@ class BiometriaCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(BiometriaCreateView, self).get_context_data(**kwargs)
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
+        return context
+
+class BiometriaUpdateView(LoginRequiredMixin, UpdateView):
+    model = Biometria
+    form_class = BiometriaForm
+    template_name = 'biometria_form.html'
+    pk_url_kwarg = 'pk_biometria'
+
+    def get_success_url(self):
+        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
+    def get_context_data(self, **kwargs):
+        context = super(BiometriaUpdateView, self).get_context_data(**kwargs)
         context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"

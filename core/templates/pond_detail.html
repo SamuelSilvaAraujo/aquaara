@@ -244,7 +244,7 @@
                                                     <td>{{ bio.middleweight }} g</td>
                                                     <td>{{ bio.date|date:'d-m-Y' }}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-outline-secondary btn-xs" title="Editar Biometria"><i class="fa fa-pencil"></i> Editar</a>
+                                                        <a href="{% url 'biometria_update' property.id pond.id bio.id %}" class="btn btn-outline-secondary btn-xs" title="Editar Biometria"><i class="fa fa-pencil"></i> Editar</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -311,7 +311,7 @@
                                                     <td>{{ mortality.amount }}</td>
                                                     <td>{{ mortality.date|date:'d-m-Y' }}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-outline-secondary btn-xs" title="Exluir Mortalidade"><i class="fa fa-trash"></i> Excluir</a>
+                                                        <a href="{% url 'mortality_remove' property.id pond.id mortality.id %}" class="btn btn-outline-secondary btn-xs" title="Exluir Mortalidade"><i class="fa fa-trash"></i> Excluir</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}

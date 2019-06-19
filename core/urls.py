@@ -22,7 +22,9 @@ urlpatterns = [
                 path('povoamento/', PopulationCreateView.as_view(), name="population"),
                 path('editar/povoamento/<int:pk_population>/', PopulationUpdateView.as_view(), name="population_update"),
                 path('mortalidade/', MortalityCreateView.as_view(), name="mortality"),
+                path('excluir/mortalidade/<int:pk_mortality>/', mortality_remove_view, name="mortality_remove"),
                 path('biometria/', BiometriaCreateView.as_view(), name="biometria"),
+                path('editar/biometria/<int:pk_biometria>/', BiometriaUpdateView.as_view(), name="biometria_update"),
                 path('despesca/', DespescaCreateView.as_view(), name="despesca"),
             ]))
         ])),
