@@ -149,14 +149,14 @@ class CycleCreateView(LoginRequiredMixin, CreateView):
     form_class = CycleForm
 
     def form_valid(self, form):
-        pk_pond = self.kwargs["pk_pond"]
-        pk_property = self.kwargs["pk_property"]
-        obj = form.save(commit=False)
-        if obj.system == 'IN' and not obj.type_intensive:
-            return super().form_invalid(form)
-        obj.pond = Pond.objects.get(pk=pk_pond)
-        obj.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
+        form = form.save(commit=False)
+        pond = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        form.pond = pond
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(CycleCreateView, self).get_context_data(**kwargs)
@@ -180,6 +180,21 @@ class CycleUpdateView(LoginRequiredMixin, UpdateView):
         context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["title"] = "Editar Ciclo"
+        context["pond_page"] = "active"
+        return context
+
+class OldCyclesView(LoginRequiredMixin, ListView):
+    model = Cycle
+    template_name = 'old_cycles.html'
+
+    def get_queryset(self):
+        pond = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        return pond.cycle_set.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(OldCyclesView, self).get_context_data(**kwargs)
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
 

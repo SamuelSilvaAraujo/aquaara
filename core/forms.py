@@ -42,6 +42,12 @@ class CycleForm(forms.ModelForm):
             'type_intensive': forms.Select(attrs={'class': 'form-control', 'id': 'type_intensive'}),
         }
 
+    def clean(self):
+        system = self.cleaned_data["system"]
+        type_intensive = self.cleaned_data["type_intensive"]
+        if system == 'IN' and not type_intensive:
+            raise forms.ValidationError("Defina o tipo de sistema intensivo!")
+
 class PopulationForm(forms.ModelForm):
     class Meta:
         model = Population

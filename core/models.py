@@ -88,18 +88,19 @@ class Despesca(models.Model):
     final_middleweight = models.FloatField("Peso Médio")
 
 class Cycle(models.Model):
+
     SYSTEM_CHOICES = [
         ('IN', 'Intensivo'),
         ('SI', 'Semi-Intensivo')
     ]
 
-    TYPE_INTENSIVE = [
+    TYPE_INTENSIVE_CHOICES = [
         ('RC', 'Renovação Constante'),
         ('RCA', 'Renovação Constante + Aeradores'),
         ('ABAA', 'Água de boa qualidade + Alta renovação + Aeradores'),
     ]
 
-    MIDDLEWEIGHT = [
+    MIDDLEWEIGHT_CHOICES = [
         (500, 500),
         (600, 600),
         (700, 700),
@@ -109,7 +110,7 @@ class Cycle(models.Model):
         (1100, 1100),
     ]
 
-    densidade_values = {
+    DENSITY_VALUES = {
         'SI': {500: 2.0, 600: 1.67, 700: 1.45, 800: 1.25, 900: 1.12, 1000: 1.00, 1100: 0.91},
         'IN': {
             'RC': {500: 4.0, 600: 3.34, 700: 2.86, 800: 2.50, 900: 2.23, 1000: 2.00, 1100: 1.82},
@@ -121,51 +122,53 @@ class Cycle(models.Model):
     date = models.DateField(auto_now_add=True)
     pond = models.ForeignKey(Pond, on_delete=models.CASCADE)
     population = models.ForeignKey(Population, on_delete=models.CASCADE, null=True, blank=True)
-    despesca = models.ForeignKey(Despesca, on_delete=models.CASCADE, null=True, blank=True)
+    despesca = models.OneToOneField(Despesca, on_delete=models.CASCADE, null=True, blank=True)
     system = models.CharField("Sistema", max_length=2, choices=SYSTEM_CHOICES)
-    type_intensive = models.CharField("Tipo de sistema intensivo", max_length=4, choices=TYPE_INTENSIVE, null=True, blank=True)
-    middleweight_despesca = models.IntegerField("Peso Médio", choices=MIDDLEWEIGHT)
+    type_intensive = models.CharField("Tipo de sistema intensivo", max_length=4, choices=TYPE_INTENSIVE_CHOICES, null=True, blank=True)
+    middleweight_despesca = models.IntegerField("Peso Médio", choices=MIDDLEWEIGHT_CHOICES)
 
     def __str__(self):
         return "{} - {}".format(self.pond.identification, self.date)
 
     def density(self):
         if self.system == 'SI':
-            return self.densidade_values['SI'][self.middleweight_despesca]
+            return self.DENSITY_VALUES['SI'][self.middleweight_despesca]
         elif self.system == 'IN':
-            return self.densidade_values['IN'][self.type_intensive][self.middleweight_despesca]
+            return self.DENSITY_VALUES['IN'][self.type_intensive][self.middleweight_despesca]
 
     def amount_fish(self):
         amount = self.density()*self.pond.area()
         return int(amount) + 1
 
+    def all_mortality(self):
+        return self.mortality_set.all().order_by("-id")
+
+    def mortality_total(self):
+        total = 0
+        for mortality in self.all_mortality():
+            total += mortality.amount
+        return total
+
     def amount_fish_current(self):
         amount = self.density() * self.pond.area()
-        for mortality in self.mortality_set.all():
+        for mortality in self.all_mortality():
             amount -= mortality.amount
         return int(amount) + 1
 
-    def peso_medio(self):
+    def middleweight_current(self):
         if self.biometria_set.count() > 0:
-            biometria = self.biometria_set.all().order_by('-id')[0]
-            return biometria.middleweight
+            return self.biometria_set.all().last().middleweight
         else:
             return self.population.middleweight
 
     def biomassa(self):
-        if self.population:
-            return (self.peso_medio() * self.amount_fish())/1000
-        else:
-            return None
+        return (self.population.middleweight * self.amount_fish())/1000
 
     def biomassa_current(self):
-        if self.population:
-            return (self.peso_medio() * self.amount_fish_current())/1000
-        else:
-            return None
+        return (self.middleweight_current() * self.amount_fish_current())/1000
 
     def taxa_alimentar(self):
-        peso_medio = self.peso_medio()
+        peso_medio = self.middleweight_current()
         biomassa = self.biomassa()
         if self.system == 'SI':
             if 1 <= peso_medio <= 30:
@@ -197,7 +200,7 @@ class Cycle(models.Model):
                 return biomassa*0.01
 
     def number_refeicoes(self):
-        peso_medio = self.peso_medio()
+        peso_medio = self.middleweight_current()
         if 1 <= peso_medio <= 300:
             return 4
         elif 301 <= peso_medio <= 600:
@@ -215,11 +218,11 @@ class Cycle(models.Model):
             return "08:00 h, 16:00 h"
 
     def arracoamento(self):
-        total = (self.amount_fish()*self.peso_medio()*self.taxa_alimentar())/100
+        total = (self.amount_fish()*self.middleweight_current()*self.taxa_alimentar())/100
         return total/self.number_refeicoes()
 
     def proteina_racao(self):
-        peso_medio = self.peso_medio()
+        peso_medio = self.middleweight_current()
         if self.system == 'SI':
             if 1 <= peso_medio <= 100:
                 return "36"
@@ -246,7 +249,7 @@ class Cycle(models.Model):
                 return "28"
 
     def diametro_pelete(self):
-        peso_medio = self.peso_medio()
+        peso_medio = self.middleweight_current()
         if self.system == 'SI':
             if 1 <= peso_medio <= 30:
                 return "1 - 2"
@@ -303,8 +306,7 @@ class Cycle(models.Model):
             biometria = self.biometria_set.all().order_by('-id')[0]
             return biometria.date + timedelta(days=15)
 
-    def all_mortality(self):
-        return self.mortality_set.all().order_by("-id")
+
 
     def total_mortality(self):
         total = 0

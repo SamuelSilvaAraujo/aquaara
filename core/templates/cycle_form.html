@@ -27,10 +27,14 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ form.middleweight_despesca.label }}</h3>
+                                        <h3>{{ form.middleweight_despesca.label }}
+                                            <small class="form-text m-b-none">Peso médio em gramas. Esse é o peso esperado na despesca!</small>
+                                        </h3>
                                     </label>
                                     {{ form.middleweight_despesca }}
-                                    <span class="form-text m-b-none">Peso médio esperado em gramas.</span>
+                                    {% for erro in form.middleweight_despesca.erros %}
+                                        <p class="text-danger">{{ erro }}</p>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -39,10 +43,14 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ form.system.label }}</h3>
+                                        <h3>{{ form.system.label }}
+                                            <small class="form-text m-b-none">Sistema de cultivo</small>
+                                        </h3>
                                     </label>
                                     {{ form.system }}
-                                    <span class="form-text m-b-none">Sistema de cultivo</span>
+                                    {% for erro in form.system.erros %}
+                                        <p class="text-danger">{{ erro }}</p>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -51,10 +59,14 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ form.type_intensive.label }}</h3>
+                                        <h3>{{ form.type_intensive.label }}
+                                            <small class="form-text m-b-none">Tipo de sistema intensivo</small>
+                                        </h3>
                                     </label>
                                     {{ form.type_intensive }}
-                                    <span class="form-text m-b-none">Tipo de sistema intensivo</span>
+                                    {% for erro in form.type_intensive.erros %}
+                                        <p class="text-danger">{{ erro }}</p>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>

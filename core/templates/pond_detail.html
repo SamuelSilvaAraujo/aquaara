@@ -29,12 +29,15 @@
                         <div class="col-md-6">
                             <div class="pull-right">
                                 {% if not pond.cycle %}
-                                    <a href="{% url 'cycle_init' property.id pond.id %}" class="btn btn-warning btn-outline btn-link"><strong>Novo ciclo</strong></a> {% else %} {% if not pond.cycle.population %}
-                                    <a href="{% url 'population' property.id pond.id %}" class="btn btn-warning btn-outline btn-link"><strong>Povoamento</strong></a> {% else %}
-                                    <a href="{% url 'despesca' property.id pond.id %}" class="btn btn-warning btn-outline btn-link"><strong>Despesca</strong></a> {% endif %} {% endif %}
-                                <a href="#" class="btn btn-primary btn-outline btn-link">
-                                    Ciclos antigos
-                                </a>
+                                    <a href="{% url 'cycle_init' property.id pond.id %}" class="btn btn-warning btn-outline btn-link font-bold"><strong>Novo ciclo</strong></a>
+                                {% else %}
+                                    {% if not pond.cycle.population %}
+                                        <a href="{% url 'population' property.id pond.id %}" class="btn btn-warning btn-outline btn-link font-bold"><strong>Povoamento</strong></a>
+                                    {% else %}
+                                        <a href="{% url 'despesca' property.id pond.id %}" class="btn btn-warning btn-outline btn-link font-bold"><strong>Despesca</strong></a>
+                                    {% endif %}
+                                {% endif %}
+                                <a href="{% url 'old_cycles' property.id pond.id %}" class="btn btn-primary btn-outline btn-link font-bold"><strong>Ciclos antigos</strong></a>
                             </div>
                         </div>
                     </div>
@@ -81,7 +84,7 @@
                     <div class="ibox-title bg-primary">
                         <h2 class="font-bold"><strong>CICLO</strong></h2>
                         <div class="ibox-tools">
-                            <a href="{% url 'cycle_update' property.id pond.id pond.cycle.id %}" class="btn-link btn-lg" title="Editar">
+                            <a href="{% url 'cycle_update' property.id pond.id pond.cycle.id %}" class="btn-link btn-lg" title="Click para editar as informações do ciclo.">
                                 <i class="fa fa-pencil text-light"></i>
                             </a>
                             <a class="collapse-link btn-link btn-lg">
@@ -94,7 +97,7 @@
                             Sistema:
                             <small> {{ pond.cycle.get_system_display }}
                                 {% if pond.cycle.system == 'IN' %}
-                                    <h5>{{ pond.cycle.get_type_intensive_display }}</h5>
+                                    <p>{{ pond.cycle.get_type_intensive_display }}</p>
                                 {% endif %}
                             </small>
                         </h3>
@@ -144,7 +147,7 @@
                             </h3>
                             <h3>
                                 Peso Médio Atual:
-                                <small> {{ pond.cycle.peso_medio }} g</small>
+                                <small> {{ pond.cycle.middleweight_current }} g</small>
                             </h3>
 
                             <h3>
@@ -164,7 +167,8 @@
                     </div>
                 </div>
 
-            {% endif %} {% endif %}
+            {% endif %}
+        {% endif %}
     </div>
 
     {% if pond.cycle and pond.cycle.population %}
@@ -204,19 +208,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="ibox">
-                    <div class="ibox-title bg-info">
-                        <h2 class="font-bold"><strong>QUALIDADE DA ÁGUA</strong></h2>
-                        <div class="ibox-tools">
-                            <a class="collapse-link btn-link btn-lg">
-                                <i class="fa fa-chevron-up text-light"></i>
-                            </a>
+
+            {% if pond.cycle.system == 'SI' %}
+
+                <div class="col-lg-6">
+                    <div class="ibox">
+                        <div class="ibox-title bg-info">
+                            <h2 class="font-bold"><strong>QUALIDADE DA ÁGUA</strong></h2>
+                            <div class="ibox-tools">
+                                <a class="collapse-link btn-link btn-lg">
+                                    <i class="fa fa-chevron-up text-light"></i>
+                                </a>
+                            </div>
                         </div>
+                        <div class="ibox-content"></div>
                     </div>
-                    <div class="ibox-content"></div>
                 </div>
-            </div>
+
+            {% endif %}
         </div>
 
         <div class="row">
@@ -368,7 +377,9 @@
             </div>
         </div>
 
-    {% endif %} {% endblock %} {% block script %}
+    {% endif %}
+{% endblock %}
+{% block script %}
 
     <script src="{% static 'js/plugins/chartJs/Chart.min.js' %}"></script>
     <script src="{% static 'js/plugins/footable/footable.all.min.js' %}"></script>
