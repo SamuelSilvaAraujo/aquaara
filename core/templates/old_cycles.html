@@ -14,7 +14,7 @@
                                     <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    {{ pond.identification }}
+                                    <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
                                 </li>
                                 <li class="breadcrumb-item active">
                                     <strong>Ciclos Antigos</strong>
@@ -27,51 +27,61 @@
         </div>
     </div>
 
-    <div class="row">
-        {% for cycle in object_list %}
+    {% if object_list.count > 0 %}
 
-            <div class="col-lg-4">
-                <div class="ibox">
-                    <div class="ibox-title bg-primary">
-                        <h2 class="font-bold text-center">
-                            <strong>Ciclo {{ forloop.counter }}</strong>
-                        </h2>
-                    </div>
-                    <div class="ibox-content">
-                        <h3>
-                            Data de Inicio:
-                            <small>{{ cycle.date|date:'d/m/Y' }}</small>
-                        </h3>
-                        <h3>
-                            Data da Despesca:
-                            <small>{{ cycle.despesca.date|date:'d/m/Y' }}</small>
-                        </h3>
-                        <h3>
-                            Quantidade de Peixes Inicial:
-                            <small>{{ cycle.amount_fish }}</small>
-                        </h3>
-                        <h3>
-                            Quantidade de Peixes na Despesca:
-                            <small>{{ cycle.amount_fish_current }}</small>
-                        </h3>
-                        <h3>
-                            Quantidade Total de Ração:
-                            <small>falta calcular</small>
-                        </h3>
-                        <h3>
-                            Mortalidade:
-                            <small>{{ cycle.mortality_total }} peixes</small>
-                        </h3>
-                        <h3>
-                            Conversão Alimentar:
-                            <small>Falta calcular</small>
-                        </h3>
+        <div class="row">
+            {% for cycle in object_list %}
+
+                <div class="col-lg-4">
+                    <div class="ibox">
+                        <div class="ibox-title bg-primary">
+                            <h2 class="font-bold text-center">
+                                <strong>Ciclo {{ forloop.counter }}</strong>
+                            </h2>
+                        </div>
+                        <div class="ibox-content">
+                            <h3>
+                                Data de Inicio:
+                                <small>{{ cycle.date|date:'d/m/Y' }}</small>
+                            </h3>
+                            <h3>
+                                Data da Despesca:
+                                <small>{{ cycle.despesca.date|date:'d/m/Y' }}</small>
+                            </h3>
+                            <h3>
+                                Quantidade de Peixes Inicial:
+                                <small>{{ cycle.amount_fish }}</small>
+                            </h3>
+                            <h3>
+                                Quantidade de Peixes na Despesca:
+                                <small>{{ cycle.amount_fish_current }}</small>
+                            </h3>
+                            <h3>
+                                Quantidade Total de Ração:
+                                <small>falta calcular</small>
+                            </h3>
+                            <h3>
+                                Mortalidade:
+                                <small>{{ cycle.mortality_total }} peixes</small>
+                            </h3>
+                            <h3>
+                                Conversão Alimentar:
+                                <small>Falta calcular</small>
+                            </h3>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+
+        <div class="middle-box text-center animated fadeInRightBig">
+            <h3 class="font-bold text-navy"><strong>Nenhum ciclo foi completado!</strong></h3>
+        </div>
+
+    {% endif %}
 
 
 

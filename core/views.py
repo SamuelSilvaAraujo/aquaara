@@ -189,7 +189,7 @@ class OldCyclesView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         pond = Pond.objects.get(pk=self.kwargs["pk_pond"])
-        return pond.cycle_set.all()
+        return pond.allCycle()
 
     def get_context_data(self, **kwargs):
         context = super(OldCyclesView, self).get_context_data(**kwargs)
