@@ -1,0 +1,73 @@
+{% extends 'pond_base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    {% if object_list.count > 0 %}
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h2><span class="text-navy font-bold"><strong>Viveiros</strong></span></h2>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                {{ property.name }}
+                            </li>
+                            <li class="breadcrumb-item active">
+                                <strong>Viveiros</strong>
+                            </li>
+                        </ol>
+                        <div class="pull-right">
+                            <a href="{% url 'pond_create' property.id %}" class="btn btn-primary btn-link btn-outline">
+                                <i class="fa fa-plus"></i> Cadastrar Viveiro
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="project-list">
+                            <table class="table table-hover">
+                                <tbody>
+                                {% for pond in object_list %}
+                                    <tr>
+                                        <td class="issue-info">
+                                            <a href="{% url 'pond_detail' property.id pond.id %}" class="font-bold">
+                                                <h4><strong>{{ pond.identification }}</strong></h4>
+                                            </a>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="{% url 'pond_update' property.id pond.id %}" class="btn btn-white btn-sm">
+                                                <i class="fa fa-pencil"></i> Editar </a>
+                                            <a href="{% url 'pond_delete' property.id pond.id %}" class="btn btn-danger btn-sm">
+                                                <i class="fa fa-trash"></i> Excluir </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+
+        <div class="middle-box text-center animated fadeInRightBig">
+            <h2 class="font-bold">Nenhum Viveiro Cadastrado!</h2>
+            <div class="error-desc">
+                Cadastre seus Viveiros aqui.
+                <br/>
+                <br/>
+                <a href="{% url 'pond_create' property.id %}" class="btn btn-primary btn-outline btn-link">
+                    <i class="fa fa-plus"></i> Cadastar Viveiro
+                </a>
+            </div>
+        </div>
+
+    {% endif %}
+
+
+{% endblock %}

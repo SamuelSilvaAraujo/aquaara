@@ -47,8 +47,8 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-4">
-            <div class="ibox">
+        <div class="col-lg">
+            <div class="ibox collapsed">
                 <div class="ibox-title bg-success">
                     <h2 class="font-bold"><strong>VIVEIRO</strong></h2>
                     <div class="ibox-tools">
@@ -79,8 +79,8 @@
         </div>
 
         {% if pond.cycle %}
-            <div class="col-lg-4">
-                <div class="ibox">
+            <div class="col-lg">
+                <div class="ibox collapsed">
                     <div class="ibox-title bg-primary">
                         <h2 class="font-bold"><strong>CICLO</strong></h2>
                         <div class="ibox-tools">
@@ -119,8 +119,8 @@
 
             {% if pond.cycle.population %}
 
-                <div class="col-lg-4">
-                    <div class="ibox">
+                <div class="col-lg">
+                    <div class="ibox collapsed">
                         <div class="ibox-title bg-danger">
                             <h2 class="font-bold"><strong>POVOAMENTO</strong></h2>
                             <div class="ibox-tools">
@@ -174,8 +174,8 @@
     {% if pond.cycle and pond.cycle.population %}
 
         <div class="row">
-            <div class="col-lg-6">
-                <div class="ibox">
+            <div class="col-lg">
+                <div class="ibox collapsed">
                     <div class="ibox-title bg-warning">
                         <h2 class="font-bold"><strong>ARRAÇOAMENTO</strong></h2>
                         <div class="ibox-tools">
@@ -209,10 +209,24 @@
                 </div>
             </div>
 
+            <div class="col-lg">
+                <div class="ibox collapsed">
+                    <div class="ibox-title bg-info">
+                        <h2 class="font-bold"><strong>CONVERSÃO ALIMENTAR / CUSTO</strong></h2>
+                        <div class="ibox-tools">
+                            <a class="collapse-link btn-link btn-lg">
+                                <i class="fa fa-chevron-up text-light"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content"></div>
+                </div>
+            </div>
+
             {% if pond.cycle.system == 'SI' %}
 
-                <div class="col-lg-6">
-                    <div class="ibox">
+                <div class="col-lg">
+                    <div class="ibox collapsed">
                         <div class="ibox-title bg-info">
                             <h2 class="font-bold"><strong>QUALIDADE DA ÁGUA</strong></h2>
                             <div class="ibox-tools">
@@ -229,9 +243,9 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg">
 
-                <div class="ibox">
+                <div class="ibox collapsed">
                     <div class="ibox-title bg-dark">
                         <h2 class="font-bold text-light"><strong>BIOMETRIA</strong></h2>
                         <div class="ibox-tools">
@@ -309,8 +323,8 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox">
+            <div class="col-lg">
+                <div class="ibox collapsed">
                     <div class="ibox-title bg-dark">
                         <h2 class="text-light font-bold"><strong>MORTALIDADE</strong></h2>
                         <div class="ibox-tools">

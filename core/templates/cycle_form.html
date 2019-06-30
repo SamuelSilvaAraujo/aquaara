@@ -7,7 +7,7 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title p-m">
-                    <h2><span class="text-navy font-bold"><strong>{{ title }}</strong></span></h2>
+                    <h2><span class="text-navy font-bold"><strong>{% if not form.instance.pk %} Iniciar {% else %} Editar {% endif %} Ciclo</strong></span></h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="{% url 'pond_detail' property.id pond.id %}">
@@ -27,12 +27,12 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ form.middleweight_despesca.label }}
+                                        <h3>{{ form.final_middleweight.label }}
                                             <small class="form-text m-b-none">Peso médio em gramas. Esse é o peso esperado na despesca!</small>
                                         </h3>
                                     </label>
-                                    {{ form.middleweight_despesca }}
-                                    {% for erro in form.middleweight_despesca.erros %}
+                                    {{ form.final_middleweight }}
+                                    {% for erro in form.final_middleweight.erros %}
                                         <p class="text-danger">{{ erro }}</p>
                                     {% endfor %}
                                 </div>
@@ -94,7 +94,7 @@
             var system = $('#system'),
                 type_intensive = $('#type_intensive');
 
-            if($('#system :selected').val() === 'IN'){
+            if($('#system :selected').val() === "intensive"){
                 type_intensive.show()
             }else {
                 type_intensive.hide();
@@ -103,7 +103,7 @@
             system.on('change', function (e) {
                 var val = $(e.target).val(),
                     type_intensive = $('#type_intensive');
-                if(val === 'IN'){
+                if(val === "intensive"){
                     type_intensive.show();
                 }else{
                     type_intensive.hide();

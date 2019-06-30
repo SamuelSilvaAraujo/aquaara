@@ -35,10 +35,10 @@ class PondForm(forms.ModelForm):
 class CycleForm(forms.ModelForm):
     class Meta:
         model = Cycle
-        fields = ['system', 'middleweight_despesca', 'type_intensive', ]
+        fields = ['system', 'final_middleweight', 'type_intensive', ]
         widgets = {
             'system': forms.Select(attrs={'class': 'form-control', 'id': 'system'}),
-            'middleweight_despesca': forms.Select(attrs={'class': 'form-control', 'id': 'middleweight_despesca'}),
+            'final_middleweight': forms.Select(attrs={'class': 'form-control', 'id': 'middleweight_despesca'}),
             'type_intensive': forms.Select(attrs={'class': 'form-control', 'id': 'type_intensive'}),
         }
 
@@ -51,10 +51,11 @@ class CycleForm(forms.ModelForm):
 class PopulationForm(forms.ModelForm):
     class Meta:
         model = Population
-        fields = ['date', 'middleweight', ]
+        fields = ['date', 'middleweight', 'amount_fish']
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
             'middleweight': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': "Ex.: 3 g"}),
+            'amount_fish': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 class MortalityForm(forms.ModelForm):
@@ -78,8 +79,9 @@ class BiometriaForm(forms.ModelForm):
 class DespescaForm(forms.ModelForm):
     class Meta:
         model = Despesca
-        fields = '__all__'
+        fields = ['date', 'middleweight', 'amount']
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
             'final_middleweight': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': "Ex.: 500 g"}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
         }
