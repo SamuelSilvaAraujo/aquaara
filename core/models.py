@@ -162,42 +162,41 @@ class Cycle(models.Model):
             return self.population.middleweight
 
     def biomassa(self):
-        return (self.population.middleweight * self.amount_fish())/1000
+        return (self.population.middleweight/1000) * self.amount_fish()
 
     def biomassa_current(self):
-        return (self.middleweight_current() * self.amount_fish_current())/1000
+        return (self.middleweight_current()/1000) * self.amount_fish_current()
 
     def taxa_alimentar(self):
         peso_medio = self.middleweight_current()
-        biomassa = self.biomassa()
         if self.system == 'SI':
             if 1 <= peso_medio <= 30:
-                return biomassa*0.10
+                return 0.10
             elif 31 <= peso_medio <= 300:
-                return biomassa*0.05
+                return 0.05
             elif 301 <= peso_medio <= 450:
-                return biomassa*0.04
+                return 0.04
             elif 451 <= peso_medio <= 600:
-                return biomassa*0.03
+                return 0.03
             elif 601 <= peso_medio <= 800:
-                return biomassa*0.02
+                return 0.02
             elif 801 <= peso_medio <= 1100:
-                return biomassa*0.01
+                return 0.01
         elif self.system == 'IN':
             if 1 <= peso_medio <= 30:
-                return biomassa * 0.10
+                return 0.10
             elif 31 <= peso_medio <= 100:
-                return biomassa*0.07
+                return 0.07
             elif 101 <= peso_medio <= 155:
-                return biomassa*0.05
+                return 0.05
             elif 156 <= peso_medio <= 450:
-                return biomassa*0.04
+                return 0.04
             elif 451 <= peso_medio <= 600:
-                return biomassa*0.03
+                return 0.03
             elif 601 <= peso_medio <= 800:
-                return biomassa*0.02
+                return 0.02
             elif 801 <= peso_medio <= 1100:
-                return biomassa*0.01
+                return 0.01
 
     def number_refeicoes(self):
         peso_medio = self.middleweight_current()
@@ -211,14 +210,14 @@ class Cycle(models.Model):
     def horario_refeicoes(self):
         number_refeicoes = self.number_refeicoes()
         if number_refeicoes == 4:
-            return "07:00 h, 11:00 h, 14:00 h, 17:00 h"
+            return "07:00 h, 10:00 h, 13:00 h, 16:00 h"
         elif number_refeicoes == 3:
-            return "07:00 h, 12:00 h, 17:00 h"
+            return "07:00 h, 11:00 h, 15:00 h"
         elif number_refeicoes == 2:
             return "08:00 h, 16:00 h"
 
     def arracoamento(self):
-        total = (self.amount_fish()*self.middleweight_current()*self.taxa_alimentar())/100
+        total = self.biomassa_current()*self.taxa_alimentar()
         return total/self.number_refeicoes()
 
     def proteina_racao(self):

@@ -142,7 +142,7 @@
                                 <small> {{ pond.cycle.date_despesca|date:'d/m/Y' }}</small>
                             </h3>
                             <h3>
-                                Peso médio Inicial:
+                                Peso Médio Inicial:
                                 <small> {{ pond.cycle.population.middleweight }} g</small>
                             </h3>
                             <h3>
@@ -151,11 +151,11 @@
                             </h3>
 
                             <h3>
-                                Peso médio final:
+                                Peso Médio Final:
                                 <small> {{ pond.cycle.middleweight_despesca }} g</small>
                             </h3>
                             <h3>
-                                Biomassa:
+                                Biomassa Inicial:
                                 <small> {{ pond.cycle.biomassa|floatformat:2 }} kg</small>
                             </h3>
                             <h3>
@@ -186,7 +186,7 @@
                     </div>
                     <div class="ibox-content">
                         <h3>Quantidade de ração:
-                            <small>{{ pond.cycle.arracoamento|floatformat:2 }} g</small>
+                            <small>{{ pond.cycle.arracoamento|floatformat:2 }} kg</small>
                         </h3>
 
                         <h3>
