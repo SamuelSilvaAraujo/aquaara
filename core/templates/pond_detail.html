@@ -95,9 +95,10 @@
                     <div class="ibox-content">
                         <h3>
                             Sistema:
-                            <small> {{ pond.cycle.get_system_display }}
-                                {% if pond.cycle.system == 'IN' %}
-                                    <p>{{ pond.cycle.get_type_intensive_display }}</p>
+                            <small>
+                                {{ pond.cycle.get_system_display }}
+                                {% if pond.cycle.system == pond.cycle.INTENSIVE %}
+                                    - {{ pond.cycle.get_type_intensive_display }}
                                 {% endif %}
                             </small>
                         </h3>
@@ -106,13 +107,19 @@
                             <small> {{ pond.cycle.density }} peixe/m²</small>
                         </h3>
                         <h3>
-                            Quantidade de Peixes Inicial:
-                            <small>{{ pond.cycle.amount_fish }} peixes</small>
+                            Quantidade de Peixes Calculada:
+                            <small>{{ pond.cycle.amount_fish_total }} peixes</small>
                         </h3>
-                        <h3>
-                            Quantidade de Peixes Atual:
-                            <small>{{ pond.cycle.amount_fish_current }} peixes</small>
-                        </h3>
+                        {% if pond.cycle.population %}
+                            <h3>
+                                Quantidade de Peixes Povoada:
+                                <small>{{ pond.cycle.population.amount_fish }} peixes</small>
+                            </h3>
+                            <h3>
+                                Quantidade de Peixes Atual:
+                                <small>{{ pond.cycle.amount_fish_current }} peixes</small>
+                            </h3>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -152,10 +159,10 @@
 
                             <h3>
                                 Peso Médio Final:
-                                <small> {{ pond.cycle.middleweight_despesca }} g</small>
+                                <small> {{ pond.cycle.final_middleweight }} g</small>
                             </h3>
                             <h3>
-                                Biomassa Inicial:
+                                Biomassa Total:
                                 <small> {{ pond.cycle.biomassa|floatformat:2 }} kg</small>
                             </h3>
                             <h3>

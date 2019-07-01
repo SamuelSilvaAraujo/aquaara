@@ -23,7 +23,7 @@ class PropertyListView(LoginRequiredMixin, ListView):
 
 class PropertyCreateView(LoginRequiredMixin, CreateView):
     model = Property
-    template_name = 'property_create.html'
+    template_name = 'property_form.html'
     form_class = PropertyForm
     second_form_class = AddressForm
 
@@ -45,7 +45,7 @@ class PropertyUpdateView(LoginRequiredMixin, UpdateView):
     model = Property
     form_class = PropertyForm
     second_form_class = AddressForm
-    template_name = 'property_update.html'
+    template_name = 'property_form.html'
 
     def form_valid(self, form):
         address_obj = self.second_form_class(self.request.POST).save()

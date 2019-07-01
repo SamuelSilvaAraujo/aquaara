@@ -59,8 +59,8 @@ class Property(models.Model):
 class Pond(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
     identification = models.CharField("Identificação", max_length=20)
-    width = models.IntegerField("Largura")
-    length = models.IntegerField("Comprimento")
+    width = models.FloatField("Largura")
+    length = models.FloatField("Comprimento")
     water_flow = models.FloatField("Vazão de Água")
 
     def __str__(self):
@@ -76,7 +76,7 @@ class Pond(models.Model):
         return self.cycle_set.filter().count()
 
     def cycle(self):
-        return self.cycle_set.get(despesca__isnull=True)
+        return self.cycle_set.get(finalized=False)
 
     def allCycle(self):
         return self.cycle_set.filter(despesca__isnull=False).order_by("-id")
@@ -128,17 +128,13 @@ class Cycle(models.Model):
     date = models.DateField(auto_now_add=True)
     pond = models.ForeignKey(Pond, on_delete=models.CASCADE)
     population = models.OneToOneField(Population, on_delete=models.CASCADE, null=True, blank=True)
-    system = models.CharField("Sistema", max_length=2, choices=SYSTEM_CHOICES)
-    type_intensive = models.CharField("Tipo de sistema intensivo", max_length=4, choices=TYPE_INTENSIVE_CHOICES, null=True, blank=True)
+    system = models.CharField("Sistema", max_length=15, choices=SYSTEM_CHOICES)
+    type_intensive = models.CharField("Tipo de sistema intensivo", max_length=50, choices=TYPE_INTENSIVE_CHOICES, null=True, blank=True)
     final_middleweight = models.IntegerField("Peso Médio Final", choices=MIDDLEWEIGHT_CHOICES)
+    finalized = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} - {}".format(self.pond.identification, self.date)
-
-    def finalized(self):
-        if self.amount_fish_current() == 0:
-            return True
-        return False
 
     def density(self):
         if self.system == self.SEMI_INTENSIVE:
@@ -160,13 +156,22 @@ class Cycle(models.Model):
         return amount - mortality - despesca
 
     def all_mortality(self):
-        return self.mortality_set.all().order_by("-id")
+        return self.mortality_set.all().order_by("date")
 
     def mortality_total(self):
-        return self.mortality_set.all().aggregate(Sum('amount'))
+        all_mortality = self.all_mortality()
+        if len(all_mortality) > 0:
+            return all_mortality.aggregate(Sum('amount')).get('amount__sum')
+        return 0
+
+    def all_despesca(self):
+        return self.despesca_set.all().order_by("date")
 
     def despesca_total(self):
-        return self.despesca_set.all().aggregate(Sum('amount'))
+        all_despesca = self.all_despesca()
+        if len(all_despesca) > 0:
+            return all_despesca.aggregate(Sum('amount')).get('amount__sum')
+        return 0
 
     def middleweight_current(self):
         if self.biometria_set.count() > 0:
@@ -175,14 +180,14 @@ class Cycle(models.Model):
             return self.population.middleweight
 
     def biomassa(self):
-        return (self.population.middleweight/1000) * self.amount_fish()
+        return (self.population.middleweight/1000) * self.amount_fish_total()
 
     def biomassa_current(self):
         return (self.middleweight_current()/1000) * self.amount_fish_current()
 
     def taxa_alimentar(self):
         peso_medio = self.middleweight_current()
-        if self.system == 'SI':
+        if self.system == self.SEMI_INTENSIVE:
             if 1 <= peso_medio <= 30:
                 return 0.10
             elif 31 <= peso_medio <= 300:
@@ -195,7 +200,7 @@ class Cycle(models.Model):
                 return 0.02
             elif 801 <= peso_medio <= 1100:
                 return 0.01
-        elif self.system == 'IN':
+        elif self.system == self.INTENSIVE:
             if 1 <= peso_medio <= 30:
                 return 0.10
             elif 31 <= peso_medio <= 100:
@@ -235,7 +240,7 @@ class Cycle(models.Model):
 
     def proteina_racao(self):
         peso_medio = self.middleweight_current()
-        if self.system == 'SI':
+        if self.system == self.SEMI_INTENSIVE:
             if 1 <= peso_medio <= 100:
                 return "36"
             elif 101 <= peso_medio <= 155:
@@ -246,7 +251,7 @@ class Cycle(models.Model):
                 return "28 - 32"
             elif 451 <= peso_medio <= 1100:
                 return "28"
-        elif self.system == 'IN':
+        elif self.system == self.INTENSIVE:
             if 1 <= peso_medio <= 30:
                 return "40"
             elif 31 <= peso_medio <= 100:
@@ -262,7 +267,7 @@ class Cycle(models.Model):
 
     def diametro_pelete(self):
         peso_medio = self.middleweight_current()
-        if self.system == 'SI':
+        if self.system == self.SEMI_INTENSIVE:
             if 1 <= peso_medio <= 30:
                 return "1 - 2"
             elif 31 <= peso_medio <= 100:
@@ -279,7 +284,7 @@ class Cycle(models.Model):
                 return "8 - 10"
             elif 801 <= peso_medio <= 1100:
                 return "10"
-        elif self.system == 'IN':
+        elif self.system == self.INTENSIVE:
             if 1 <= peso_medio <= 30:
                 return "1 - 2"
             elif 31 <= peso_medio <= 100:

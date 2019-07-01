@@ -14,9 +14,11 @@
                     <div class="ibox-title">
                         <h2><span class="text-navy font-bold"><strong>Propriedades</strong></span></h2>
                         <div class="pull-right">
-                            <a href="{% url 'property_create' %}" class="btn btn-primary btn-link btn-outline">
-                                <i class="fa fa-plus"></i>
-                                Cadastrar Propriedade
+                            <a href="{% url 'property_create' %}" class="btn btn-primary">
+                                <h4 class="font-bold">
+                                    <i class="fa fa-plus"></i>
+                                    <strong>Cadastrar Propriedade</strong>
+                                </h4>
                             </a>
                         </div>
                     </div>
@@ -29,13 +31,12 @@
                                     <tr>
                                         <td class="issue-info">
                                             <a href="{% url 'property_ponds' property.id %}">
-                                                <h3>{{ property.name }}</h3>
-                                                <h4>
+                                                <h3>{{ property.name }}
                                                     <small>
                                                         {{ property.address.street }}, {{ property.address.number }} - {{ property.address.district }} -
                                                         {{ property.address.city }}, {{ property.address.get_state_display }}
                                                     </small>
-                                                </h4>
+                                                </h3>
                                             </a>
                                         </td>
                                         <td class="text-right">
@@ -65,9 +66,11 @@
                 Cadastre suas Propriedades Aqui.
                 <br/>
                 <br/>
-                <a href="{% url 'property_create' %}" class="btn btn-outline btn-link btn-primary">
-                    <i class="fa fa-plus"></i>
-                    Cadastrar Propriedade
+                <a href="{% url 'property_create' %}" class="btn btn-primary">
+                    <h4 class="font-bold">
+                        <i class="fa fa-plus"></i>
+                        <strong>Cadastrar Propriedade</strong>
+                    </h4>
                 </a>
             </div>
         </div>

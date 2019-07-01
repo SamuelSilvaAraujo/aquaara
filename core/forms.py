@@ -26,10 +26,10 @@ class PondForm(forms.ModelForm):
         model = Pond
         fields = ['identification', 'water_flow', 'width', 'length', ]
         widgets = {
-            'identification': forms.TextInput(attrs={'class': 'form-control', 'id': 'identification', 'placeholder': "Ex.: viveiro 01"}),
-            'water_flow': forms.NumberInput(attrs={'class': 'form-control', 'id': 'vazao', 'placeholder': "Ex.: 15 L/s"}),
-            'width': forms.NumberInput(attrs={'class': 'form-control', 'id': 'largura', 'placeholder': "Ex.: 50m"}),
-            'length': forms.NumberInput(attrs={'class': 'form-control', 'id': 'comprimento', 'placeholder': "Ex.: 80m"}),
+            'identification': forms.TextInput(attrs={'class': 'form-control', 'id': 'identification'}),
+            'water_flow': forms.NumberInput(attrs={'class': 'form-control', 'id': 'vazao'}),
+            'width': forms.NumberInput(attrs={'class': 'form-control', 'id': 'largura'}),
+            'length': forms.NumberInput(attrs={'class': 'form-control', 'id': 'comprimento'}),
         }
 
 class CycleForm(forms.ModelForm):
@@ -54,7 +54,7 @@ class PopulationForm(forms.ModelForm):
         fields = ['date', 'middleweight', 'amount_fish']
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
-            'middleweight': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': "Ex.: 3 g"}),
+            'middleweight': forms.NumberInput(attrs={'class': 'form-control'}),
             'amount_fish': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 

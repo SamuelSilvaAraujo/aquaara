@@ -24,10 +24,11 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ form.identification.label }}</h3>
+                                        <h3>{{ form.identification.label }}
+                                            <small class="form-text">Nome ou Numero que identifique o viveiro.</small>
+                                        </h3>
                                     </label>
                                     {{ form.identification }}
-                                    <span class="form-text m-b-none">Nome ou Numero que identifique o viveiro.</span>
                                 </div>
                             </div>
                         </div>
@@ -36,10 +37,11 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ form.water_flow.label }}</h3>
+                                        <h3>{{ form.water_flow.label }}
+                                            <small class="form-text">Vazão de Água do viveiro em litros por segundo.</small>
+                                        </h3>
                                     </label>
                                     {{ form.water_flow }}
-                                    <span class="form-text m-b-none">Vazão de Água em litros por segundo.</span>
                                 </div>
                             </div>
                         </div>
@@ -48,19 +50,22 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ form.width.label }}</h3>
+                                        <h3>{{ form.width.label }}
+                                            <small class="form-text">Largura do viveiro em metros.</small>
+                                        </h3>
                                     </label>
                                     {{ form.width }}
-                                    <span class="form-text m-b-none">Largura do viveiro em metros.</span>
+
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ form.length.label }}</h3>
+                                        <h3>{{ form.length.label }}
+                                            <small class="form-text">Comprimento do viveiro em metros.</small>
+                                        </h3>
                                     </label>
                                     {{ form.length }}
-                                    <span class="form-text m-b-none">Comprimento do viveiro em metros.</span>
                                 </div>
                             </div>
                         </div>
@@ -69,8 +74,18 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <a class="btn btn-link btn-white" href="{% url 'property_ponds' property.id %}">Cancelar</a>
-                                <button class="btn btn-primary" type="submit">Salvar</button>
+                                <a class="btn btn-link btn-default" href="{% url 'property_ponds' property.id %}">
+                                    <h4>
+                                        <i class="fa fa-close"></i>
+                                        <strong>Cancelar</strong>
+                                    </h4>
+                                </a>
+                                <button class="btn btn-primary" type="submit">
+                                    <h4>
+                                        <i class="fa fa-save"></i>
+                                        <strong>Salvar</strong>
+                                    </h4>
+                                </button>
                             </div>
                         </div>
                     </form>
