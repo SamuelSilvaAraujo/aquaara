@@ -32,7 +32,7 @@
                                         </h3>
                                     </label>
                                     {{ form.final_middleweight }}
-                                    {% for erro in form.final_middleweight.erros %}
+                                    {% for erro in form.final_middleweight.errors %}
                                         <p class="text-danger">{{ erro }}</p>
                                     {% endfor %}
                                 </div>
@@ -48,7 +48,7 @@
                                         </h3>
                                     </label>
                                     {{ form.system }}
-                                    {% for erro in form.system.erros %}
+                                    {% for erro in form.system.errors %}
                                         <p class="text-danger">{{ erro }}</p>
                                     {% endfor %}
                                 </div>
@@ -64,7 +64,7 @@
                                         </h3>
                                     </label>
                                     {{ form.type_intensive }}
-                                    {% for erro in form.type_intensive.erros %}
+                                    {% for erro in form.type_intensive.errors %}
                                         <p class="text-danger">{{ erro }}</p>
                                     {% endfor %}
                                 </div>

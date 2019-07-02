@@ -27,6 +27,7 @@ urlpatterns = [
                 path('biometria/', BiometriaCreateView.as_view(), name="biometria"),
                 path('editar/biometria/<int:pk_biometria>/', BiometriaUpdateView.as_view(), name="biometria_update"),
                 path('despesca/', DespescaCreateView.as_view(), name="despesca"),
+                path('custo/', CostCreateView.as_view(), name="custo")
             ]))
         ])),
     ])),

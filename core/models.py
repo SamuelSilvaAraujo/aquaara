@@ -72,14 +72,14 @@ class Pond(models.Model):
     def area(self):
         return self.width*self.length
 
-    def number_cycles(self):
-        return self.cycle_set.filter().count()
-
     def cycle(self):
         return self.cycle_set.get(finalized=False)
 
     def allCycle(self):
-        return self.cycle_set.filter(despesca__isnull=False).order_by("-id")
+        return self.cycle_set.filter(finalized=True).order_by("date")
+
+    def number_cycles(self):
+        return self.allCycle().count()
 
 class Population(models.Model):
     date = models.DateField("Data", default=datetime.now)
@@ -234,9 +234,12 @@ class Cycle(models.Model):
         elif number_refeicoes == 2:
             return "08:00 h, 16:00 h"
 
-    def arracoamento(self):
+    def arracoamento_total(self):
         total = self.biomassa_current()*self.taxa_alimentar()
-        return total/self.number_refeicoes()
+        return total
+
+    def arracoamento_refeicao(self):
+        return self.arracoamento_total()/self.number_refeicoes()
 
     def proteina_racao(self):
         peso_medio = self.middleweight_current()
@@ -335,7 +338,6 @@ class Cycle(models.Model):
     def all_biometria(self):
         return self.biometria_set.all().order_by("-id")
 
-
 class Mortality(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
@@ -347,7 +349,7 @@ class Biometria(models.Model):
     middleweight = models.FloatField("Peso Médio")
 
 class Despesca(models.Model):
-    cyle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
+    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
     middleweight = models.FloatField("Peso Médio")
     amount = models.IntegerField("Quantidade de Peixes")
@@ -358,3 +360,9 @@ class WaterQuality(models.Model):
     temperature = models.FloatField("Temperatura")
     ph = models.FloatField("PH")
     oxygen = models.FloatField("Oxigênio")
+
+class Cost(models.Model):
+    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+    price = models.FloatField("Preço")
+    weight = models.FloatField("Peso")

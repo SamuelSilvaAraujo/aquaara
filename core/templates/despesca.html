@@ -31,13 +31,15 @@
                             <div class="col-md-12">
                                 <div class="form-group"  id="data_id">
                                     <label class="col-form-label">
-                                        <h3>{{ form.date.label }}</h3>
+                                        <h3>{{ form.date.label }}
+                                            <small class="form-text m-b-none">Data em que a despesca foi realizado.</small>
+                                        </h3>
                                     </label>
                                     <div class="input-group date">
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                         {{ form.date }}
                                     </div>
-                                    <span class="form-text m-b-none">Data em que a despesca foi realizado.</span>
+
                                 </div>
                             </div>
                         </div>
@@ -46,10 +48,24 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ form.final_middleweight.label }}</h3>
+                                        <h3>{{ form.middleweight.label }}
+                                            <small class="form-text m-b-none">Peso médio dos peixes.</small>
+                                        </h3>
                                     </label>
-                                    {{ form.final_middleweight }}
-                                    <span class="form-text m-b-none">Peso médio dos peixes na despesca.</span>
+                                    {{ form.middleweight }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.amount.label }}
+                                            <small class="form-text m-b-none">Quantidade de peixes.</small>
+                                        </h3>
+                                    </label>
+                                    {{ form.amount }}
                                 </div>
                             </div>
                         </div>
@@ -58,8 +74,18 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <a class="btn btn-white btn-link" href="{% url 'pond_detail' property.id pond.id %}">Cancelar</a>
-                                <button class="btn btn-primary" type="submit">Salvar</button>
+                                <a class="btn btn-white btn-link" href="{% url 'pond_detail' property.id pond.id %}">
+                                    <h4>
+                                        <i class="fa fa-close"></i>
+                                        <strong>Cancelar</strong>
+                                    </h4>
+                                </a>
+                                <button class="btn btn-primary" type="submit">
+                                    <h4>
+                                        <i class="fa fa-save"></i>
+                                        <strong>Salvar</strong>
+                                    </h4>
+                                </button>
                             </div>
                         </div>
                     </form>

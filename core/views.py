@@ -220,7 +220,6 @@ class PopulationCreateView(LoginRequiredMixin, CreateView):
         context = super(PopulationCreateView, self).get_context_data(**kwargs)
         context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
-        context["title"] = "Povoamento"
         context["pond_page"] = "active"
         return context
 
@@ -237,7 +236,6 @@ class PopulationUpdateView(LoginRequiredMixin, UpdateView):
         context = super(PopulationUpdateView, self).get_context_data(**kwargs)
         context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
-        context["title"] = "Editar Povoamento"
         context["pond_page"] = "active"
         return context
 
@@ -325,3 +323,19 @@ class DespescaCreateView(LoginRequiredMixin, CreateView):
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
+
+class CostCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'cost_form.html'
+    model = Cost
+    form_class = CostForm
+
+    def form_valid(self, form):
+        pond = Pond.objects.get(id=self.kwargs["pk_pond"])
+        cycle = pond.cycle()
+        form = form.save(commit=False)
+        form.cycle = cycle
+        form.save()
+        return super(CostCreateView).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})

@@ -19,7 +19,7 @@
                             <h2><span class="text-navy font-bold"><strong>{{ pond.identification|upper }}</strong></span></h2>
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
+                                    <a href="{% url 'property_ponds' pond.property.id %}">{{ pond.property.name }}</a>
                                 </li>
                                 <li class="breadcrumb-item active">
                                     <strong>{{ pond.identification }}</strong>
@@ -29,15 +29,15 @@
                         <div class="col-md-6">
                             <div class="pull-right">
                                 {% if not pond.cycle %}
-                                    <a href="{% url 'cycle_init' property.id pond.id %}" class="btn btn-warning btn-outline btn-link font-bold"><strong>Novo ciclo</strong></a>
+                                    <a href="{% url 'cycle_init' pond.property.id pond.id %}" class="btn btn-warning btn-outline btn-link font-bold"><strong>Novo ciclo</strong></a>
                                 {% else %}
                                     {% if not pond.cycle.population %}
-                                        <a href="{% url 'population' property.id pond.id %}" class="btn btn-warning btn-outline btn-link font-bold"><strong>Povoamento</strong></a>
+                                        <a href="{% url 'population' pond.property.id pond.id %}" class="btn btn-warning btn-outline btn-link font-bold"><strong>Povoamento</strong></a>
                                     {% else %}
-                                        <a href="{% url 'despesca' property.id pond.id %}" class="btn btn-warning btn-outline btn-link font-bold"><strong>Despesca</strong></a>
+                                        <a href="{% url 'despesca' pond.property.id pond.id %}" class="btn btn-warning btn-outline btn-link font-bold"><strong>Despesca</strong></a>
                                     {% endif %}
                                 {% endif %}
-                                <a href="{% url 'old_cycles' property.id pond.id %}" class="btn btn-primary btn-outline btn-link font-bold"><strong>Ciclos antigos</strong></a>
+                                <a href="{% url 'old_cycles' pond.property.id pond.id %}" class="btn btn-primary btn-outline btn-link font-bold"><strong>Ciclos antigos</strong></a>
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                     <div class="ibox-title bg-primary">
                         <h2 class="font-bold"><strong>CICLO</strong></h2>
                         <div class="ibox-tools">
-                            <a href="{% url 'cycle_update' property.id pond.id pond.cycle.id %}" class="btn-link btn-lg" title="Click para editar as informações do ciclo.">
+                            <a href="{% url 'cycle_update' pond.property.id pond.id pond.cycle.id %}" class="btn-link btn-lg" title="Click para editar as informações do ciclo.">
                                 <i class="fa fa-pencil text-light"></i>
                             </a>
                             <a class="collapse-link btn-link btn-lg">
@@ -107,16 +107,16 @@
                             <small> {{ pond.cycle.density }} peixe/m²</small>
                         </h3>
                         <h3>
-                            Quantidade de Peixes Calculada:
+                            Total de Peixes:
                             <small>{{ pond.cycle.amount_fish_total }} peixes</small>
                         </h3>
                         {% if pond.cycle.population %}
                             <h3>
-                                Quantidade de Peixes Povoada:
+                                Total de Peixes Povoado:
                                 <small>{{ pond.cycle.population.amount_fish }} peixes</small>
                             </h3>
                             <h3>
-                                Quantidade de Peixes Atual:
+                                Total de Peixes Atual:
                                 <small>{{ pond.cycle.amount_fish_current }} peixes</small>
                             </h3>
                         {% endif %}
@@ -192,8 +192,11 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <h3>Quantidade de ração:
-                            <small>{{ pond.cycle.arracoamento|floatformat:2 }} kg</small>
+                        <h3>Total de Ração do dia:
+                            <small>{{ pond.cycle.arracoamento_total|floatformat:2 }} kg</small>
+                        </h3>
+                        <h3>Total de Ração por refeição:
+                            <small>{{ pond.cycle.arracoamento_refeicao|floatformat:2 }} kg</small>
                         </h3>
 
                         <h3>

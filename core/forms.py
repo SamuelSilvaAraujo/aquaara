@@ -1,5 +1,5 @@
 from django import forms
-from .models import Property, Address, Pond, Cycle, Population, Mortality, Biometria, Despesca
+from .models import *
 
 class PropertyForm(forms.ModelForm):
     class Meta:
@@ -45,8 +45,8 @@ class CycleForm(forms.ModelForm):
     def clean(self):
         system = self.cleaned_data["system"]
         type_intensive = self.cleaned_data["type_intensive"]
-        if system == 'IN' and not type_intensive:
-            raise forms.ValidationError("Defina o tipo de sistema intensivo!")
+        if system == Cycle.INTENSIVE and not type_intensive:
+            self.add_error('type_intensive', "Defina o tipo de sistema intensivo!")
 
 class PopulationForm(forms.ModelForm):
     class Meta:
@@ -82,6 +82,15 @@ class DespescaForm(forms.ModelForm):
         fields = ['date', 'middleweight', 'amount']
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
-            'final_middleweight': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': "Ex.: 500 g"}),
+            'middleweight': forms.NumberInput(attrs={'class': 'form-control'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+class CostForm(forms.ModelForm):
+    class Meta:
+        model = Cost
+        fields = ['weight', 'price']
+        widgets = {
+            'weight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control'}),
         }
