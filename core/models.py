@@ -155,8 +155,15 @@ class Cycle(models.Model):
         despesca = self.despesca_total()
         return amount - mortality - despesca
 
+    def previous_amount_fish(self):
+        last_biometria = self.biometria_set.last()
+        total_amount = self.amount_fish_population()
+        total_mortality = self.all_mortality().filter(date__lt=last_biometria.date)
+        total_despesca = self.all_despesca().filter(date__lt=last_biometria.date)
+        return total_amount - total_mortality - total_despesca
+
     def all_mortality(self):
-        return self.mortality_set.all().order_by("date")
+        return self.mortality_set.all()
 
     def mortality_total(self):
         all_mortality = self.all_mortality()
@@ -165,7 +172,7 @@ class Cycle(models.Model):
         return 0
 
     def all_despesca(self):
-        return self.despesca_set.all().order_by("date")
+        return self.despesca_set.all()
 
     def despesca_total(self):
         all_despesca = self.all_despesca()
@@ -173,76 +180,87 @@ class Cycle(models.Model):
             return all_despesca.aggregate(Sum('amount')).get('amount__sum')
         return 0
 
-    def middleweight_current(self):
-        if self.biometria_set.count() > 0:
-            return self.biometria_set.all().last().middleweight
-        else:
-            return self.population.middleweight
+    def population_middleweight(self):
+        return self.population.middleweight
+
+    def current_middleweight(self):
+        return self.biometria_set.last().middleweight if self.biometria_set.last() else self.population_middleweight()
+
+    def previous_middleweight(self):
+        return self.biometria_set.all()[1].middleweight if self.biometria_set.count() > 1 else self.population_middleweight()
 
     def biomassa(self):
-        return (self.population.middleweight/1000) * self.amount_fish_total()
+        return (self.current_middleweight()/1000) * self.amount_fish_total()
 
-    def biomassa_current(self):
-        return (self.middleweight_current()/1000) * self.amount_fish_current()
+    def current_biomassa(self):
+        return (self.current_middleweight()/1000) * self.amount_fish_current()
 
-    def taxa_alimentar(self):
-        peso_medio = self.middleweight_current()
+    def previous_biomassa(self):
+        return (self.previous_middleweight()/1000) * self.previous_amount_fish()
+
+    def feed_rate(self, middleweight):
+        # peso_medio = self.current_middleweight()
         if self.system == self.SEMI_INTENSIVE:
-            if 1 <= peso_medio <= 30:
+            if 1 <= middleweight <= 30:
                 return 0.10
-            elif 31 <= peso_medio <= 300:
+            elif 31 <= middleweight <= 300:
                 return 0.05
-            elif 301 <= peso_medio <= 450:
+            elif 301 <= middleweight <= 450:
                 return 0.04
-            elif 451 <= peso_medio <= 600:
+            elif 451 <= middleweight <= 600:
                 return 0.03
-            elif 601 <= peso_medio <= 800:
+            elif 601 <= middleweight <= 800:
                 return 0.02
-            elif 801 <= peso_medio <= 1100:
+            elif 801 <= middleweight <= 1100:
                 return 0.01
         elif self.system == self.INTENSIVE:
-            if 1 <= peso_medio <= 30:
+            if 1 <= middleweight <= 30:
                 return 0.10
-            elif 31 <= peso_medio <= 100:
+            elif 31 <= middleweight <= 100:
                 return 0.07
-            elif 101 <= peso_medio <= 155:
+            elif 101 <= middleweight <= 155:
                 return 0.05
-            elif 156 <= peso_medio <= 450:
+            elif 156 <= middleweight <= 450:
                 return 0.04
-            elif 451 <= peso_medio <= 600:
+            elif 451 <= middleweight <= 600:
                 return 0.03
-            elif 601 <= peso_medio <= 800:
+            elif 601 <= middleweight <= 800:
                 return 0.02
-            elif 801 <= peso_medio <= 1100:
+            elif 801 <= middleweight <= 1100:
                 return 0.01
 
-    def number_refeicoes(self):
-        peso_medio = self.middleweight_current()
-        if 1 <= peso_medio <= 300:
+    def number_feeds(self):
+        middleweight = self.current_middleweight()
+        if 1 <= middleweight <= 300:
             return 4
-        elif 301 <= peso_medio <= 600:
+        elif 301 <= middleweight <= 600:
             return 3
-        elif 601 <= peso_medio <= 1100:
+        elif 601 <= middleweight <= 1100:
             return 2
 
     def horario_refeicoes(self):
-        number_refeicoes = self.number_refeicoes()
-        if number_refeicoes == 4:
+        number_feeds = self.number_feeds()
+        if number_feeds == 4:
             return "07:00 h, 10:00 h, 13:00 h, 16:00 h"
-        elif number_refeicoes == 3:
+        elif number_feeds == 3:
             return "07:00 h, 11:00 h, 15:00 h"
-        elif number_refeicoes == 2:
+        elif number_feeds == 2:
             return "08:00 h, 16:00 h"
 
-    def arracoamento_total(self):
-        total = self.biomassa_current()*self.taxa_alimentar()
-        return total
+    def full_day_feeding(self):
+        return self.current_biomassa()*self.feed_rate(self.current_middleweight())
 
-    def arracoamento_refeicao(self):
-        return self.arracoamento_total()/self.number_refeicoes()
+    def feed_meal(self):
+        return self.full_day_feeding()/self.number_feeds()
+
+    def full_period_feeding(self):
+        last_date = self.population.date
+        for biometria in self.all_biometria():
+            pass
+        return
 
     def proteina_racao(self):
-        peso_medio = self.middleweight_current()
+        peso_medio = self.current_middleweight()
         if self.system == self.SEMI_INTENSIVE:
             if 1 <= peso_medio <= 100:
                 return "36"
@@ -269,7 +287,7 @@ class Cycle(models.Model):
                 return "28"
 
     def diametro_pelete(self):
-        peso_medio = self.middleweight_current()
+        peso_medio = self.current_middleweight()
         if self.system == self.SEMI_INTENSIVE:
             if 1 <= peso_medio <= 30:
                 return "1 - 2"
@@ -326,33 +344,39 @@ class Cycle(models.Model):
             biometria = self.biometria_set.all().order_by('-id')[0]
             return biometria.date + timedelta(days=15)
 
-    def total_mortality(self):
-        total = 0
-        for mortality in self.all_mortality():
-            total += mortality.amount
-        return total
-
     def last_biometria(self):
-        return self.biometria_set.all().order_by("-id")[0]
+        return self.biometria_set.last()
 
     def all_biometria(self):
-        return self.biometria_set.all().order_by("-id")
+        return self.biometria_set.all()
+
+    def current_cost(self):
+        return self.cost_set.last()
 
 class Mortality(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
     amount = models.IntegerField("Quantidade")
 
+    class Meta:
+        ordering = ['date']
+
 class Biometria(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
     middleweight = models.FloatField("Peso Médio")
+
+    class Meta:
+        ordering = ['date']
 
 class Despesca(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
     middleweight = models.FloatField("Peso Médio")
     amount = models.IntegerField("Quantidade de Peixes")
+
+    class Meta:
+        ordering = ['date']
 
 class WaterQuality(models.Model):
     date = models.DateField("Data", default=datetime.now)
@@ -366,3 +390,6 @@ class Cost(models.Model):
     date = models.DateField(auto_now_add=True)
     price = models.FloatField("Preço")
     weight = models.FloatField("Peso")
+
+    class Meta:
+        ordering = ['date']

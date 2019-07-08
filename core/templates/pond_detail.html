@@ -112,11 +112,11 @@
                         </h3>
                         {% if pond.cycle.population %}
                             <h3>
-                                Total de Peixes Povoado:
-                                <small>{{ pond.cycle.population.amount_fish }} peixes</small>
+                                Peixes Povoado:
+                                <small>{{ pond.cycle.amount_fish_population }} peixes</small>
                             </h3>
                             <h3>
-                                Total de Peixes Atual:
+                                Peixes Atual:
                                 <small>{{ pond.cycle.amount_fish_current }} peixes</small>
                             </h3>
                         {% endif %}
@@ -144,17 +144,17 @@
                                 Data do Povoamento:
                                 <small> {{ pond.cycle.population.date|date:'d/m/Y' }}</small>
                             </h3>
+{#                            <h3>#}
+{#                                Data da despesca:#}
+{#                                <small> {{ pond.cycle.date_despesca|date:'d/m/Y' }}</small>#}
+{#                            </h3>#}
                             <h3>
-                                Data da despesca:
-                                <small> {{ pond.cycle.date_despesca|date:'d/m/Y' }}</small>
-                            </h3>
-                            <h3>
-                                Peso Médio Inicial:
-                                <small> {{ pond.cycle.population.middleweight }} g</small>
+                                Peso Médio no Povoamento:
+                                <small> {{ pond.cycle.population_middleweight }} g</small>
                             </h3>
                             <h3>
                                 Peso Médio Atual:
-                                <small> {{ pond.cycle.middleweight_current }} g</small>
+                                <small> {{ pond.cycle.current_middleweight }} g</small>
                             </h3>
 
                             <h3>
@@ -162,13 +162,17 @@
                                 <small> {{ pond.cycle.final_middleweight }} g</small>
                             </h3>
                             <h3>
-                                Biomassa Total:
+                                Biomassa Maxima:
                                 <small> {{ pond.cycle.biomassa|floatformat:2 }} kg</small>
                             </h3>
                             <h3>
                                 Biomassa Atual:
-                                <small> {{ pond.cycle.biomassa_current|floatformat:2 }} kg</small>
+                                <small> {{ pond.cycle.current_biomassa|floatformat:2 }} kg</small>
                             </h3>
+{#                            <h3>#}
+{#                                Biomassa Anterior:#}
+{#                                <small> {{ pond.cycle.previous_biomassa|floatformat:2 }} kg</small>#}
+{#                            </h3>#}
 
                         </div>
                     </div>
@@ -193,15 +197,15 @@
                     </div>
                     <div class="ibox-content">
                         <h3>Total de Ração do dia:
-                            <small>{{ pond.cycle.arracoamento_total|floatformat:2 }} kg</small>
+                            <small>{{ pond.cycle.full_day_feeding|floatformat:2 }} kg</small>
                         </h3>
                         <h3>Total de Ração por refeição:
-                            <small>{{ pond.cycle.arracoamento_refeicao|floatformat:2 }} kg</small>
+                            <small>{{ pond.cycle.feed_meal|floatformat:2 }} kg</small>
                         </h3>
 
                         <h3>
                             Refeições por dia:
-                            <small>{{ pond.cycle.number_refeicoes }}</small>
+                            <small>{{ pond.cycle.number_feeds }}</small>
                         </h3>
                         <h3>
                             Horários da ração:
@@ -224,6 +228,9 @@
                     <div class="ibox-title bg-info">
                         <h2 class="font-bold"><strong>CONVERSÃO ALIMENTAR / CUSTO</strong></h2>
                         <div class="ibox-tools">
+                            <a href="{% url 'custo_update' property.id pond.id pond.cycle.current_cost.id %}" class="btn-link btn-lg" title="Click para editar as informações de custo.">
+                                <i class="fa fa-pencil text-light"></i>
+                            </a>
                             <a class="collapse-link btn-link btn-lg">
                                 <i class="fa fa-chevron-up text-light"></i>
                             </a>
@@ -233,8 +240,11 @@
                 </div>
             </div>
 
-            {% if pond.cycle.system == 'SI' %}
+        </div>
 
+        {% if pond.cycle.system == pond.cycle.SEMI_INTENSIVE %}
+
+            <div class="row">
                 <div class="col-lg">
                     <div class="ibox collapsed">
                         <div class="ibox-title bg-info">
@@ -248,9 +258,8 @@
                         <div class="ibox-content"></div>
                     </div>
                 </div>
-
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
 
         <div class="row">
             <div class="col-lg">

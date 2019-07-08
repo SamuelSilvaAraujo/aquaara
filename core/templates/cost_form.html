@@ -2,4 +2,101 @@
 
 {% block content %}
 
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h2>
+                        <span class="text-navy font-bold">
+                        <strong>{% if not form.instance.pk %} Cadastrar {% else %} Editar {% endif %} Custo</strong></span>
+                    </h2>
+                </div>
+                <div class="ibox-content">
+                    <form method="post" class="form-horizontal">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.weight.label }}
+                                            <small class="form-text">Peso do saco de Ração</small>
+                                        </h3>
+                                    </label>
+                                    {{ form.weight }}
+                                    {% for erro in form.weight.errors %}
+                                        <p class="text-danger">{{ erro }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.price.label }}
+                                            <small class="form-text">Preço do saco de Ração</small>
+                                        </h3>
+                                    </label>
+                                    {{ form.price }}
+                                    {% for erro in form.price.errors %}
+                                        <p class="text-danger">{{ erro }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-white" href="{% url 'pond_detail' property.id pond.id %}">
+                                    <strong>Cancelar</strong>
+                                </a>
+                                <button class="btn btn-primary" type="submit">
+                                    <strong>Salvar</strong>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="ibox">
+                <div class="ibox-title bg-warning">
+                    <h2 class="font-bold"><strong>ARRAÇOAMENTO</strong></h2>
+                </div>
+                <div class="ibox-content">
+                    <h3>Total de Ração do dia:
+                        <small>{{ pond.cycle.arracoamento_total|floatformat:2 }} kg</small>
+                    </h3>
+                    <h3>Total de Ração por refeição:
+                        <small>{{ pond.cycle.arracoamento_refeicao|floatformat:2 }} kg</small>
+                    </h3>
+
+                    <h3>
+                        Refeições por dia:
+                        <small>{{ pond.cycle.number_refeicoes }}</small>
+                    </h3>
+                    <h3>
+                        Horários da ração:
+                        <small>{{ pond.cycle.horario_refeicoes }}</small>
+                    </h3>
+                    <h3>
+                        Proteina na ração:
+                        <small>{{ pond.cycle.proteina_racao }} %</small>
+                    </h3>
+                    <h3>
+                        Diâmetro do pelete:
+                        <small>{{ pond.cycle.diametro_pelete }} mm</small>
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 {% endblock %}

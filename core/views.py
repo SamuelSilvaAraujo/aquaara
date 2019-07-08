@@ -206,15 +206,17 @@ class PopulationCreateView(LoginRequiredMixin, CreateView):
     form_class = PopulationForm
     template_name = 'population_form.html'
 
+    def get_success_url(self):
+        return reverse_lazy('custo_create', kwargs={'pk_property': self.kwargs['pk_property'], 'pk_pond': self.kwargs['pk_pond']})
+
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
-        pk_property = self.kwargs["pk_property"]
         pond_obj = Pond.objects.get(pk=pk_pond)
         cycle = pond_obj.cycle()
-        population_obj = form.save()
-        cycle.population = population_obj
+        population = form.save()
+        cycle.population = population
         cycle.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(PopulationCreateView, self).get_context_data(**kwargs)
@@ -335,7 +337,30 @@ class CostCreateView(LoginRequiredMixin, CreateView):
         form = form.save(commit=False)
         form.cycle = cycle
         form.save()
-        return super(CostCreateView).form_valid(form)
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
+    def get_context_data(self, **kwargs):
+        context = super(CostCreateView, self).get_context_data(**kwargs)
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
+        return context
+
+class CostUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'cost_form.html'
+    model = Cost
+    form_class = CostForm
+    pk_url_kwarg = 'pk_cost'
+
+    def get_success_url(self):
+        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
+    def get_context_data(self, **kwargs):
+        context = super(CostUpdateView, self).get_context_data(**kwargs)
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
+        return context
