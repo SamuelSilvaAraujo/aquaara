@@ -144,10 +144,10 @@
                                 Data do Povoamento:
                                 <small> {{ pond.cycle.population.date|date:'d/m/Y' }}</small>
                             </h3>
-{#                            <h3>#}
-{#                                Data da despesca:#}
-{#                                <small> {{ pond.cycle.date_despesca|date:'d/m/Y' }}</small>#}
-{#                            </h3>#}
+                            {#                            <h3>#}
+                            {#                                Data da despesca:#}
+                            {#                                <small> {{ pond.cycle.date_despesca|date:'d/m/Y' }}</small>#}
+                            {#                            </h3>#}
                             <h3>
                                 Peso Médio no Povoamento:
                                 <small> {{ pond.cycle.population_middleweight }} g</small>
@@ -163,16 +163,12 @@
                             </h3>
                             <h3>
                                 Biomassa Maxima:
-                                <small> {{ pond.cycle.biomassa|floatformat:2 }} kg</small>
+                                <small> {{ pond.cycle.max_biomassa|floatformat:2 }} kg</small>
                             </h3>
                             <h3>
                                 Biomassa Atual:
                                 <small> {{ pond.cycle.current_biomassa|floatformat:2 }} kg</small>
                             </h3>
-{#                            <h3>#}
-{#                                Biomassa Anterior:#}
-{#                                <small> {{ pond.cycle.previous_biomassa|floatformat:2 }} kg</small>#}
-{#                            </h3>#}
 
                         </div>
                     </div>
@@ -200,7 +196,7 @@
                             <small>{{ pond.cycle.full_day_feeding|floatformat:2 }} kg</small>
                         </h3>
                         <h3>Total de Ração por refeição:
-                            <small>{{ pond.cycle.feed_meal|floatformat:2 }} kg</small>
+                            <small>{{ pond.cycle.feeding_meal|floatformat:2 }} kg</small>
                         </h3>
 
                         <h3>
@@ -213,11 +209,11 @@
                         </h3>
                         <h3>
                             Proteina na ração:
-                            <small>{{ pond.cycle.proteina_racao }} %</small>
+                            <small>{{ pond.cycle.proteina_racao }}</small>
                         </h3>
                         <h3>
                             Diâmetro do pelete:
-                            <small>{{ pond.cycle.diametro_pelete }} mm</small>
+                            <small>{{ pond.cycle.diametro_pelete }}</small>
                         </h3>
                     </div>
                 </div>
@@ -228,7 +224,7 @@
                     <div class="ibox-title bg-info">
                         <h2 class="font-bold"><strong>CONVERSÃO ALIMENTAR / CUSTO</strong></h2>
                         <div class="ibox-tools">
-                            <a href="{% url 'custo_update' property.id pond.id pond.cycle.current_cost.id %}" class="btn-link btn-lg" title="Click para editar as informações de custo.">
+                            <a href="{% url 'custo' property.id pond.id %}" class="btn-link btn-lg" title="Click para editar as informações de custo.">
                                 <i class="fa fa-pencil text-light"></i>
                             </a>
                             <a class="collapse-link btn-link btn-lg">
@@ -236,7 +232,46 @@
                             </a>
                         </div>
                     </div>
-                    <div class="ibox-content"></div>
+                    <div class="ibox-content">
+                        <table class="custotable table table-hover no-margins" data-page-size="5">
+                            <thead>
+                            <tr>
+                                <th>Conversão Alimentar</th>
+                                <th>Custo</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>20</td>
+                                <td>R$ 500</td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td>R$ 500</td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td>R$ 500</td>
+                            </tr> <tr>
+                                <td>20</td>
+                                <td>R$ 500</td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td>R$ 500</td>
+                            </tr>
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <ul class="pagination float-right"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -281,7 +316,7 @@
                             <div class="col-md-12">
                                 <h3>
                                     Data da Proxima Biometria:
-                                    <small>{{ pond.cycle.date_biometria|date:'d/m/Y' }}</small>
+                                    <small>{{ pond.cycle.date_next_biometria|date:'d/m/Y' }}</small>
                                 </h3>
                                 <h3>
                                     Quantidade de Peixes da Proxima Biometria:
@@ -423,6 +458,7 @@
 
             $('.biotable').footable();
             $('.mortatable').footable();
+            $('.custotable').footable();
 
         });
 
