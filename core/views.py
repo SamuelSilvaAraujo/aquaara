@@ -310,15 +310,17 @@ class DespescaCreateView(LoginRequiredMixin, CreateView):
     form_class = DespescaForm
     template_name = 'despesca.html'
 
+    def get_success_url(self):
+        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
     def form_valid(self, form):
         pk_pond = self.kwargs["pk_pond"]
-        pk_property = self.kwargs["pk_property"]
         pond_obj = Pond.objects.get(pk=pk_pond)
-        despesca_obj = form.save()
         cycle = pond_obj.cycle()
-        cycle.despesca = despesca_obj
-        cycle.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
+        form = form.save(commit=False)
+        form.cycle = cycle
+        form.save()
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(DespescaCreateView, self).get_context_data(**kwargs)

@@ -235,32 +235,22 @@
                     <div class="ibox-content">
                         <table class="custotable table table-hover no-margins" data-page-size="5">
                             <thead>
+
                             <tr>
+                                <th>Período</th>
                                 <th>Conversão Alimentar</th>
                                 <th>Custo</th>
                             </tr>
                             </thead>
                             <tbody>
+                            {% for period in pond.cycle.periods %}
 
-                            <tr>
-                                <td>20</td>
-                                <td>R$ 500</td>
-                            </tr>
-                            <tr>
-                                <td>20</td>
-                                <td>R$ 500</td>
-                            </tr>
-                            <tr>
-                                <td>20</td>
-                                <td>R$ 500</td>
-                            </tr> <tr>
-                                <td>20</td>
-                                <td>R$ 500</td>
-                            </tr>
-                            <tr>
-                                <td>20</td>
-                                <td>R$ 500</td>
-                            </tr>
+                                <tr>
+                                    <td>{{ period.period.start|date:'d/m/Y' }} - {{ period.period.end|date:'d/m/Y' }}</td>
+                                    <td>{{ period.food_conversion|floatformat:2 }}</td>
+                                    <td>R$ {{ period.cost }}</td>
+                                </tr>
+                            {% endfor %}
 
                             </tbody>
                             <tfoot>

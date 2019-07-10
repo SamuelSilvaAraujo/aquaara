@@ -1,7 +1,7 @@
 from django.template.defaultfilters import slugify
 from django.db import models
 from datetime import datetime, timedelta
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.urls import reverse
 
 from users.models import User
@@ -198,8 +198,17 @@ class Cycle(models.Model):
     def current_biomassa(self):
         return (self.current_middleweight()/1000) * self.amount_fish_current()
 
-    def feed_rate(self):
-        middleweight = self.current_middleweight()
+    def period_biomassa(self, middleweight, amount_fish):
+        return (middleweight/1000) * amount_fish
+
+    def period_amount_fish(self, end_date):
+        population_amount = self.amount_fish_population()
+        mortality = self.all_mortality().filter(date__lte=end_date).aggregate(Sum('amount')).get('amount__sum') or 0
+        despesca = self.all_despesca().filter(date__lte=end_date).aggregate(Sum('amount')).get('amount__sum') or 0
+        return population_amount - mortality - despesca
+
+    def feed_rate(self, middleweight):
+        # middleweight = self.current_middleweight()
         if self.system == self.SEMI_INTENSIVE:
             if 1 <= middleweight <= 30:
                 return 0.10
@@ -248,7 +257,7 @@ class Cycle(models.Model):
             return "08:00 h, 16:00 h"
 
     def full_day_feeding(self):
-        return self.current_biomassa()*self.feed_rate()
+        return self.current_biomassa()*self.feed_rate(self.current_middleweight())
 
     def feeding_meal(self):
         return self.full_day_feeding()/self.number_feeds()
@@ -341,6 +350,56 @@ class Cycle(models.Model):
     def current_cost(self):
         return self.cost_set.last()
 
+    def period_feeding(self, middleweight, start_date, end_date):
+        number_days = end_date - start_date
+        amount_fish = self.period_amount_fish(end_date)
+        biomassa = self.period_biomassa(middleweight, amount_fish)
+        feeding = biomassa * self.feed_rate(middleweight)
+        return feeding*number_days.days
+
+    def food_conversion(self, feeding, middleweight_initial, middleweight_final, start_date, end_date):
+        amount_fish1 = self.period_amount_fish(start_date)
+        biomassa1 = self.period_biomassa(middleweight_initial, amount_fish1)
+        amount_fish2 = self.period_amount_fish(end_date)
+        biomassa2 = self.period_biomassa(middleweight_final, amount_fish2)
+        biomassa = biomassa2 - biomassa1
+        return feeding/biomassa
+
+    def cost_period(self,feeding, start_date, end_date):
+        cost = self.cost_set.filter(Q(date__gte=start_date) & Q(date__lt=end_date))
+        return 0
+
+    def periods(self):
+        list = []
+        start_date = self.population.date
+        middleweight = self.population.middleweight
+        for biometria in self.all_biometria():
+            end_date = biometria.date
+            period_mortality = [m for m in self.all_mortality().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
+            period_despesca = [d for d in self.all_despesca().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
+            dates_list = set(period_mortality + period_despesca)
+            feeding = 0
+            start_date_period = start_date
+            if len(dates_list) > 0:
+                for date in dates_list:
+                    feeding += self.period_feeding(middleweight, start_date_period, date)
+                    start_date_period = date
+                feeding += self.period_feeding(middleweight, start_date_period, end_date)
+            else:
+                feeding += self.period_feeding(middleweight, start_date, end_date)
+
+            cost = self.cost_period(feeding, start_date, end_date)
+            food_conversion = self.food_conversion(feeding, middleweight, biometria.middleweight, start_date, end_date)
+            list.append({
+                "period": {"start": start_date, "end": end_date},
+                "food_conversion": food_conversion,
+                "cost": cost
+            })
+            start_date = end_date
+            middleweight = biometria.middleweight
+        return list
+
+
 class Mortality(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
@@ -381,3 +440,6 @@ class Cost(models.Model):
 
     class Meta:
         ordering = ['-date']
+
+    def price_kg(self):
+        return self.price/self.weight
