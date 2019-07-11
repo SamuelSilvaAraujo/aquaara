@@ -208,7 +208,6 @@ class Cycle(models.Model):
         return population_amount - mortality - despesca
 
     def feed_rate(self, middleweight):
-        # middleweight = self.current_middleweight()
         if self.system == self.SEMI_INTENSIVE:
             if 1 <= middleweight <= 30:
                 return 0.10
@@ -329,13 +328,13 @@ class Cycle(models.Model):
     def amount_fish_biometria(self):
         amount = self.amount_fish_current()
         if amount <= 400:
-            return int(amount*0.10) + 1
+            return amount*0.10
         elif 401 <= amount <= 700:
-            return int(amount*0.07) + 1
+            return amount*0.07
         elif 701 <= amount <= 2000:
-            return int(amount*0.05) + 1
+            return amount*0.05
         else:
-            return int(amount*0.05) + 1
+            return amount*0.03
 
     def date_next_biometria(self):
         td = timedelta(days=15)
