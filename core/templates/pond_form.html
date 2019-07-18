@@ -9,7 +9,7 @@
                     <h2><span class="text-navy font-bold"><strong>{% if not form.instance.pk %} Cadastrar {% else %} Editar {% endif %} Viveiro</strong></span></h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
+                            <a href="{% url 'ponds_list' property.id %}">{{ property.name }}</a>
                         </li>
                         <li class="breadcrumb-item active">
                             <strong>Cadastrar Viveiro</strong>
@@ -38,7 +38,7 @@
                                 <div class="form-group">
                                     <label class="col-form-label">
                                         <h3>{{ form.water_flow.label }}
-                                            <small class="form-text">Vazão de Água do viveiro em litros por segundo.</small>
+                                            <small class="form-text">Vazão de Água do viveiro em litros por minuto.</small>
                                         </h3>
                                     </label>
                                     {{ form.water_flow }}
@@ -74,17 +74,11 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <a class="btn btn-link btn-default" href="{% url 'property_ponds' property.id %}">
-                                    <h4>
-                                        <i class="fa fa-close"></i>
-                                        <strong>Cancelar</strong>
-                                    </h4>
+                                <a class="btn btn-link btn-default" href="{% url 'ponds_list' property.id %}">
+                                   Cancelar
                                 </a>
                                 <button class="btn btn-primary" type="submit">
-                                    <h4>
-                                        <i class="fa fa-save"></i>
-                                        <strong>Salvar</strong>
-                                    </h4>
+                                    Salvar
                                 </button>
                             </div>
                         </div>

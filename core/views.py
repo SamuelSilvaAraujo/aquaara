@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
@@ -64,7 +64,7 @@ class PropertyDeleteView(LoginRequiredMixin, DeleteView):
 
 class PondListView(LoginRequiredMixin, ListView):
     template_name = 'pond_list.html'
-    model = Property
+    model = Pond
     pk_url_kwarg = 'pk_property'
 
     def get_queryset(self):
@@ -102,7 +102,7 @@ class PondDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PondDetailView, self).get_context_data(**kwargs)
-        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["property"] = self.object.property
         context["pond_page"] = "active"
         return context
 

@@ -58,7 +58,7 @@ class Pond(models.Model):
         return self.identification
 
     def volume(self):
-        return (self.width*self.length*1)*1000
+        return (self.width*self.length * ((((self.length*0.005)+1)+1)/2))*1000
 
     def area(self):
         return self.width*self.length
