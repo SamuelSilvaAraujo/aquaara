@@ -68,7 +68,7 @@
                     </h3>
                     <h3>
                         Vazão de Água:
-                        <small> {{ pond.water_flow }} l/m</small>
+                        <small> {{ pond.water_flow }} L / M</small>
                     </h3>
                     <h3>
                         Volume de Água:
@@ -112,14 +112,26 @@
                         </h3>
                         {% if pond.cycle.population %}
                             <h3>
-                                Peixes Povoado:
-                                <small>{{ pond.cycle.amount_fish_population }} peixes</small>
+                                Biomassa Maxima:
+                                <small> {{ pond.cycle.max_biomassa|floatformat:2 }} kg</small>
                             </h3>
                             <h3>
                                 Peixes Atual:
                                 <small>{{ pond.cycle.amount_fish_current }} peixes</small>
                             </h3>
+                            <h3>
+                                Biomassa Atual:
+                                <small> {{ pond.cycle.current_biomassa|floatformat:2 }} kg</small>
+                            </h3>
+                            <h3>
+                                Peso Médio Atual:
+                                <small> {{ pond.cycle.current_middleweight }} g</small>
+                            </h3>
                         {% endif %}
+                        <h3>
+                            Peso Médio Final:
+                            <small> {{ pond.cycle.final_middleweight }} g</small>
+                        </h3>
                     </div>
                 </div>
             </div>
@@ -149,22 +161,15 @@
                                 <small> {{ pond.cycle.population_middleweight }} g</small>
                             </h3>
                             <h3>
-                                Peso Médio Atual:
-                                <small> {{ pond.cycle.current_middleweight }} g</small>
+                                Peixes Povoado:
+                                <small>{{ pond.cycle.amount_fish_population }} peixes</small>
+                            </h3>
+                            <h3>
+                                Biomassa no Povoamento:
+                                <small>{{ pond.cycle.first_biomassa }} kg</small>
                             </h3>
 
-                            <h3>
-                                Peso Médio Final:
-                                <small> {{ pond.cycle.final_middleweight }} g</small>
-                            </h3>
-                            <h3>
-                                Biomassa Maxima:
-                                <small> {{ pond.cycle.max_biomassa|floatformat:2 }} kg</small>
-                            </h3>
-                            <h3>
-                                Biomassa Atual:
-                                <small> {{ pond.cycle.current_biomassa|floatformat:2 }} kg</small>
-                            </h3>
+
 
                         </div>
                     </div>
@@ -213,7 +218,7 @@
                         </h3>
                         <h3>
                             Conversão Alimentar
-{#                            <small>{{ pond.cycle.food_conversion }}</small>#}
+                            {#                            <small>{{ pond.cycle.food_conversion }}</small>#}
                         </h3>
                     </div>
                 </div>
