@@ -30,11 +30,12 @@
                                 {% for property in object_list %}
                                     <tr>
                                         <td class="issue-info">
-                                            <a href="{% url 'property_ponds' property.id %}">
+                                            <a href="{% url 'ponds_list' property.id %}">
                                                 <h3>{{ property.name }}
                                                     <small>
-                                                        {{ property.address.street }}, {{ property.address.number }} - {{ property.address.district }} -
-                                                        {{ property.address.city }}, {{ property.address.get_state_display }}
+                                                        {{ property.district }}
+                                                        {% if property.complement %}, {{ property.complement }}{% endif %} <br>
+                                                        {{ property.city }}, {{ property.get_state_display }}
                                                     </small>
                                                 </h3>
                                             </a>

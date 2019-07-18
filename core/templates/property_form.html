@@ -18,7 +18,7 @@
                     <form method="post" class="form-horizontal">
                         {% csrf_token %}
 
-                        <div class="row">
+                        <div class="form-row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">
@@ -39,29 +39,22 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="col-form-label">
-                                        <h3>{{ address_form.street.label }}</h3>
-                                    </label> {{ address_form.street }}
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="col-form-label">
-                                        <h3>{{ address_form.number.label }}</h3>
-                                    </label> {{ address_form.number }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
+                        <div class="form-row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3>{{ address_form.district.label }}</h3>
-                                    </label> {{ address_form.district }}
+                                        <h3>{{ form.district.label }}</h3>
+                                    </label> {{ form.district }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">
+                                        <h3>{{ form.complement.label }}</h3>
+                                    </label> {{ form.complement }}
                                 </div>
                             </div>
                         </div>
@@ -70,15 +63,15 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3> {{ address_form.city.label }}</h3>
-                                    </label> {{ address_form.city }}
+                                        <h3> {{ form.city.label }}</h3>
+                                    </label> {{ form.city }}
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="col-form-label">
-                                        <h3> {{ address_form.state.label }}</h3>
-                                    </label> {{ address_form.state }}
+                                        <h3> {{ form.state.label }}</h3>
+                                    </label> {{ form.state }}
                                 </div>
                             </div>
                         </div>

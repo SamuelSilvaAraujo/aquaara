@@ -10,7 +10,7 @@ urlpatterns = [
         path('<int:pk>/excluir/', PropertyDeleteView.as_view(), name="property_delete")
     ])),
     path('<int:pk_property>/', include([
-        path('viveiros/', PondListView.as_view(), name="property_ponds"),
+        path('viveiros/', PondListView.as_view(), name="ponds_list"),
         path('viveiro/', include([
             path('cadastro/', PondCreateView.as_view(), name="pond_create"),
             path('<int:pk_pond>/', include([

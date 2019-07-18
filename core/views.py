@@ -1,6 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
@@ -25,38 +24,29 @@ class PropertyCreateView(LoginRequiredMixin, CreateView):
     model = Property
     template_name = 'property_form.html'
     form_class = PropertyForm
-    second_form_class = AddressForm
 
     def get_context_data(self, **kwargs):
         context = super(PropertyCreateView, self).get_context_data(**kwargs)
-        context["address_form"] = AddressForm
         context["propertys_page"] = "active"
         return context
 
     def form_valid(self, form):
-        address_obj = self.second_form_class(self.request.POST).save()
-        obj = form.save(commit=False)
-        obj.address = address_obj
-        obj.user = self.request.user
-        obj.save()
-        return HttpResponseRedirect(reverse_lazy('property_ponds', kwargs={'pk_property': obj.id}))
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('ponds_list', kwargs={'pk_property': self.object.pk})
 
 class PropertyUpdateView(LoginRequiredMixin, UpdateView):
     model = Property
     form_class = PropertyForm
-    second_form_class = AddressForm
     template_name = 'property_form.html'
 
-    def form_valid(self, form):
-        address_obj = self.second_form_class(self.request.POST).save()
-        property_obj = form.save(commit=False)
-        property_obj.address = address_obj
-        property_obj.save()
-        return HttpResponseRedirect(reverse_lazy("property_list"))
+    def get_success_url(self):
+        return reverse('property_list')
 
     def get_context_data(self, **kwargs):
         context = super(PropertyUpdateView, self).get_context_data(**kwargs)
-        context["address_form"] = self.second_form_class(instance=self.object.address)
         context["propertys_page"] = "active"
         return context
 

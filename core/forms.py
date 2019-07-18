@@ -4,21 +4,13 @@ from .models import *
 class PropertyForm(forms.ModelForm):
     class Meta:
         model = Property
-        fields = ['name', ]
+        fields = ['name', 'district', 'city', 'state', 'complement', ]
         widgets = {
-            'name': forms.TextInput(attrs={'class':'form-control', 'id': 'name'})
-        }
-
-class AddressForm(forms.ModelForm):
-    class Meta:
-        model = Address
-        fields = '__all__'
-        widgets = {
-            'street': forms.TextInput(attrs={'class': 'form-control', 'id': 'street'}),
-            'number': forms.NumberInput(attrs={'class': 'form-control', 'id': 'number'}),
-            'district': forms.TextInput(attrs={'class': 'form-control', 'id': 'district'}),
-            'city': forms.TextInput(attrs={'class': 'form-control', 'id': 'city'}),
-            'state': forms.Select(attrs={'class': 'form-control m-b', 'id': 'state'}),
+            'name': forms.TextInput(attrs={'class':'form-control'}),
+            'district': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+            'state': forms.Select(attrs={'class': 'form-control'}),
+            'complement': forms.TextInput(attrs={'class': 'form-control'})
         }
 
 class PondForm(forms.ModelForm):

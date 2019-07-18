@@ -1,12 +1,12 @@
-from django.template.defaultfilters import slugify
 from django.db import models
 from datetime import datetime, timedelta
 from django.db.models import Sum, Q
+from django.shortcuts import redirect
 from django.urls import reverse
 
 from users.models import User
 
-class Address(models.Model):
+class Property(models.Model):
     STATES_CHOICES = [
         ('AC', 'Acre'),
         ('AL', 'Alagoas'),
@@ -37,19 +37,12 @@ class Address(models.Model):
         ('TO', 'Tocantins')
     ]
 
-    city = models.CharField("Cidade", max_length=20)
-    district = models.CharField("Bairro", max_length=30)
-    number = models.IntegerField("Numero")
-    street = models.CharField("Rua", max_length=30)
-    state = models.CharField("Estado", choices=STATES_CHOICES, max_length=2)
-
-    def __str__(self):
-        return "{}-{}".format(self.city, self.state)
-
-class Property(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField("Nome", max_length=50)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    name = models.CharField("Nome da Propriedade", max_length=50)
+    city = models.CharField("Cidade", max_length=50)
+    state = models.CharField("Estado", max_length=2, choices=STATES_CHOICES)
+    district = models.CharField("Bairro/Povoado", max_length=30)
+    complement = models.CharField("Complemento", max_length=100, blank=True)
 
     def __str__(self):
         return self.name
