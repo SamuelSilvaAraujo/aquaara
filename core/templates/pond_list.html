@@ -11,17 +11,12 @@
                 <div class="ibox">
                     <div class="ibox-title">
                         <h2><span class="text-navy font-bold"><strong>Viveiros</strong></span></h2>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                {{ property.name }}
-                            </li>
-                            <li class="breadcrumb-item active">
-                                <strong>Viveiros</strong>
-                            </li>
-                        </ol>
                         <div class="pull-right">
-                            <a href="{% url 'pond_create' property.id %}" class="btn btn-primary btn-link btn-outline">
-                                <i class="fa fa-plus"></i> Cadastrar Viveiro
+                            <a href="{% url 'pond_create' property.id %}" class="btn btn-primary">
+                                <h4 class="font-bold">
+                                    <i class="fa fa-plus"></i>
+                                    <strong>Cadastrar Viveiro</strong>
+                                </h4>
                             </a>
                         </div>
                     </div>

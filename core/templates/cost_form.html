@@ -71,19 +71,19 @@
                 </div>
                 <div class="ibox-content">
                     <h3>Total de Ração do dia:
-                        <small>{{ pond.cycle.arracoamento_total|floatformat:2 }} kg</small>
+                        <small>{{ pond.cycle.full_day_feeding|floatformat:3 }} kg</small>
                     </h3>
                     <h3>Total de Ração por refeição:
-                        <small>{{ pond.cycle.arracoamento_refeicao|floatformat:2 }} kg</small>
+                        <small>{{ pond.cycle.feeding_meal|floatformat:3 }} kg</small>
                     </h3>
 
                     <h3>
                         Refeições por dia:
-                        <small>{{ pond.cycle.number_refeicoes }}</small>
+                        <small>{{ pond.cycle.number_feeds }}</small>
                     </h3>
                     <h3>
                         Horários da ração:
-                        <small>{{ pond.cycle.horario_refeicoes }}</small>
+                        <small>{{ pond.cycle.meal_times }}</small>
                     </h3>
                     <h3>
                         Proteina na ração:

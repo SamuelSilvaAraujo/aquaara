@@ -11,7 +11,7 @@
                             <h2><span class="text-navy font-bold"><strong>{{ pond.identification|upper }}</strong></span></h2>
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{% url 'property_ponds' property.id %}">{{ property.name }}</a>
+                                    <a href="{% url 'ponds_list' property.id %}">{{ property.name }}</a>
                                 </li>
                                 <li class="breadcrumb-item active">
                                     <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
