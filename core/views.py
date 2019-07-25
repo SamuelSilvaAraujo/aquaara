@@ -269,7 +269,6 @@ class BiometriaCreateView(LoginRequiredMixin, CreateView):
         pond = Pond.objects.get(pk=self.kwargs["pk_pond"])
         form = form.save(commit=False)
         form.cycle = pond.cycle()
-        form.save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
