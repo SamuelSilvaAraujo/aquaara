@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
@@ -255,7 +255,7 @@ class MortalityCreateView(LoginRequiredMixin, CreateView):
 def mortality_remove_view(request, pk_property, pk_pond, pk_mortality):
     mortality = Mortality.objects.get(pk=pk_mortality)
     mortality.delete()
-    return redirect('pond_detail', pk_property, pk_pond)
+    return reverse('pond_detail', pk_property, pk_pond)
 
 class BiometriaCreateView(LoginRequiredMixin, CreateView):
     model = Biometria
@@ -347,6 +347,27 @@ class CostCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CostCreateView, self).get_context_data(**kwargs)
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
+        return context
+
+class WaterQualityFormView(LoginRequiredMixin, CreateView):
+    template_name = 'water_quality_form.html'
+    model = WaterQuality
+    form_class = WaterQualityForm
+
+    def form_valid(self, form):
+        pond = Pond.objects.get(id=self.kwargs["pk_pond"])
+        cycle = pond.cycle()
+        form.instance.cycle = cycle
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
+    def get_context_data(self, **kwargs):
+        context = super(WaterQualityFormView, self).get_context_data(**kwargs)
         context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"

@@ -1,8 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
 from django.db.models import Sum, Q
-from django.shortcuts import redirect
-from django.urls import reverse
 
 from users.models import User
 
@@ -410,7 +408,6 @@ class Cycle(models.Model):
         #     middleweight = biometria.middleweight
         return list
 
-
 class Mortality(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
@@ -437,6 +434,7 @@ class Despesca(models.Model):
         ordering = ['-date']
 
 class WaterQuality(models.Model):
+    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
     transparency = models.FloatField("Transparência")
     temperature = models.FloatField("Temperatura")

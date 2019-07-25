@@ -86,3 +86,14 @@ class CostForm(forms.ModelForm):
             'weight': forms.NumberInput(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+class WaterQualityForm(forms.ModelForm):
+    class Meta:
+        model = WaterQuality
+        exclude = ['date']
+        widgets = {
+            'ph': forms.NumberInput(attrs={'class': 'form-control'}),
+            'oxygen': forms.NumberInput(attrs={'class': 'form-control'}),
+            'temperature': forms.NumberInput(attrs={'class': 'form-control'}),
+            'transparency': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
