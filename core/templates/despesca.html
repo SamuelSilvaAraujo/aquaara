@@ -38,6 +38,9 @@
                                     <div class="input-group date">
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                         {{ form.date }}
+                                        {% for erro in form.date.errors %}
+                                            <p class="text-danger">{{ erro }}</p>
+                                        {% endfor %}
                                     </div>
 
                                 </div>
@@ -53,6 +56,9 @@
                                         </h3>
                                     </label>
                                     {{ form.middleweight }}
+                                    {% for erro in form.middleweight.errors %}
+                                        <p class="text-danger">{{ erro }}</p>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -66,6 +72,9 @@
                                         </h3>
                                     </label>
                                     {{ form.amount }}
+                                    {% for erro in form.amount.errors %}
+                                        <p class="text-danger">{{ erro }}</p>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>

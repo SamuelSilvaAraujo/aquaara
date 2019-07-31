@@ -1,5 +1,4 @@
-from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
@@ -79,6 +78,7 @@ class PondListView(LoginRequiredMixin, ListView):
         return context
 
 class PondCreateView(LoginRequiredMixin, CreateView):
+    model = Pond
     form_class = PondForm
     template_name = 'pond_form.html'
 
@@ -88,12 +88,13 @@ class PondCreateView(LoginRequiredMixin, CreateView):
         context["pond_page"] = "active"
         return context
 
+    def get_success_url(self):
+        return reverse('pond_detail', kwargs={"pk_property": self.kwargs["pk_property"], "pk_pond": self.object.pk})
+
     def form_valid(self, form):
-        pk_property = self.kwargs["pk_property"]
-        form = form.save(commit=False)
-        form.property = Property.objects.get(pk=pk_property)
-        form.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={"pk_property": self.kwargs["pk_property"], "pk_pond": form.id}))
+        property = Property.objects.get(pk=self.kwargs["pk_property"])
+        form.instance.property = property
+        return super().form_valid(form)
 
 class PondDetailView(LoginRequiredMixin, DetailView):
     template_name = 'pond_detail.html'
@@ -114,7 +115,7 @@ class PondUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         pk_property = self.kwargs["pk_property"]
-        return reverse_lazy('property_ponds', kwargs={"pk_property": pk_property})
+        return reverse('property_ponds', kwargs={"pk_property": pk_property})
 
     def get_context_data(self, **kwargs):
         context = super(PondUpdateView, self).get_context_data(**kwargs)
@@ -144,14 +145,12 @@ class CycleCreateView(LoginRequiredMixin, CreateView):
     form_class = CycleForm
 
     def form_valid(self, form):
-        form = form.save(commit=False)
         pond = Pond.objects.get(pk=self.kwargs["pk_pond"])
-        form.pond = pond
-        form.save()
+        form.instance.pond = pond
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(CycleCreateView, self).get_context_data(**kwargs)
@@ -167,7 +166,7 @@ class CycleUpdateView(LoginRequiredMixin, UpdateView):
     form_class = CycleForm
 
     def get_success_url(self):
-        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(CycleUpdateView, self).get_context_data(**kwargs)
@@ -197,11 +196,10 @@ class PopulationCreateView(LoginRequiredMixin, CreateView):
     template_name = 'population_form.html'
 
     def get_success_url(self):
-        return reverse_lazy('custo', kwargs={'pk_property': self.kwargs['pk_property'], 'pk_pond': self.kwargs['pk_pond']})
+        return reverse('custo', kwargs={'pk_property': self.kwargs['pk_property'], 'pk_pond': self.kwargs['pk_pond']})
 
     def form_valid(self, form):
-        pk_pond = self.kwargs["pk_pond"]
-        pond_obj = Pond.objects.get(pk=pk_pond)
+        pond_obj = Pond.objects.get(pk=self.kwargs["pk_pond"])
         cycle = pond_obj.cycle()
         population = form.save()
         cycle.population = population
@@ -222,7 +220,7 @@ class PopulationUpdateView(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'pk_population'
 
     def get_success_url(self):
-        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(PopulationUpdateView, self).get_context_data(**kwargs)
@@ -236,14 +234,16 @@ class MortalityCreateView(LoginRequiredMixin, CreateView):
     form_class = MortalityForm
     template_name = 'mortality.html'
 
+    def get_success_url(self):
+        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
     def form_valid(self, form):
-        pk_pond = self.kwargs["pk_pond"]
-        pk_property = self.kwargs["pk_property"]
-        pond_obj = Pond.objects.get(pk=pk_pond)
-        obj = form.save(commit=False)
-        obj.cycle = pond_obj.cycle()
-        obj.save()
-        return HttpResponseRedirect(reverse_lazy('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
+        pond_obj = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        if form.cleaned_data['amount'] > pond_obj.cycle().amount_fish_current():
+            form.add_error("amount", "Quantidade de peixes maior que a quantidade de peixes atual!")
+            return self.form_invalid(form)
+        form.instance.cycle = pond_obj.cycle()
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(MortalityCreateView, self).get_context_data(**kwargs)
@@ -263,12 +263,11 @@ class BiometriaCreateView(LoginRequiredMixin, CreateView):
     template_name = 'biometria_form.html'
 
     def get_success_url(self):
-        return reverse_lazy('custo', kwargs={'pk_property': self.kwargs['pk_property'], 'pk_pond': self.kwargs['pk_pond']})
+        return reverse('custo', kwargs={'pk_property': self.kwargs['pk_property'], 'pk_pond': self.kwargs['pk_pond']})
 
     def form_valid(self, form):
         pond = Pond.objects.get(pk=self.kwargs["pk_pond"])
-        form = form.save(commit=False)
-        form.cycle = pond.cycle()
+        form.instance.cycle = pond.cycle()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -285,7 +284,7 @@ class BiometriaUpdateView(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'pk_biometria'
 
     def get_success_url(self):
-        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(BiometriaUpdateView, self).get_context_data(**kwargs)
@@ -300,15 +299,14 @@ class DespescaCreateView(LoginRequiredMixin, CreateView):
     template_name = 'despesca.html'
 
     def get_success_url(self):
-        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def form_valid(self, form):
-        pk_pond = self.kwargs["pk_pond"]
-        pond_obj = Pond.objects.get(pk=pk_pond)
-        cycle = pond_obj.cycle()
-        form = form.save(commit=False)
-        form.cycle = cycle
-        form.save()
+        pond_obj = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        if form.cleaned_data['amount'] > pond_obj.cycle().amount_fish_current():
+            form.add_error("amount", "Quantidade de peixes maior que a quantidade de peixes atual!")
+            return self.form_invalid(form)
+        form.instance.cycle = pond_obj.cycle()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -335,14 +333,11 @@ class CostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         pond = Pond.objects.get(id=self.kwargs["pk_pond"])
-        cycle = pond.cycle()
-        form = form.save(commit=False)
-        form.cycle = cycle
-        form.save()
+        form.instance.cycle = pond.cycle()
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(CostCreateView, self).get_context_data(**kwargs)
@@ -363,7 +358,7 @@ class WaterQualityFormView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(WaterQualityFormView, self).get_context_data(**kwargs)
