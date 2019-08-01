@@ -190,6 +190,18 @@ class OldCyclesView(LoginRequiredMixin, ListView):
         context["pond_page"] = "active"
         return context
 
+class CycleDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'cycle_detail.html'
+    model = Cycle
+    pk_url_kwarg = 'pk_cycle'
+
+    def get_context_data(self, **kwargs):
+        context = super(CycleDetailView, self).get_context_data(**kwargs)
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
+        return context
+
 def end_cycle(request, pk_property, pk_pond, pk_cycle):
     cycle = Cycle.objects.get(pk=pk_cycle, finalized=False)
     cycle.finalized = True

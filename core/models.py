@@ -185,7 +185,6 @@ class Cycle(models.Model):
             return despescas.first().middleweight
         else:
             return self.population_middleweight()
-        # return self.all_biometria().first().middleweight if self.all_biometria().count() > 0 else self.population_middleweight()
 
     def period_middleweight(self, end_data):
         biometria = self.all_biometria().filter(date__lte=end_data)

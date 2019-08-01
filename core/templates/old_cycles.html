@@ -8,18 +8,11 @@
                 <div class="ibox-title p-m">
                     <div class="row">
                         <div class="col-md-6">
-                            <h2><span class="text-navy font-bold"><strong>{{ pond.identification|upper }}</strong></span></h2>
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="{% url 'ponds_list' property.id %}">{{ property.name }}</a>
-                                </li>
-                                <li class="breadcrumb-item active">
-                                    <a href="{% url 'pond_detail' property.id pond.id %}">{{ pond.identification }}</a>
-                                </li>
-                                <li class="breadcrumb-item active">
-                                    <strong>Ciclos Antigos</strong>
-                                </li>
-                            </ol>
+                            <a href="{% url 'pond_detail' pond.property.id pond.id %}">
+                                <h2 class="text-navy font-bold">
+                                    <strong>{{ pond.identification|upper }}</strong>
+                                </h2>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -34,10 +27,12 @@
 
                 <div class="col-lg-4">
                     <div class="ibox">
-                        <div class="ibox-title bg-primary">
-                            <h2 class="font-bold text-center">
+                        <div class="ibox-title bg-white">
+                            <a href="{% url 'cycle_detail' property.id pond.id cycle.id %}" class="btn-link">
+                                <h2 class="font-bold text-center">
                                 <strong>Ciclo {{ forloop.counter }}</strong>
                             </h2>
+                            </a>
                         </div>
                         <div class="ibox-content">
                             <h3>

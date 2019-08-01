@@ -1,0 +1,23 @@
+{% extends 'pond_base.html' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title p-m">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="{% url 'pond_detail' pond.property.id pond.id %}">
+                                <h2 class="text-navy font-bold">
+                                    <strong>{{ pond.identification|upper }}</strong>
+                                </h2>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
