@@ -172,7 +172,20 @@ class Cycle(models.Model):
         return self.population.middleweight
 
     def current_middleweight(self):
-        return self.all_biometria().first().middleweight if self.all_biometria().count() > 0 else self.population_middleweight()
+        biometrias = self.all_biometria()
+        despescas = self.all_despesca()
+        if biometrias.count() > 0 and despescas.count() > 0:
+            if biometrias.first().date > despescas.first().date:
+                return biometrias.first().middleweight
+            elif despescas.first().date > biometrias.first().date:
+                return despescas.first().middleweight
+        elif biometrias.count() > 0:
+            return biometrias.first().middleweight
+        elif despescas.count() > 0:
+            return despescas.first().middleweight
+        else:
+            return self.population_middleweight()
+        # return self.all_biometria().first().middleweight if self.all_biometria().count() > 0 else self.population_middleweight()
 
     def period_middleweight(self, end_data):
         biometria = self.all_biometria().filter(date__lte=end_data)

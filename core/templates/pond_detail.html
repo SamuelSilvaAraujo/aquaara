@@ -25,12 +25,17 @@
                                 <a href="{% url 'population' pond.property.id pond.id %}" class="btn btn-warning">
                                     <h4 class="font-bold"><strong>Povoamento</strong></h4>
                                 </a>
-{#                            {% else %}#}
-{#                                <a href="{% url 'despesca' pond.property.id pond.id %}" class="btn btn-warning">#}
-{#                                    <h4 class="font-bold"><strong>Despesca</strong></h4>#}
-{#                                </a>#}
                             {% endif %}
+
+                            {% if pond.cycle.amount_fish_current == 0 %}
+
+                                <a href="{% url 'end_cycle' pond.property.id pond.id pond.cycle.id %}" class="btn btn-warning">
+                                    <h4 class="font-bold"><strong>Finalizar Ciclo</strong></h4>
+                                </a>
+                            {% endif %}
+
                         {% endif %}
+
                         <a href="{% url 'old_cycles' pond.property.id pond.id %}" class="btn btn-primary">
                             <h4 class="font-bold"><strong>Ciclos antigos</strong></h4>
                         </a>

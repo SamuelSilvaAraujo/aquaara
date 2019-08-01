@@ -190,6 +190,12 @@ class OldCyclesView(LoginRequiredMixin, ListView):
         context["pond_page"] = "active"
         return context
 
+def end_cycle(request, pk_property, pk_pond, pk_cycle):
+    cycle = Cycle.objects.get(pk=pk_cycle, finalized=False)
+    cycle.finalized = True
+    cycle.save()
+    return reverse('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond})
+
 class PopulationCreateView(LoginRequiredMixin, CreateView):
     model = Population
     form_class = PopulationForm
@@ -324,7 +330,7 @@ class CostCreateView(LoginRequiredMixin, CreateView):
     def get_initial(self):
         initial = super(CostCreateView, self).get_initial()
         initial = initial.copy()
-        cycle = Cycle.objects.get(pond__id=self.kwargs["pk_pond"])
+        cycle = Cycle.objects.get(pond__id=self.kwargs["pk_pond"], finalized=False)
         if cycle.cost_set.count() > 0:
             previous_cost = cycle.cost_set.last()
             initial['price'] = previous_cost.price
