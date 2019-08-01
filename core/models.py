@@ -150,10 +150,10 @@ class Cycle(models.Model):
         despesca = self.despesca_total()
         return amount - mortality - despesca
 
-    def amount_fish_period(self, end_date):
+    def amount_fish_period(self, date):
         total_amount = self.amount_fish_population()
-        mortality = self.all_mortality().filter(date__lte=end_date).aggregate(Sum('amount')).get('amount__sum') or 0
-        despesca = self.all_despesca().filter(date__lte=end_date).aggregate(Sum('amount')).get('amount__sum') or 0
+        mortality = self.mortality_total_period(date)
+        despesca = self.despesca_total_period(date)
         return total_amount - mortality - despesca
 
     def all_mortality(self):
@@ -162,33 +162,46 @@ class Cycle(models.Model):
     def mortality_total(self):
         return self.all_mortality().aggregate(Sum('amount')).get('amount__sum') or 0
 
+    def mortality_total_period(self, date):
+        return self.all_mortality().filter(date__lte=date).aggregate(Sum('amount')).get('amount__sum') or 0
+
     def all_despesca(self):
         return self.despesca_set.all()
 
     def despesca_total(self):
         return self.all_despesca().aggregate(Sum('amount')).get('amount__sum') or 0
 
+    def despesca_total_period(self, date):
+        return self.all_despesca().filter(date__lte=date).aggregate(Sum('amount')).get('amount__sum') or 0
+
     def population_middleweight(self):
         return self.population.middleweight
 
     def current_middleweight(self):
-        biometrias = self.all_biometria()
-        despescas = self.all_despesca()
-        if biometrias.count() > 0 and despescas.count() > 0:
-            if biometrias.first().date > despescas.first().date:
-                return biometrias.first().middleweight
-            elif despescas.first().date > biometrias.first().date:
-                return despescas.first().middleweight
-        elif biometrias.count() > 0:
-            return biometrias.first().middleweight
-        elif despescas.count() > 0:
-            return despescas.first().middleweight
+        biometria = self.all_biometria().first()
+        if biometria:
+            despesca = self.all_despesca().filter(date__gt=biometria.date)
+            if despesca:
+                return despesca.middleweight
+            else:
+                return biometria.middleweight
+        elif self.all_despesca().count() > 0:
+            return self.all_despesca().first().middleweight
         else:
             return self.population_middleweight()
 
-    def period_middleweight(self, end_data):
-        biometria = self.all_biometria().filter(date__lte=end_data)
-        return biometria.first().middleweight if biometria.count() > 0 else self.population_middleweight()
+    def period_middleweight(self, date):
+        biometria = self.all_biometria().filter(date__lte=date).first()
+        if biometria:
+            despesca = self.all_despesca().filter(Q(date__gt=biometria.date) & Q(date__lte=date))
+            if despesca:
+                return despesca.middleweight
+            else:
+                return biometria.middleweight
+        elif self.all_despesca().filter(date__lte=date).count() > 0:
+            return self.all_despesca().filter(date__lte=date).first().middleweight
+        else:
+            return self.population_middleweight()
 
     def first_biomassa(self):
         return (self.population_middleweight()/1000) * self.amount_fish_population()
@@ -199,8 +212,10 @@ class Cycle(models.Model):
     def current_biomassa(self):
         return (self.current_middleweight()/1000) * self.amount_fish_current()
 
-    def period_biomassa(self, middleweight_period, amount_fish_period):
-        return (middleweight_period/1000) * amount_fish_period
+    def period_biomassa(self, date):
+        middleweight = self.period_middleweight(date)
+        amount_fish = self.amount_fish_period(date)
+        return (middleweight/1000) * amount_fish
 
     def feed_rate(self, middleweight):
         if self.system == self.SEMI_INTENSIVE:
@@ -341,42 +356,32 @@ class Cycle(models.Model):
     def current_cost(self):
         return self.cost_set.last()
 
-    def ration_total(self, start_date, end_date):
+    def ration_total_in_period(self, start_date, end_date):
+
         period_mortality = [m for m in self.all_mortality().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
         period_despesca = [d for d in self.all_despesca().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
         dates_list = set(period_mortality + period_despesca)
         total_ration = 0
 
-        if len(dates_list) > 0:
-            for date in dates_list:
-                number_days = (date - start_date).days
-                middleweight = self.period_middleweight(date)
-                amount_fish = self.amount_fish_period(date)
-                biomassa = (middleweight / 1000) * amount_fish
-                feeding = biomassa * self.feed_rate(middleweight)
-                total_ration += feeding * number_days
-                start_date = date
-
-            number_days = (end_date - start_date).days
-            middleweight = self.period_middleweight(end_date)
-            amount_fish = self.amount_fish_period(end_date)
-            biomassa = (middleweight / 1000) * amount_fish
+        for date in dates_list:
+            number_days = (date - start_date).days
+            middleweight = self.period_middleweight(date)
+            biomassa = self.period_biomassa(date)
             feeding = biomassa * self.feed_rate(middleweight)
             total_ration += feeding * number_days
+            start_date = date
 
-        else:
-            number_days = (end_date - start_date).days
-            middleweight = self.period_middleweight(end_date)
-            amount_fish = self.amount_fish_period(end_date)
-            biomassa = (middleweight / 1000) * amount_fish
-            feeding = biomassa * self.feed_rate(middleweight)
-            total_ration += feeding * number_days
+        number_days = (end_date - start_date).days
+        middleweight = self.period_middleweight(end_date)
+        biomassa = self.period_biomassa(end_date)
+        feeding = biomassa * self.feed_rate(middleweight)
+        total_ration += feeding * number_days
 
         return total_ration
 
     def food_conversion(self):
         biomassa = self.current_biomassa() - self.first_biomassa()
-        ration_total = self.ration_total(self.population.date, datetime.now().date())
+        ration_total = self.ration_total_in_period(self.population.date, datetime.now().date())
         if biomassa > 0:
             return ration_total/biomassa
         else:
