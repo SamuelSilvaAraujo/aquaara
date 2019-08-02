@@ -167,9 +167,6 @@
                                 Biomassa no Povoamento:
                                 <small>{{ pond.cycle.first_biomassa }} kg</small>
                             </h3>
-
-
-
                         </div>
                     </div>
                 </div>
@@ -195,12 +192,12 @@
                         <h3>Total de Ração do dia:
                             <small>{{ pond.cycle.full_day_feeding|floatformat:3 }} kg</small>
                         </h3>
-                        <h3>Total de Ração por refeição:
+                        <h3>Quatidade de Ração por refeição:
                             <small>{{ pond.cycle.feeding_meal|floatformat:3 }} kg</small>
                         </h3>
 
                         <h3>
-                            Refeições por dia:
+                            Numero de Refeições no dia:
                             <small>{{ pond.cycle.number_feeds }}</small>
                         </h3>
                         <h3>
@@ -237,36 +234,43 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>
+                                    Custo Total:
+                                    <small>R$ {{ pond.cycle.cost_total|floatformat:2 }}</small>
+                                </h3>
+                            </div>
+                        </div>
                     </div>
-                    <div class="ibox-content">
-                        <table class="custotable table table-hover no-margins" data-page-size="5">
-                            <thead>
-
-                            <tr>
-                                <th>Período</th>
-                                <th>Custo</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for period in pond.cycle.periods %}
-
-                                <tr>
-                                    <td>{{ period.period.start|date:'d/m/Y' }} - {{ period.period.end|date:'d/m/Y' }}</td>
-                                    <td>R$ {{ period.cost }}</td>
-                                </tr>
-                            {% endfor %}
-
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td colspan="5">
-                                    <ul class="pagination float-right"></ul>
-                                </td>
-                            </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                    {#                    <div class="ibox-content">#}
+                    {#                        <table class="custotable table table-hover no-margins" data-page-size="5">#}
+                    {#                            <thead>#}
+                    {##}
+                    {#                            <tr>#}
+                    {#                                <th>Período</th>#}
+                    {#                                <th>Custo</th>#}
+                    {#                            </tr>#}
+                    {#                            </thead>#}
+                    {#                            <tbody>#}
+                    {#                            {% for period in pond.cycle.periods %}#}
+                    {##}
+                    {#                                <tr>#}
+                    {#                                    <td>{{ period.period.start|date:'d/m/Y' }} - {{ period.period.end|date:'d/m/Y' }}</td>#}
+                    {#                                    <td>R$ {{ period.cost }}</td>#}
+                    {#                                </tr>#}
+                    {#                            {% endfor %}#}
+                    {##}
+                    {#                            </tbody>#}
+                    {#                            <tfoot>#}
+                    {#                            <tr>#}
+                    {#                                <td colspan="5">#}
+                    {#                                    <ul class="pagination float-right"></ul>#}
+                    {#                                </td>#}
+                    {#                            </tr>#}
+                    {#                            </tfoot>#}
+                    {#                        </table>#}
+                    {#                    </div>#}
                 </div>
             </div>
 
@@ -540,7 +544,7 @@
                 datasets: [
 
                     {
-                        label: "Biometria",
+                        label: "Peso Médio",
                         backgroundColor: 'rgba(26,179,148,0.5)',
                         borderColor: "rgba(26,179,148,0.7)",
                         pointBackgroundColor: "rgba(26,179,148,1)",
@@ -575,7 +579,7 @@
                 datasets: [
 
                     {
-                        label: "Mortalidade",
+                        label: "Peixes Mortos",
                         backgroundColor: 'rgba(26,179,148,0.5)',
                         borderColor: "rgba(26,179,148,0.7)",
                         pointBackgroundColor: "rgba(26,179,148,1)",

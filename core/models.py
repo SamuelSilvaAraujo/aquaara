@@ -137,6 +137,8 @@ class Cycle(models.Model):
         elif self.system == self.INTENSIVE:
             return self.DENSITY_VALUES[self.INTENSIVE][self.type_intensive][self.final_middleweight]
 
+    #quantidade de peixes
+
     def amount_fish_total(self):
         amount = self.density()*self.pond.area()
         return int(amount) + 1
@@ -156,6 +158,8 @@ class Cycle(models.Model):
         despesca = self.despesca_total_period(date)
         return total_amount - mortality - despesca
 
+    #mortalidade
+
     def all_mortality(self):
         return self.mortality_set.all()
 
@@ -165,6 +169,8 @@ class Cycle(models.Model):
     def mortality_total_period(self, date):
         return self.all_mortality().filter(date__lte=date).aggregate(Sum('amount')).get('amount__sum') or 0
 
+    #despesca
+
     def all_despesca(self):
         return self.despesca_set.all()
 
@@ -173,6 +179,8 @@ class Cycle(models.Model):
 
     def despesca_total_period(self, date):
         return self.all_despesca().filter(date__lte=date).aggregate(Sum('amount')).get('amount__sum') or 0
+
+    #peso médio
 
     def population_middleweight(self):
         return self.population.middleweight
@@ -203,6 +211,8 @@ class Cycle(models.Model):
         else:
             return self.population_middleweight()
 
+    #biomassa
+
     def first_biomassa(self):
         return (self.population_middleweight()/1000) * self.amount_fish_population()
 
@@ -216,6 +226,8 @@ class Cycle(models.Model):
         middleweight = self.period_middleweight(date)
         amount_fish = self.amount_fish_period(date)
         return (middleweight/1000) * amount_fish
+
+    #arraçoamento
 
     def feed_rate(self, middleweight):
         if self.system == self.SEMI_INTENSIVE:
@@ -335,6 +347,8 @@ class Cycle(models.Model):
             elif 801 <= middleweight <= 1100:
                 return "10 mm"
 
+    #biometria
+
     def amount_fish_next_biometria(self):
         amount = self.amount_fish_current()
         if amount <= 400:
@@ -352,6 +366,8 @@ class Cycle(models.Model):
 
     def all_biometria(self):
         return self.biometria_set.all()
+
+    #custo e conversão alimentar
 
     def current_cost(self):
         return self.cost_set.last()
@@ -386,6 +402,16 @@ class Cycle(models.Model):
             return ration_total/biomassa
         else:
             return 0
+
+    def cost_total(self):
+        costs = self.all_cost()
+        start_date = costs.last().date
+        for cost in costs:
+            print(cost.date)
+        return 0
+
+    def all_cost(self):
+        return self.cost_set.all()
 
     def cost_period(self,feeding, start_date, end_date):
         cost = self.cost_set.filter(Q(date__gte=start_date) & Q(date__lt=end_date))

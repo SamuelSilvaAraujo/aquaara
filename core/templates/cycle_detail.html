@@ -20,4 +20,42 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="ibox collapsed">
+                <div class="ibox-title bg-primary">
+                    <h2 class="font-bold"><strong>CICLO</strong></h2>
+                    <div class="ibox-tools">
+                        <a class="collapse-link btn-link btn-lg">
+                            <i class="fa fa-chevron-up text-light"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <h3>
+                        Sistema:
+                        <small>
+                            {{ cycle.get_system_display }}
+                            {% if cycle.system == cycle.INTENSIVE %}
+                                - {{ cycle.get_type_intensive_display }}
+                            {% endif %}
+                        </small>
+                    </h3>
+                    <h3>
+                        Densidade:
+                        <small> {{ cycle.density }} peixe/m²</small>
+                    </h3>
+                    <h3>
+                        Total de Peixes:
+                        <small>{{ cycle.amount_fish_total }} peixes</small>
+                    </h3>
+                    <h3>
+                        Peso Médio Final:
+                        <small> {{ cycle.current_middleweight }} g</small>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
