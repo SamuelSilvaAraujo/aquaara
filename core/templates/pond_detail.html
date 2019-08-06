@@ -122,7 +122,7 @@
                                 Biomassa Atual:
                                 <small> {{ pond.cycle.current_biomassa|floatformat:2 }} kg</small>
                             </h3>
-                            <h3>
+                            <h3 title="Peso Médio da ultima biometria">
                                 Peso Médio Atual:
                                 <small> {{ pond.cycle.current_middleweight }} g</small>
                             </h3>
@@ -243,34 +243,49 @@
                             </div>
                         </div>
                     </div>
-                    {#                    <div class="ibox-content">#}
-                    {#                        <table class="custotable table table-hover no-margins" data-page-size="5">#}
-                    {#                            <thead>#}
-                    {##}
-                    {#                            <tr>#}
-                    {#                                <th>Período</th>#}
-                    {#                                <th>Custo</th>#}
-                    {#                            </tr>#}
-                    {#                            </thead>#}
-                    {#                            <tbody>#}
-                    {#                            {% for period in pond.cycle.periods %}#}
-                    {##}
-                    {#                                <tr>#}
-                    {#                                    <td>{{ period.period.start|date:'d/m/Y' }} - {{ period.period.end|date:'d/m/Y' }}</td>#}
-                    {#                                    <td>R$ {{ period.cost }}</td>#}
-                    {#                                </tr>#}
-                    {#                            {% endfor %}#}
-                    {##}
-                    {#                            </tbody>#}
-                    {#                            <tfoot>#}
-                    {#                            <tr>#}
-                    {#                                <td colspan="5">#}
-                    {#                                    <ul class="pagination float-right"></ul>#}
-                    {#                                </td>#}
-                    {#                            </tr>#}
-                    {#                            </tfoot>#}
-                    {#                        </table>#}
-                    {#                    </div>#}
+                    <div class="ibox-content">
+                        <table class="custotable table table-hover no-margins" data-page-size="5">
+                            <thead>
+
+                            <tr>
+                                <th>Período</th>
+                                <th>Custo</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {#                            {% for period in pond.cycle.periods %}#}
+                            {##}
+                            {#                                <tr>#}
+                            {#                                    <td>{{ period.period.start|date:'d/m/Y' }} - {{ period.period.end|date:'d/m/Y' }}</td>#}
+                            {#                                    <td>R$ {{ period.cost }}</td>#}
+                            {#                                </tr>#}
+                            {#                            {% endfor %}#}
+
+                            <tr>
+                                <td>05/08</td>
+                                <td>200 R$</td>
+                            </tr>
+
+                            <tr>
+                                <td>05/08</td>
+                                <td>200 R$</td>
+                            </tr>
+
+                            <tr>
+                                <td>05/08</td>
+                                <td>200 R$</td>
+                            </tr>
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <ul class="pagination float-right"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -470,7 +485,7 @@
                                 {% if all_despesca|length > 0 %}
                                     <div class="col-md-12">
 
-                                        <table class="mortatable table table-hover no-margins" data-page-size="5">
+                                        <table class="despescatable table table-hover no-margins" data-page-size="5">
                                             <thead>
                                             <tr>
                                                 <th>Quantidade</th>
@@ -483,7 +498,7 @@
                                             {% for despesca in all_despesca %}
                                                 <tr>
                                                     <td>{{ despesca.amount }}</td>
-                                                    <td>{{ despesca.middleweight }}</td>
+                                                    <td>{{ despesca.middleweight }} g</td>
                                                     <td>{{ despesca.date|date:'d-m-Y' }}</td>
                                                 </tr>
                                             {% endfor %}
@@ -526,6 +541,7 @@
             $('.biotable').footable();
             $('.mortatable').footable();
             $('.custotable').footable();
+            $('.despescatable').footable();
 
         });
 

@@ -167,7 +167,7 @@ class Cycle(models.Model):
         return self.all_mortality().aggregate(Sum('amount')).get('amount__sum') or 0
 
     def mortality_total_period(self, date):
-        return self.all_mortality().filter(date__lte=date).aggregate(Sum('amount')).get('amount__sum') or 0
+        return self.all_mortality().filter(date__lt=date).aggregate(Sum('amount')).get('amount__sum') or 0
 
     #despesca
 
@@ -178,7 +178,7 @@ class Cycle(models.Model):
         return self.all_despesca().aggregate(Sum('amount')).get('amount__sum') or 0
 
     def despesca_total_period(self, date):
-        return self.all_despesca().filter(date__lte=date).aggregate(Sum('amount')).get('amount__sum') or 0
+        return self.all_despesca().filter(date__lt=date).aggregate(Sum('amount')).get('amount__sum') or 0
 
     #peso médio
 
@@ -186,30 +186,22 @@ class Cycle(models.Model):
         return self.population.middleweight
 
     def current_middleweight(self):
-        biometria = self.all_biometria().first()
-        if biometria:
-            despesca = self.all_despesca().filter(date__gt=biometria.date)
-            if despesca:
-                return despesca.middleweight
-            else:
-                return biometria.middleweight
-        elif self.all_despesca().count() > 0:
-            return self.all_despesca().first().middleweight
-        else:
-            return self.population_middleweight()
+        return self.all_biometria().first().middleweight if self.all_biometria().first() else self.population_middleweight()
 
-    def period_middleweight(self, date):
-        biometria = self.all_biometria().filter(date__lte=date).first()
-        if biometria:
-            despesca = self.all_despesca().filter(Q(date__gt=biometria.date) & Q(date__lte=date))
-            if despesca:
-                return despesca.middleweight
-            else:
-                return biometria.middleweight
-        elif self.all_despesca().filter(date__lte=date).count() > 0:
-            return self.all_despesca().filter(date__lte=date).first().middleweight
-        else:
-            return self.population_middleweight()
+    def period_middleweight(self):
+        list = [{
+            'date': self.population.date,
+            'value': self.population_middleweight()
+        }]
+        biometrias = self.all_biometria()
+
+        for biometria in biometrias:
+            middleweight = {
+                'date': biometria.date,
+                'value': biometria.middleweight
+            }
+            list.append(middleweight)
+        return list
 
     #biomassa
 
@@ -222,10 +214,25 @@ class Cycle(models.Model):
     def current_biomassa(self):
         return (self.current_middleweight()/1000) * self.amount_fish_current()
 
-    def period_biomassa(self, date):
-        middleweight = self.period_middleweight(date)
-        amount_fish = self.amount_fish_period(date)
-        return (middleweight/1000) * amount_fish
+    def list_biomassa(self):
+        list = [{
+            'date': self.population.date,
+            'biomassa': self.first_biomassa(),
+            'middleweight': self.population_middleweight()
+        }]
+
+        all_biometria = self.all_biometria()
+
+        for biometria in all_biometria:
+            biomassa = (biometria.middleweight/1000) * self.amount_fish_period(biometria.date)
+
+            list.append({
+                'date': biometria.date,
+                'biomassa': biomassa,
+                'middleweight': biometria.middleweight
+            })
+
+        return list
 
     #arraçoamento
 
@@ -362,56 +369,63 @@ class Cycle(models.Model):
 
     def date_next_biometria(self):
         td = timedelta(days=15)
-        return self.biometria_set.first().date + td if self.biometria_set.count() > 0 else self.population.date + td
+        return self.biometria_set.first().date + td if self.biometria_set.first() else self.population.date + td
 
     def all_biometria(self):
         return self.biometria_set.all()
 
     #custo e conversão alimentar
 
-    def current_cost(self):
-        return self.cost_set.last()
-
     def ration_total_in_period(self, start_date, end_date):
 
-        period_mortality = [m for m in self.all_mortality().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
-        period_despesca = [d for d in self.all_despesca().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
-        dates_list = set(period_mortality + period_despesca)
+        # period_mortality = [m for m in self.all_mortality().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
+        # period_despesca = [d for d in self.all_despesca().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
+        # dates_list = set(period_mortality + period_despesca)
+        # total_ration = 0
+        #
+        # for date in dates_list:
+        #     number_days = (date - start_date).days
+        #     middleweight = self.period_middleweight(date)
+        #     biomassa = self.period_biomassa(date)
+        #     feeding = biomassa * self.feed_rate(middleweight)
+        #     total_ration += feeding * number_days
+        #     start_date = date
+        #
+        # number_days = (end_date - start_date).days
+        # middleweight = self.period_middleweight(end_date)
+        # biomassa = self.period_biomassa(end_date)
+        # feeding = biomassa * self.feed_rate(middleweight)
+        # total_ration += feeding * number_days
+        #
+        return 0
+
+    def ration_total(self):
         total_ration = 0
+        list_biomassa = self.list_biomassa()
 
-        for date in dates_list:
-            number_days = (date - start_date).days
-            middleweight = self.period_middleweight(date)
-            biomassa = self.period_biomassa(date)
-            feeding = biomassa * self.feed_rate(middleweight)
-            total_ration += feeding * number_days
-            start_date = date
-
-        number_days = (end_date - start_date).days
-        middleweight = self.period_middleweight(end_date)
-        biomassa = self.period_biomassa(end_date)
-        feeding = biomassa * self.feed_rate(middleweight)
-        total_ration += feeding * number_days
+        for bio in list_biomassa:
+            total_ration += bio["biomassa"] * self.feed_rate(bio["middleweight"])
 
         return total_ration
 
     def food_conversion(self):
         biomassa = self.current_biomassa() - self.first_biomassa()
-        ration_total = self.ration_total_in_period(self.population.date, datetime.now().date())
         if biomassa > 0:
-            return ration_total/biomassa
+            return self.ration_total()/biomassa
         else:
             return 0
 
     def cost_total(self):
         costs = self.all_cost()
-        start_date = costs.last().date
-        for cost in costs:
-            print(cost.date)
+        # for cost in costs:
+        #     print(cost.date)
         return 0
 
     def all_cost(self):
         return self.cost_set.all()
+
+    def current_cost(self):
+        return self.cost_set.last()
 
     def cost_period(self,feeding, start_date, end_date):
         cost = self.cost_set.filter(Q(date__gte=start_date) & Q(date__lt=end_date))
@@ -461,9 +475,9 @@ class WaterQuality(models.Model):
             return  self.IDEAL
         elif (30 <= self.transparency <= 50) and (20 <= self.temperature <= 32) and (4.5 <= self.ph <= 8.0) and ( 3 <= self.oxygen <= 5):
             return self.ACCEPTABLE
-        elif (self.transparency == 25 or self.transparency == 60) and ( self.temperature < 20 or self.temperature > 32) and (self.ph < 4.5 or self.ph > 8.0) and (2 <= self.oxygen <= 3 or 5 <= self.oxygen <= 7):
+        elif (self.transparency == 25 or self.transparency == 60) and ( self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (2 <= self.oxygen <= 3 or 5 <= self.oxygen <= 7):
             return self.BAD
-        elif (self.transparency < 25 or self.transparency > 60) and (self.temperature < 20 or self.temperature > 32) and (self.ph < 4.5 or self.ph > 8.0) and (1 > self.oxygen < 7):
+        elif (self.transparency <= 25 or self.transparency >= 60) and (self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (self.oxygen == 1 or self.oxygen == 7):
             return self.TERRIBLE
 
     def water_renovation(self):
