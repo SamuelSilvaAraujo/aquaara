@@ -364,22 +364,40 @@ class CostCreateView(LoginRequiredMixin, CreateView):
         context["pond_page"] = "active"
         return context
 
-class WaterQualityFormView(LoginRequiredMixin, CreateView):
+class WaterQualityCreateView(LoginRequiredMixin, CreateView):
     template_name = 'water_quality_form.html'
     model = WaterQuality
     form_class = WaterQualityForm
 
     def form_valid(self, form):
+        form = form.save()
         pond = Pond.objects.get(id=self.kwargs["pk_pond"])
         cycle = pond.cycle()
-        form.instance.cycle = cycle
+        cycle.water_quality_id = form.id
+        cycle.save()
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
-        context = super(WaterQualityFormView, self).get_context_data(**kwargs)
+        context = super(WaterQualityCreateView, self).get_context_data(**kwargs)
+        context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
+        context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
+        context["pond_page"] = "active"
+        return context
+
+class WaterQualityUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'water_quality_form.html'
+    model = WaterQuality
+    form_class = WaterQualityForm
+    pk_url_kwarg = 'pk_water_quality'
+
+    def get_success_url(self):
+        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
+    def get_context_data(self, **kwargs):
+        context = super(WaterQualityUpdateView, self).get_context_data(**kwargs)
         context["property"] = Property.objects.get(pk=self.kwargs["pk_property"])
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"

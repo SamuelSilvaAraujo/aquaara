@@ -192,6 +192,7 @@
                         <h3>Total de Ração do dia:
                             <small>{{ pond.cycle.full_day_feeding|floatformat:3 }} kg</small>
                         </h3>
+
                         <h3>Quatidade de Ração por refeição:
                             <small>{{ pond.cycle.feeding_meal|floatformat:3 }} kg</small>
                         </h3>
@@ -234,14 +235,10 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h3>
-                                    Custo Total:
-                                    <small>R$ {{ pond.cycle.cost_total|floatformat:2 }}</small>
-                                </h3>
-                            </div>
-                        </div>
+                        <h3>
+                            Custo Total:
+                            <small>R$ {{ pond.cycle.cost_total.total|floatformat:2 }}</small>
+                        </h3>
                     </div>
                     <div class="ibox-content">
                         <table class="custotable table table-hover no-margins" data-page-size="5">
@@ -253,28 +250,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {#                            {% for period in pond.cycle.periods %}#}
-                            {##}
-                            {#                                <tr>#}
-                            {#                                    <td>{{ period.period.start|date:'d/m/Y' }} - {{ period.period.end|date:'d/m/Y' }}</td>#}
-                            {#                                    <td>R$ {{ period.cost }}</td>#}
-                            {#                                </tr>#}
-                            {#                            {% endfor %}#}
+                            {% for period in pond.cycle.cost_total.periods reversed %}
 
-                            <tr>
-                                <td>05/08</td>
-                                <td>200 R$</td>
-                            </tr>
-
-                            <tr>
-                                <td>05/08</td>
-                                <td>200 R$</td>
-                            </tr>
-
-                            <tr>
-                                <td>05/08</td>
-                                <td>200 R$</td>
-                            </tr>
+                                <tr>
+                                    <td>{{ period.start_date|date:'d/m/Y' }} - {{ period.end_date|date:'d/m/Y' }}</td>
+                                    <td>R$ {{ period.value|floatformat:2 }}</td>
+                                </tr>
+                            {% endfor %}
 
                             </tbody>
                             <tfoot>
@@ -293,23 +275,102 @@
 
         {% if pond.cycle.system == pond.cycle.SEMI_INTENSIVE %}
 
-            {% with waterquality=pond.cycle.waterquality_set.last %}
+            {% with waterquality=pond.cycle.water_quality %}
 
                 <div class="row">
                     <div class="col-lg">
                         <div class="ibox collapsed">
-                            <div class="ibox-title {% if waterquality.quality == waterquality.IDEAL %} bg-info {% elif waterquality.quality == waterquality.ACCEPTABLE %} bg-success {% elif waterquality.quality == waterquality.BAD %} bg-warning {% elif waterquality.quality == waterquality.TERRIBLE %} bg-danger {% endif %}">
+                            <div class="ibox-title {% if waterquality.quality == waterquality.IDEAL or waterquality.quality == None %} bg-info {% elif waterquality.quality == waterquality.ACCEPTABLE %} bg-success {% elif waterquality.quality == waterquality.BAD %} bg-warning {% elif waterquality.quality == waterquality.TERRIBLE %} bg-danger  {% endif %}">
                                 <h2 class="font-bold"><strong>QUALIDADE DA ÁGUA</strong></h2>
                                 <div class="ibox-tools">
-                                    <a class="btn-link btn-lg" href="{% url 'water_quality' property.id pond.id %}" title="Qualidade da agúa">
-                                        <i class="fa fa-plus text-light"></i>
-                                    </a>
+
+                                    {% if not waterquality %}
+
+                                        <a class="btn-link btn-lg" href="{% url 'water_quality_create' property.id pond.id %}" title="Qualidade da água">
+                                            <i class="fa fa-plus text-light"></i>
+                                        </a>
+
+                                    {% else %}
+
+                                        <a class="btn-link btn-lg" href="{% url 'water_quality_update' property.id pond.id waterquality.id %}" title="Qualidade da água">
+                                            <i class="fa fa-pencil text-light"></i>
+                                        </a>
+
+                                    {% endif %}
                                     <a class="collapse-link btn-link btn-lg">
                                         <i class="fa fa-chevron-up text-light"></i>
                                     </a>
                                 </div>
                             </div>
-                            <div class="ibox-content"></div>
+                            <div class="ibox-content">
+                                {% if waterquality %}
+
+                                    <div class="row">
+                                        <div class="col-md">
+                                            {% with quality=waterquality.quality %}
+
+                                                <h3>Qualidade da água:
+
+                                                    {% if quality == waterquality.IDEAL %}
+                                                        <small>Ideal</small>
+
+                                                    {% elif quality == waterquality.ACCEPTABLE %}
+
+                                                        <small>Aceitável</small>
+
+                                                    {% elif quality == waterquality.BAD %}
+
+                                                        <small>Ruim</small>
+
+                                                    {% elif quality == waterquality.TERRIBLE %}
+
+                                                        <small>Terrível</small>
+
+                                                    {% endif %}
+                                                </h3>
+
+                                            {% endwith %}
+
+                                            <h3>
+                                                Taxa de renovação:
+                                                <small>{{ waterquality.water_renovation }}</small>
+                                            </h3>
+
+                                        </div>
+                                        <div class="col-md">
+
+                                            <h3>
+                                                Transparência:
+                                                <small>{{ waterquality.transparency }}</small>
+                                            </h3>
+
+                                            <h3>
+                                                Temperatura:
+                                                <small>{{ waterquality.temperature }}</small>
+                                            </h3>
+
+                                        </div>
+
+                                        <div class="col-md">
+                                            <h3>
+                                                PH:
+                                                <small>{{ waterquality.ph }}</small>
+                                            </h3>
+
+                                            <h3>
+                                                Oxigênio:
+                                                <small>{{ waterquality.oxygen }}</small>
+                                            </h3>
+
+                                        </div>
+                                    </div>
+
+                                {% else %}
+
+                                    <h3>A qualidade da água ainda não foi calculada. Informe os dados para que a qualidade seja calculada!</h3>
+
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -78,6 +78,48 @@ class Population(models.Model):
     def __str__(self):
         return "{} / {}".format(self.date, self.cycle)
 
+class WaterQuality(models.Model):
+
+    IDEAL = 'ideal'
+    ACCEPTABLE = 'acceptable'
+    BAD = 'bad'
+    TERRIBLE = 'terrible'
+
+    QUALITY_CHOICES = {
+        IDEAL, 'Ideal',
+        ACCEPTABLE, 'Aceitável',
+        BAD, 'Ruim',
+        TERRIBLE, 'Terrível'
+    }
+
+    date = models.DateField("Data", default=datetime.now)
+    transparency = models.FloatField("Transparência")
+    temperature = models.FloatField("Temperatura")
+    ph = models.FloatField("PH")
+    oxygen = models.FloatField("Oxigênio")
+
+    def quality(self):
+        if self.transparency == 40 and (25 <= self.temperature <= 27) and (6.5 <= self.ph <= 8.4) and self.oxygen == 5:
+            return  self.IDEAL
+        elif (30 <= self.transparency <= 50) and (20 <= self.temperature <= 32) and (4.5 <= self.ph <= 8.0) and ( 3 <= self.oxygen <= 5):
+            return self.ACCEPTABLE
+        elif (self.transparency == 25 or self.transparency == 60) and ( self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (2 <= self.oxygen <= 3 or 5 <= self.oxygen <= 7):
+            return self.BAD
+        elif (self.transparency <= 25 or self.transparency >= 60) and (self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (self.oxygen == 1 or self.oxygen == 7):
+            return self.TERRIBLE
+        else:
+            return None
+
+    def water_renovation(self):
+        if self.quality() == self.IDEAL:
+            return "1%"
+        elif self.quality() == self.ACCEPTABLE:
+            return "1 a 5%"
+        elif self.quality() == self.BAD:
+            return "10 a 20%"
+        elif self.quality() == self.TERRIBLE:
+            return "Renovação constante"
+
 class Cycle(models.Model):
 
     INTENSIVE = "intensive"
@@ -120,6 +162,7 @@ class Cycle(models.Model):
     date = models.DateField(auto_now_add=True)
     pond = models.ForeignKey(Pond, on_delete=models.CASCADE)
     population = models.OneToOneField(Population, on_delete=models.CASCADE, null=True, blank=True)
+    water_quality =models.OneToOneField(WaterQuality, on_delete=models.CASCADE, null=True, blank=True)
     system = models.CharField("Sistema", max_length=15, choices=SYSTEM_CHOICES)
     type_intensive = models.CharField("Tipo de sistema intensivo", max_length=50, choices=TYPE_INTENSIVE_CHOICES, null=True, blank=True)
     final_middleweight = models.IntegerField("Peso Médio Final", choices=MIDDLEWEIGHT_CHOICES)
@@ -376,35 +419,18 @@ class Cycle(models.Model):
 
     #custo e conversão alimentar
 
-    def ration_total_in_period(self, start_date, end_date):
-
-        # period_mortality = [m for m in self.all_mortality().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
-        # period_despesca = [d for d in self.all_despesca().filter(Q(date__gte=start_date) & Q(date__lte=end_date)).values_list("date", flat=True)]
-        # dates_list = set(period_mortality + period_despesca)
-        # total_ration = 0
-        #
-        # for date in dates_list:
-        #     number_days = (date - start_date).days
-        #     middleweight = self.period_middleweight(date)
-        #     biomassa = self.period_biomassa(date)
-        #     feeding = biomassa * self.feed_rate(middleweight)
-        #     total_ration += feeding * number_days
-        #     start_date = date
-        #
-        # number_days = (end_date - start_date).days
-        # middleweight = self.period_middleweight(end_date)
-        # biomassa = self.period_biomassa(end_date)
-        # feeding = biomassa * self.feed_rate(middleweight)
-        # total_ration += feeding * number_days
-        #
-        return 0
-
     def ration_total(self):
         total_ration = 0
         list_biomassa = self.list_biomassa()
 
-        for bio in list_biomassa:
-            total_ration += bio["biomassa"] * self.feed_rate(bio["middleweight"])
+        for index, bio in enumerate(list_biomassa):
+            ration = bio["biomassa"] * self.feed_rate(bio["middleweight"])
+            if index + 1 < len(list_biomassa):
+                end_date = list_biomassa[index + 1]["date"]
+            else:
+                end_date = datetime.now().date()
+            number_days = (end_date - bio["date"]).days
+            total_ration += ration * number_days
 
         return total_ration
 
@@ -416,20 +442,34 @@ class Cycle(models.Model):
             return 0
 
     def cost_total(self):
-        costs = self.all_cost()
-        # for cost in costs:
-        #     print(cost.date)
-        return 0
+        list = {
+            'total': 0,
+            'periods': []
+        }
+
+        list_biomassa = self.list_biomassa()
+
+        for index, bio in enumerate(list_biomassa):
+            ration = bio["biomassa"] * self.feed_rate(bio["middleweight"])
+            if index + 1 < len(list_biomassa):
+                end_date = list_biomassa[index + 1]["date"]
+            else:
+                end_date = datetime.now().date()
+            number_days = (end_date - bio["date"]).days
+            total_ration = ration * number_days
+            cost = self.all_cost().filter(date__lte=end_date).first()
+            value = total_ration * cost.price_kg()
+            list['total'] += value
+            list['periods'].append({
+                'start_date': bio['date'],
+                'end_date': end_date,
+                'value': value
+            })
+
+        return list
 
     def all_cost(self):
         return self.cost_set.all()
-
-    def current_cost(self):
-        return self.cost_set.last()
-
-    def cost_period(self,feeding, start_date, end_date):
-        cost = self.cost_set.filter(Q(date__gte=start_date) & Q(date__lt=end_date))
-        return 0
 
 class Mortality(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
@@ -455,40 +495,6 @@ class Despesca(models.Model):
 
     class Meta:
         ordering = ['-date']
-
-class WaterQuality(models.Model):
-
-    IDEAL = 'ideal'
-    ACCEPTABLE = 'acceptable'
-    BAD = 'bad'
-    TERRIBLE = 'terrible'
-
-    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
-    date = models.DateField("Data", default=datetime.now)
-    transparency = models.FloatField("Transparência")
-    temperature = models.FloatField("Temperatura")
-    ph = models.FloatField("PH")
-    oxygen = models.FloatField("Oxigênio")
-
-    def quality(self):
-        if self.transparency == 40 and (25 <= self.temperature <= 27) and (6.5 <= self.ph <= 8.4) and self.oxygen == 5:
-            return  self.IDEAL
-        elif (30 <= self.transparency <= 50) and (20 <= self.temperature <= 32) and (4.5 <= self.ph <= 8.0) and ( 3 <= self.oxygen <= 5):
-            return self.ACCEPTABLE
-        elif (self.transparency == 25 or self.transparency == 60) and ( self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (2 <= self.oxygen <= 3 or 5 <= self.oxygen <= 7):
-            return self.BAD
-        elif (self.transparency <= 25 or self.transparency >= 60) and (self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (self.oxygen == 1 or self.oxygen == 7):
-            return self.TERRIBLE
-
-    def water_renovation(self):
-        if self.quality() == self.IDEAL:
-            return "1%"
-        elif self.quality() == self.ACCEPTABLE:
-            return "1 a 5%"
-        elif self.quality() == self.BAD:
-            return "10 a 20%"
-        elif self.quality() == self.TERRIBLE:
-            return "Renovação constante"
 
 class Cost(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)

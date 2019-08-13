@@ -90,7 +90,7 @@ class CostForm(forms.ModelForm):
 class WaterQualityForm(forms.ModelForm):
     class Meta:
         model = WaterQuality
-        exclude = ['date', 'cycle']
+        exclude = ['date']
         widgets = {
             'ph': forms.NumberInput(attrs={'class': 'form-control'}),
             'oxygen': forms.NumberInput(attrs={'class': 'form-control'}),

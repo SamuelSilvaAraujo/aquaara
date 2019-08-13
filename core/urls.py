@@ -30,7 +30,8 @@ urlpatterns = [
                 path('editar/biometria/<int:pk_biometria>/', BiometriaUpdateView.as_view(), name="biometria_update"),
                 path('despesca/', DespescaCreateView.as_view(), name="despesca"),
                 path('custo/', CostCreateView.as_view(), name="custo"),
-                path('qualidade_agua/', WaterQualityFormView.as_view(), name="water_quality"),
+                path('qualidade_agua/adicionar/', WaterQualityCreateView.as_view(), name="water_quality_create"),
+                path('qualidade_agua/editar/<int:pk_water_quality>/', WaterQualityUpdateView.as_view(), name="water_quality_update"),
             ]))
         ])),
     ])),
