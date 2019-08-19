@@ -184,7 +184,7 @@ class Cycle(models.Model):
 
     def amount_fish_total(self):
         amount = self.density()*self.pond.area()
-        return int(amount) + 1
+        return amount
 
     def amount_fish_population(self):
         return self.population.amount_fish
@@ -421,16 +421,31 @@ class Cycle(models.Model):
 
     def ration_total(self):
         total_ration = 0
-        list_biomassa = self.list_biomassa()
 
-        for index, bio in enumerate(list_biomassa):
-            ration = bio["biomassa"] * self.feed_rate(bio["middleweight"])
-            if index + 1 < len(list_biomassa):
-                end_date = list_biomassa[index + 1]["date"]
+        start_date = self.population.date
+        middleweight = self.population_middleweight()
+        amount_fish = self.amount_fish_population()
+        biomassa = (middleweight/1000)*amount_fish
+        ration = biomassa*self.feed_rate(middleweight)
+        number_days = (self.all_biometria().last().date - start_date).days
+        total_ration += ration*number_days
+
+        all_biometria = self.all_biometria();
+
+        for index, bio in enumerate(all_biometria):
+            start_date = bio.date
+            middleweight = bio.middleweight
+            amount_fish = self.amount_fish_period(start_date)
+            biomassa = (middleweight/1000)*amount_fish
+            ration = biomassa*self.feed_rate(middleweight)
+            if index + 1 < len(all_biometria):
+                end_date = all_biometria[index + 1]["date"]
             else:
-                end_date = datetime.now().date()
-            number_days = (end_date - bio["date"]).days
-            total_ration += ration * number_days
+                end_date = self.all_despesca().first().date
+            number_days = (end_date - start_date).days
+            total_ration += ration*number_days
+
+        print(total_ration)
 
         return total_ration
 

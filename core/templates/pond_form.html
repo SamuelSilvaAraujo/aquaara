@@ -7,14 +7,6 @@
             <div class="ibox">
                 <div class="ibox-title p-m">
                     <h2><span class="text-navy font-bold"><strong>{% if not form.instance.pk %} Cadastrar {% else %} Editar {% endif %} Viveiro</strong></span></h2>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{% url 'ponds_list' property.id %}">{{ property.name }}</a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            <strong>Cadastrar Viveiro</strong>
-                        </li>
-                    </ol>
                 </div>
                 <div class="ibox-content p-m">
                     <form method="post">

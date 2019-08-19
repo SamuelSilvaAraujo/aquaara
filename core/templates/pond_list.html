@@ -50,18 +50,16 @@
 
     {% else %}
 
-        <div class="middle-box text-center animated fadeInRightBig">
-            <h2 class="font-bold">Nenhum Viveiro Cadastrado!</h2>
-            <div class="error-desc">
-                Cadastre seus Viveiros aqui.
-                <br/>
-                <br/>
-                <a href="{% url 'pond_create' property.id %}" class="btn btn-primary">
-                    <h4 class="font-bold">
-                        <i class="fa fa-plus"></i>
-                        <strong>Cadastar Viveiro</strong>
-                    </h4>
+        <div class="wrapper wrapper-content">
+            <div class="middle-box text-center animated fadeInRightBig">
+                <h2 class="font-bold">Nenhum Viveiro Cadastrado!</h2>
+                <div class="error-desc">
+                     Cadastre seus Viveiros aqui.
+                    <br/><a href="{% url 'pond_create' property.id %}" class="btn btn-primary m-t">
+                    <i class="fa fa-plus"></i>
+                    <strong>Cadastar Viveiro</strong>
                 </a>
+                </div>
             </div>
         </div>
 

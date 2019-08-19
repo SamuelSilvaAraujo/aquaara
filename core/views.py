@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
@@ -131,7 +132,7 @@ class PondDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         pk_property = self.kwargs["pk_property"]
-        return  reverse('property_ponds', kwargs={"pk_property": pk_property})
+        return reverse('ponds_list', kwargs={"pk_property": pk_property})
 
     def get_context_data(self, **kwargs):
         context = super(PondDeleteView, self).get_context_data(**kwargs)
@@ -203,10 +204,10 @@ class CycleDetailView(LoginRequiredMixin, DetailView):
         return context
 
 def end_cycle(request, pk_property, pk_pond, pk_cycle):
-    cycle = Cycle.objects.get(pk=pk_cycle, finalized=False)
+    cycle = get_object_or_404(Cycle, pk=pk_cycle, finalized=False)
     cycle.finalized = True
     cycle.save()
-    return reverse('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond})
+    return redirect(reverse('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
 
 class PopulationCreateView(LoginRequiredMixin, CreateView):
     model = Population

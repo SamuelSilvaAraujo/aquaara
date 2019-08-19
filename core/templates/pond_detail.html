@@ -103,11 +103,11 @@
                         </h3>
                         <h3>
                             Densidade:
-                            <small> {{ pond.cycle.density }} peixe/m²</small>
+                            <small> {{ pond.cycle.density|floatformat:2 }} peixe/m²</small>
                         </h3>
                         <h3>
                             Total de Peixes:
-                            <small>{{ pond.cycle.amount_fish_total }} peixes</small>
+                            <small>{{ pond.cycle.amount_fish_total|floatformat }} peixes</small>
                         </h3>
                         {% if pond.cycle.population %}
                             <h3>
@@ -116,7 +116,7 @@
                             </h3>
                             <h3>
                                 Peixes Atual:
-                                <small>{{ pond.cycle.amount_fish_current }} peixes</small>
+                                <small>{{ pond.cycle.amount_fish_current|floatformat }} peixes</small>
                             </h3>
                             <h3>
                                 Biomassa Atual:
@@ -124,12 +124,12 @@
                             </h3>
                             <h3 title="Peso Médio da ultima biometria">
                                 Peso Médio Atual:
-                                <small> {{ pond.cycle.current_middleweight }} g</small>
+                                <small> {{ pond.cycle.current_middleweight|floatformat:2 }} g</small>
                             </h3>
                         {% endif %}
                         <h3>
                             Peso Médio Final:
-                            <small> {{ pond.cycle.final_middleweight }} g</small>
+                            <small> {{ pond.cycle.final_middleweight|floatformat:2 }} g</small>
                         </h3>
                     </div>
                 </div>
@@ -384,31 +384,31 @@
                     <div class="ibox-title bg-dark">
                         <h2 class="font-bold text-light"><strong>BIOMETRIA</strong></h2>
                         <div class="ibox-tools">
-                            <a class="btn-link btn-lg" href="{% url 'biometria' property.id pond.id %}" title="NOVA BIOMETRIA">
-                                <i class="fa fa-plus text-light"></i>
-                            </a>
+
+                            {% if pond.cycle.amount_fish_current %}
+                                <a class="btn-link btn-lg" href="{% url 'biometria' property.id pond.id %}" title="NOVA BIOMETRIA">
+                                    <i class="fa fa-plus text-light"></i>
+                                </a>
+                            {% endif %}
                             <a class="collapse-link btn-link btn-lg">
                                 <i class="fa fa-chevron-up text-light"></i>
                             </a>
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h3>
-                                    Data da Proxima Biometria:
-                                    <small>{{ pond.cycle.date_next_biometria|date:'d/m/Y' }}</small>
-                                </h3>
-                                <h3>
-                                    Quantidade de Peixes da Proxima Biometria:
-                                    <small>{{ pond.cycle.amount_fish_next_biometria }}</small>
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="row">
-                            {% with all_biometria=pond.cycle.all_biometria %}
-                                {% if all_biometria|length > 0 %}
+                        <h3>
+                            Data da Proxima Biometria:
+                            <small>{{ pond.cycle.date_next_biometria|date:'d/m/Y' }}</small>
+                        </h3>
+                        <h3>
+                            Quantidade de Peixes da Proxima Biometria:
+                            <small>{{ pond.cycle.amount_fish_next_biometria|floatformat }}</small>
+                        </h3>
+                    </div>
+                    <div class="ibox-content">
+                        {% with all_biometria=pond.cycle.all_biometria %}
+                            {% if all_biometria|length > 0 %}
+                                <div class="row">
                                     <div class="col-md-4">
                                         <table class="biotable table table-hover no-margins" data-page-size="5">
                                             <thead>
@@ -445,13 +445,13 @@
                                             <canvas id="bioChart" height="100%"></canvas>
                                         </div>
                                     </div>
-                                {% else %}
-                                    <div class="col-md-12">
-                                        <h3 class="text-center">Nenhuma Biometria realizada!</h3>
-                                    </div>
-                                {% endif %}
-                            {% endwith %}
-                        </div>
+                                </div>
+                            {% else %}
+                                <div class="col-md-12">
+                                    <h3 class="text-center">Nenhuma Biometria realizada!</h3>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
                     </div>
                 </div>
             </div>
@@ -463,9 +463,11 @@
                     <div class="ibox-title bg-dark">
                         <h2 class="text-light font-bold"><strong>MORTALIDADE</strong></h2>
                         <div class="ibox-tools">
-                            <a class="btn-link btn-lg" href="{% url 'mortality' property.id pond.id %}" title="NOVO REGISTRO DE MORTALIDADE">
-                                <i class="fa fa-plus text-light"></i>
-                            </a>
+                            {% if pond.cycle.amount_fish_current > 0 %}
+                                <a class="btn-link btn-lg" href="{% url 'mortality' property.id pond.id %}" title="NOVO REGISTRO DE MORTALIDADE">
+                                    <i class="fa fa-plus text-light"></i>
+                                </a>
+                            {% endif %}
                             <a class="collapse-link btn-link btn-lg">
                                 <i class="fa fa-chevron-up text-light"></i>
                             </a>
@@ -532,9 +534,11 @@
                     <div class="ibox-title bg-dark">
                         <h2 class="text-light font-bold"><strong>DESPESCA</strong></h2>
                         <div class="ibox-tools">
-                            <a class="btn-link btn-lg" href="{% url 'despesca' pond.property.id pond.id %}" title="NOVA DESPESCA">
-                                <i class="fa fa-plus text-light"></i>
-                            </a>
+                            {% if pond.cycle.amount_fish_current > 0 %}
+                                <a class="btn-link btn-lg" href="{% url 'despesca' pond.property.id pond.id %}" title="NOVA DESPESCA">
+                                    <i class="fa fa-plus text-light"></i>
+                                </a>
+                            {% endif %}
                             <a class="collapse-link btn-link btn-lg">
                                 <i class="fa fa-chevron-up text-light"></i>
                             </a>

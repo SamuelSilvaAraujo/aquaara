@@ -61,18 +61,16 @@
 
     {% else %}
 
-        <div class="middle-box text-center animated fadeInRightBig">
-            <h3 class="font-bold">Nenhuma Propriedade Cadastrada!</h3>
-            <div class="error-desc">
-                Cadastre suas Propriedades Aqui.
-                <br/>
-                <br/>
-                <a href="{% url 'property_create' %}" class="btn btn-primary">
-                    <h4 class="font-bold">
-                        <i class="fa fa-plus"></i>
-                        <strong>Cadastrar Propriedade</strong>
-                    </h4>
+        <div class="wrapper wrapper-content">
+            <div class="middle-box text-center animated fadeInRightBig">
+                <h3 class="font-bold">Nenhuma Propriedade Cadastrada!</h3>
+                <div class="error-desc">
+                    Cadastre suas Propriedades Aqui.
+                    <br/><a href="{% url 'property_create' %}" class="btn btn-primary m-t">
+                    <i class="fa fa-plus"></i>
+                    <strong>Cadastrar Propriedade</strong>
                 </a>
+                </div>
             </div>
         </div>
 
