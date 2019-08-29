@@ -6,14 +6,20 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title p-m">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <a href="{% url 'pond_detail' pond.property.id pond.id %}">
-                                <h2 class="text-navy font-bold">
-                                    <strong>{{ pond.identification|upper }}</strong>
-                                </h2>
-                            </a>
-                        </div>
+                    <h2>
+                        <span class="text-navy font-bold">
+                        <strong>{{ pond.identification|upper }}</strong>
+                        </span>
+                    </h2>
+                    <div class="pull-right">
+                        <a href="{% url 'pond_detail' pond.property.id pond.id %}" class="btn btn-primary">
+                            <h4 class="font-bold">
+                                <strong>
+                                    <i class="fa fa-arrow-left text-light"></i>
+                                    Voltar ao viveiro
+                                </strong>
+                            </h4>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -33,6 +39,10 @@
                 </div>
                 <div class="ibox-content">
                     <h3>
+                        Data de Inicio:
+                        <small>{{ cycle.date|date:'d/m/Y' }}</small>
+                    </h3>
+                    <h3>
                         Sistema:
                         <small>
                             {{ cycle.get_system_display }}
@@ -50,8 +60,12 @@
                         <small>{{ cycle.amount_fish_total }} peixes</small>
                     </h3>
                     <h3>
+                        Peso Médio Inicial:
+                        <small> {{ cycle.population_middleweight }} g</small>
+                    </h3>
+                    <h3>
                         Peso Médio Final:
-                        <small> {{ cycle.current_middleweight }} g</small>
+                        <small> {{ cycle.last_middleweight }} g</small>
                     </h3>
                 </div>
             </div>

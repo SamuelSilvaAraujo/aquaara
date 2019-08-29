@@ -71,7 +71,7 @@
                     </h3>
                     <h3>
                         Volume de Água:
-                        <small> {{ pond.volume }} L</small>
+                        <small> {{ pond.volume|floatformat:2 }} L</small>
                     </h3>
                 </div>
             </div>
@@ -157,7 +157,7 @@
                             </h3>
                             <h3>
                                 Peso Médio no Povoamento:
-                                <small> {{ pond.cycle.population_middleweight }} g</small>
+                                <small> {{ pond.cycle.population_middleweight|floatformat:2 }} g</small>
                             </h3>
                             <h3>
                                 Peixes Povoado:
@@ -165,7 +165,7 @@
                             </h3>
                             <h3>
                                 Biomassa no Povoamento:
-                                <small>{{ pond.cycle.first_biomassa }} kg</small>
+                                <small>{{ pond.cycle.first_biomassa|floatformat:2 }} kg</small>
                             </h3>
                         </div>
                     </div>
@@ -250,7 +250,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for period in pond.cycle.cost_total.periods reversed %}
+                            {% for period in pond.cycle.cost_total.periods %}
 
                                 <tr>
                                     <td>{{ period.start_date|date:'d/m/Y' }} - {{ period.end_date|date:'d/m/Y' }}</td>

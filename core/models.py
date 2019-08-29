@@ -223,13 +223,16 @@ class Cycle(models.Model):
     def despesca_total_period(self, date):
         return self.all_despesca().filter(date__lt=date).aggregate(Sum('amount')).get('amount__sum') or 0
 
+    def last_despesca(self):
+        return self.all_despesca().first()
+
     #peso médio
 
     def population_middleweight(self):
         return self.population.middleweight
 
     def current_middleweight(self):
-        return self.all_biometria().first().middleweight if self.all_biometria().first() else self.population_middleweight()
+        return self.all_biometria().first().middleweight if self.all_biometria().count() > 0 else self.population_middleweight()
 
     def period_middleweight(self):
         list = [{
@@ -246,36 +249,25 @@ class Cycle(models.Model):
             list.append(middleweight)
         return list
 
+    def last_middleweight(self):
+        return self.all_despesca().first().middleweight
+
     #biomassa
 
+    def biomassa(self, middleweight, amount_fish):
+        return (middleweight/1000)*amount_fish
+
     def first_biomassa(self):
-        return (self.population_middleweight()/1000) * self.amount_fish_population()
+        return self.biomassa(self.population_middleweight(), self.amount_fish_population())
 
     def max_biomassa(self):
-        return (self.current_middleweight()/1000) * self.amount_fish_total()
+        return self.biomassa(self.current_middleweight(), self.amount_fish_total())
 
     def current_biomassa(self):
-        return (self.current_middleweight()/1000) * self.amount_fish_current()
+        return self.biomassa(self.current_middleweight(), self.amount_fish_current())
 
-    def list_biomassa(self):
-        list = [{
-            'date': self.population.date,
-            'biomassa': self.first_biomassa(),
-            'middleweight': self.population_middleweight()
-        }]
-
-        all_biometria = self.all_biometria()
-
-        for biometria in all_biometria:
-            biomassa = (biometria.middleweight/1000) * self.amount_fish_period(biometria.date)
-
-            list.append({
-                'date': biometria.date,
-                'biomassa': biomassa,
-                'middleweight': biometria.middleweight
-            })
-
-        return list
+    def last_biomassa(self):
+        return self.biomassa(self.last_middleweight(), self.amount_fish_period(self.last_despesca().date))
 
     #arraçoamento
 
@@ -412,7 +404,7 @@ class Cycle(models.Model):
 
     def date_next_biometria(self):
         td = timedelta(days=15)
-        return self.biometria_set.first().date + td if self.biometria_set.first() else self.population.date + td
+        return self.biometria_set.first().date + td if self.biometria_set.count() > 0 else self.population.date + td
 
     def all_biometria(self):
         return self.biometria_set.all()
@@ -422,30 +414,39 @@ class Cycle(models.Model):
     def ration_total(self):
         total_ration = 0
 
+        all_biometria = self.all_biometria().order_by('date')
+
         start_date = self.population.date
-        middleweight = self.population_middleweight()
-        amount_fish = self.amount_fish_population()
-        biomassa = (middleweight/1000)*amount_fish
-        ration = biomassa*self.feed_rate(middleweight)
-        number_days = (self.all_biometria().last().date - start_date).days
+
+        if self.all_biometria().count() > 0:
+            end_date = all_biometria.first().date
+        else:
+            end_date = datetime.now().date()
+
+        population_middleweight = self.population_middleweight()
+        amount_fish_population = self.amount_fish_population()
+        population_biomassa = self.biomassa(population_middleweight, amount_fish_population)
+
+        ration = population_biomassa*self.feed_rate(population_middleweight)
+        number_days = (end_date - start_date).days
         total_ration += ration*number_days
 
-        all_biometria = self.all_biometria();
+        for biometria in all_biometria:
+            start_date = biometria.date
 
-        for index, bio in enumerate(all_biometria):
-            start_date = bio.date
-            middleweight = bio.middleweight
-            amount_fish = self.amount_fish_period(start_date)
-            biomassa = (middleweight/1000)*amount_fish
-            ration = biomassa*self.feed_rate(middleweight)
-            if index + 1 < len(all_biometria):
-                end_date = all_biometria[index + 1]["date"]
+            next_biometria = all_biometria.filter(date__gt=start_date).first()
+            if next_biometria:
+                end_date = next_biometria.date
             else:
-                end_date = self.all_despesca().first().date
+                end_date = datetime.now().date()
+
+            biometria_middleweight = biometria.middleweight
+            biometria_amount_fish = self.amount_fish_period(biometria.date)
+            biometria_biomassa = self.biomassa(biometria_middleweight, biometria_amount_fish)
+
+            ration = biometria_biomassa*self.feed_rate(biometria_middleweight)
             number_days = (end_date - start_date).days
             total_ration += ration*number_days
-
-        print(total_ration)
 
         return total_ration
 
@@ -456,32 +457,74 @@ class Cycle(models.Model):
         else:
             return 0
 
+    def final_food_conversion(self):
+        biomassa = self.last_biomassa() - self.first_biomassa()
+        return self.ration_total()/biomassa
+
     def cost_total(self):
-        list = {
+        cost_dict = {
             'total': 0,
             'periods': []
         }
 
-        list_biomassa = self.list_biomassa()
+        all_biometria = self.all_biometria().order_by('date')
 
-        for index, bio in enumerate(list_biomassa):
-            ration = bio["biomassa"] * self.feed_rate(bio["middleweight"])
-            if index + 1 < len(list_biomassa):
-                end_date = list_biomassa[index + 1]["date"]
+        start_date = self.population.date
+
+        if self.all_biometria().count() > 0:
+            end_date = all_biometria.first().date
+        else:
+            end_date = datetime.now().date()
+
+        population_middleweight = self.population_middleweight()
+        amount_fish_population = self.amount_fish_population()
+        population_biomassa = self.biomassa(population_middleweight, amount_fish_population)
+
+        ration = population_biomassa * self.feed_rate(population_middleweight)
+        number_days = (end_date - start_date).days
+
+        total_ration = ration*number_days
+
+        cost = self.all_cost().filter(date__lte=start_date).first()
+
+        value = total_ration * cost.price_kg()
+
+        cost_dict['total'] += value
+        cost_dict['periods'].append({
+            'start_date': start_date,
+            'end_date': end_date,
+            'value': value
+        })
+
+        for biometria in all_biometria:
+            start_date = biometria.date
+
+            next_biometria = all_biometria.filter(date__gt=start_date).first()
+            if next_biometria:
+                end_date = next_biometria.date
             else:
                 end_date = datetime.now().date()
-            number_days = (end_date - bio["date"]).days
+
+            biometria_middleweight = biometria.middleweight
+            biometria_amount_fish = self.amount_fish_period(biometria.date)
+            biometria_biomassa = self.biomassa(biometria_middleweight, biometria_amount_fish)
+
+            ration = biometria_biomassa * self.feed_rate(biometria_middleweight)
+            number_days = (end_date - start_date).days
             total_ration = ration * number_days
-            cost = self.all_cost().filter(date__lte=end_date).first()
+
+            cost = self.all_cost().filter(date__lte=start_date).first()
+
             value = total_ration * cost.price_kg()
-            list['total'] += value
-            list['periods'].append({
-                'start_date': bio['date'],
+
+            cost_dict['total'] += value
+            cost_dict['periods'].append({
+                'start_date': start_date,
                 'end_date': end_date,
                 'value': value
             })
 
-        return list
+        return cost_dict
 
     def all_cost(self):
         return self.cost_set.all()

@@ -44,20 +44,20 @@
                                 <small>{{ cycle.amount_fish_population }}</small>
                             </h3>
                             <h3>
-                                Quantidade de Peixes na Despesca:
+                                Quantidade de Peixes Despescado:
                                 <small>{{ cycle.despesca_total }}</small>
-                            </h3>
-                            <h3>
-                                Quantidade Total de Ração:
-                                <small>{{ cycle.ration_total|floatformat:2 }}</small>
                             </h3>
                             <h3>
                                 Mortalidade:
                                 <small>{{ cycle.mortality_total }} peixes</small>
                             </h3>
                             <h3>
+                                Quantidade Total de Ração:
+                                <small>{{ cycle.ration_total|floatformat:2 }}</small>
+                            </h3>
+                            <h3>
                                 Conversão Alimentar:
-                                <small>Falta calcular</small>
+                                <small>{{cycle.final_food_conversion|floatformat:2}}</small>
                             </h3>
                         </div>
                     </div>
