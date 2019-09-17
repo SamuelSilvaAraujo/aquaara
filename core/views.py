@@ -5,8 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
 from .models import *
 
+
 class Index(TemplateView):
     template_name = 'index.html'
+
 
 class PropertyListView(LoginRequiredMixin, ListView):
     model = Property
@@ -19,6 +21,7 @@ class PropertyListView(LoginRequiredMixin, ListView):
         context = super(PropertyListView, self).get_context_data(**kwargs)
         context["propertys_page"] = "active"
         return context
+
 
 class PropertyCreateView(LoginRequiredMixin, CreateView):
     model = Property
@@ -37,6 +40,7 @@ class PropertyCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('ponds_list', kwargs={'pk_property': self.object.pk})
 
+
 class PropertyUpdateView(LoginRequiredMixin, UpdateView):
     model = Property
     form_class = PropertyForm
@@ -50,6 +54,7 @@ class PropertyUpdateView(LoginRequiredMixin, UpdateView):
         context["propertys_page"] = "active"
         return context
 
+
 class PropertyDeleteView(LoginRequiredMixin, DeleteView):
     model = Property
     template_name = 'property_delete.html'
@@ -62,9 +67,10 @@ class PropertyDeleteView(LoginRequiredMixin, DeleteView):
         context["propertys_page"] = "active"
         return context
 
+
 class PondListView(LoginRequiredMixin, ListView):
-    template_name = 'pond_list.html'
     model = Pond
+    template_name = 'pond_list.html'
     pk_url_kwarg = 'pk_property'
 
     def get_queryset(self):
@@ -77,6 +83,7 @@ class PondListView(LoginRequiredMixin, ListView):
         context["property"] = property
         context["pond_page"] = "active"
         return context
+
 
 class PondCreateView(LoginRequiredMixin, CreateView):
     model = Pond
@@ -97,9 +104,10 @@ class PondCreateView(LoginRequiredMixin, CreateView):
         form.instance.property = property
         return super().form_valid(form)
 
+
 class PondDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'pond_detail.html'
     model = Pond
+    template_name = 'pond_detail.html'
     pk_url_kwarg = "pk_pond"
 
     def get_context_data(self, **kwargs):
@@ -108,10 +116,11 @@ class PondDetailView(LoginRequiredMixin, DetailView):
         context["pond_page"] = "active"
         return context
 
+
 class PondUpdateView(LoginRequiredMixin, UpdateView):
-    template_name = 'pond_form.html'
     model = Pond
     form_class = PondForm
+    template_name = 'pond_form.html'
     pk_url_kwarg = 'pk_pond'
 
     def get_success_url(self):
@@ -124,6 +133,7 @@ class PondUpdateView(LoginRequiredMixin, UpdateView):
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
+
 
 class PondDeleteView(LoginRequiredMixin, DeleteView):
     model = Pond
@@ -140,10 +150,11 @@ class PondDeleteView(LoginRequiredMixin, DeleteView):
         context["pond_page"] = "active"
         return context
 
+
 class CycleCreateView(LoginRequiredMixin, CreateView):
     model = Cycle
-    template_name = 'cycle_form.html'
     form_class = CycleForm
+    template_name = 'cycle_form.html'
 
     def form_valid(self, form):
         pond = Pond.objects.get(pk=self.kwargs["pk_pond"])
@@ -160,14 +171,16 @@ class CycleCreateView(LoginRequiredMixin, CreateView):
         context["pond_page"] = "active"
         return context
 
+
 class CycleUpdateView(LoginRequiredMixin, UpdateView):
     model = Cycle
+    form_class = CycleForm
     template_name = 'cycle_form.html'
     pk_url_kwarg = 'pk_cycle'
-    form_class = CycleForm
 
     def get_success_url(self):
-        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail',
+                       kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(CycleUpdateView, self).get_context_data(**kwargs)
@@ -175,6 +188,7 @@ class CycleUpdateView(LoginRequiredMixin, UpdateView):
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
+
 
 class OldCyclesView(LoginRequiredMixin, ListView):
     model = Cycle
@@ -191,6 +205,7 @@ class OldCyclesView(LoginRequiredMixin, ListView):
         context["pond_page"] = "active"
         return context
 
+
 class CycleDetailView(LoginRequiredMixin, DetailView):
     template_name = 'cycle_detail.html'
     model = Cycle
@@ -203,11 +218,13 @@ class CycleDetailView(LoginRequiredMixin, DetailView):
         context["pond_page"] = "active"
         return context
 
+
 def end_cycle(request, pk_property, pk_pond, pk_cycle):
     cycle = get_object_or_404(Cycle, pk=pk_cycle, finalized=False)
     cycle.finalized = True
     cycle.save()
     return redirect(reverse('pond_detail', kwargs={'pk_property': pk_property, 'pk_pond': pk_pond}))
+
 
 class PopulationCreateView(LoginRequiredMixin, CreateView):
     model = Population
@@ -232,14 +249,16 @@ class PopulationCreateView(LoginRequiredMixin, CreateView):
         context["pond_page"] = "active"
         return context
 
+
 class PopulationUpdateView(LoginRequiredMixin, UpdateView):
     model = Population
-    template_name = 'population_form.html'
     form_class = PopulationForm
+    template_name = 'population_form.html'
     pk_url_kwarg = 'pk_population'
 
     def get_success_url(self):
-        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail',
+                       kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(PopulationUpdateView, self).get_context_data(**kwargs)
@@ -248,13 +267,21 @@ class PopulationUpdateView(LoginRequiredMixin, UpdateView):
         context["pond_page"] = "active"
         return context
 
+
 class MortalityCreateView(LoginRequiredMixin, CreateView):
     model = Mortality
     form_class = MortalityForm
     template_name = 'mortality.html'
 
     def get_success_url(self):
-        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail',
+                       kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+
+    def get_initial(self):
+        initial = super(MortalityCreateView, self).get_initial()
+        initial = initial.copy()
+        initial['pond_id'] = self.kwargs["pk_pond"]
+        return initial
 
     def form_valid(self, form):
         pond_obj = Pond.objects.get(pk=self.kwargs["pk_pond"])
@@ -271,10 +298,12 @@ class MortalityCreateView(LoginRequiredMixin, CreateView):
         context["pond_page"] = "active"
         return context
 
+
 def mortality_remove_view(request, pk_property, pk_pond, pk_mortality):
     mortality = Mortality.objects.get(pk=pk_mortality)
     mortality.delete()
     return reverse('pond_detail', pk_property, pk_pond)
+
 
 class BiometriaCreateView(LoginRequiredMixin, CreateView):
     model = Biometria
@@ -296,6 +325,7 @@ class BiometriaCreateView(LoginRequiredMixin, CreateView):
         context["pond_page"] = "active"
         return context
 
+
 class BiometriaUpdateView(LoginRequiredMixin, UpdateView):
     model = Biometria
     form_class = BiometriaForm
@@ -303,7 +333,8 @@ class BiometriaUpdateView(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'pk_biometria'
 
     def get_success_url(self):
-        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail',
+                       kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(BiometriaUpdateView, self).get_context_data(**kwargs)
@@ -312,13 +343,15 @@ class BiometriaUpdateView(LoginRequiredMixin, UpdateView):
         context["pond_page"] = "active"
         return context
 
+
 class DespescaCreateView(LoginRequiredMixin, CreateView):
     model = Despesca
     form_class = DespescaForm
     template_name = 'despesca.html'
 
     def get_success_url(self):
-        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail',
+                       kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def form_valid(self, form):
         pond_obj = Pond.objects.get(pk=self.kwargs["pk_pond"])
@@ -334,6 +367,7 @@ class DespescaCreateView(LoginRequiredMixin, CreateView):
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
+
 
 class CostCreateView(LoginRequiredMixin, CreateView):
     template_name = 'cost_form.html'
@@ -356,7 +390,8 @@ class CostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail',
+                       kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(CostCreateView, self).get_context_data(**kwargs)
@@ -364,6 +399,7 @@ class CostCreateView(LoginRequiredMixin, CreateView):
         context["pond"] = Pond.objects.get(pk=self.kwargs["pk_pond"])
         context["pond_page"] = "active"
         return context
+
 
 class WaterQualityCreateView(LoginRequiredMixin, CreateView):
     template_name = 'water_quality_form.html'
@@ -379,7 +415,8 @@ class WaterQualityCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail',
+                       kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(WaterQualityCreateView, self).get_context_data(**kwargs)
@@ -388,6 +425,7 @@ class WaterQualityCreateView(LoginRequiredMixin, CreateView):
         context["pond_page"] = "active"
         return context
 
+
 class WaterQualityUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'water_quality_form.html'
     model = WaterQuality
@@ -395,7 +433,8 @@ class WaterQualityUpdateView(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'pk_water_quality'
 
     def get_success_url(self):
-        return reverse('pond_detail', kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
+        return reverse('pond_detail',
+                       kwargs={'pk_property': self.kwargs["pk_property"], 'pk_pond': self.kwargs["pk_pond"]})
 
     def get_context_data(self, **kwargs):
         context = super(WaterQualityUpdateView, self).get_context_data(**kwargs)

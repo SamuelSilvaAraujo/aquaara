@@ -59,6 +59,18 @@ class MortalityForm(forms.ModelForm):
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': "Ex.: 10 peixes"}),
         }
 
+    # def __init__(self, *args, **kwargs):
+    #     self.pond_id = kwargs.pop('pond_id', None)
+    #     super(MortalityForm, self).__init__(*args, **kwargs)
+    #
+    # def clean_amount(self):
+    #     pond = Pond.objects.get(id=self.pond_id)
+    #     amount = self.cleaned_data['amount']
+    #     if amount > pond.cycle().amount_fish_current():
+    #         raise forms.ValidationError("Quantidade de peixes maior que a quantidade de peixes atual!")
+    #     return amount
+
+
 class BiometriaForm(forms.ModelForm):
     class Meta:
         model = Biometria
