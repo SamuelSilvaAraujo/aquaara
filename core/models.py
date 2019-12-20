@@ -1,8 +1,9 @@
 from django.db import models
 from datetime import datetime, timedelta
-from django.db.models import Sum, Q
+from django.db.models import Sum
 
 from users.models import User
+
 
 class Property(models.Model):
     STATES_CHOICES = [
@@ -45,6 +46,7 @@ class Property(models.Model):
     def __str__(self):
         return self.name
 
+
 class Pond(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
     identification = models.CharField("Identificação", max_length=20)
@@ -56,10 +58,10 @@ class Pond(models.Model):
         return self.identification
 
     def volume(self):
-        return (self.width*self.length * ((((self.length*0.005)+1)+1)/2))*1000
+        return (self.width * self.length * ((((self.length * 0.005) + 1) + 1) / 2)) * 1000
 
     def area(self):
-        return self.width*self.length
+        return self.width * self.length
 
     def cycle(self):
         return self.cycle_set.filter(finalized=False).first()
@@ -70,6 +72,7 @@ class Pond(models.Model):
     def number_cycles(self):
         return self.allCycle().count()
 
+
 class Population(models.Model):
     date = models.DateField("Data", default=datetime.now)
     middleweight = models.FloatField("Peso Médio")
@@ -78,8 +81,8 @@ class Population(models.Model):
     def __str__(self):
         return "{} / {}".format(self.date, self.cycle)
 
-class WaterQuality(models.Model):
 
+class WaterQuality(models.Model):
     IDEAL = 'ideal'
     ACCEPTABLE = 'acceptable'
     BAD = 'bad'
@@ -100,12 +103,17 @@ class WaterQuality(models.Model):
 
     def quality(self):
         if self.transparency == 40 and (25 <= self.temperature <= 27) and (6.5 <= self.ph <= 8.4) and self.oxygen == 5:
-            return  self.IDEAL
-        elif (30 <= self.transparency <= 50) and (20 <= self.temperature <= 32) and (4.5 <= self.ph <= 8.0) and ( 3 <= self.oxygen <= 5):
+            return self.IDEAL
+        elif (30 <= self.transparency <= 50) and (20 <= self.temperature <= 32) and (4.5 <= self.ph <= 8.0) and (
+                3 <= self.oxygen <= 5):
             return self.ACCEPTABLE
-        elif (self.transparency == 25 or self.transparency == 60) and ( self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (2 <= self.oxygen <= 3 or 5 <= self.oxygen <= 7):
+        elif (self.transparency == 25 or self.transparency == 60) and (
+                self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (
+                2 <= self.oxygen <= 3 or 5 <= self.oxygen <= 7):
             return self.BAD
-        elif (self.transparency <= 25 or self.transparency >= 60) and (self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (self.oxygen == 1 or self.oxygen == 7):
+        elif (self.transparency <= 25 or self.transparency >= 60) and (
+                self.temperature <= 20 or self.temperature >= 32) and (self.ph <= 4.5 or self.ph >= 8.0) and (
+                self.oxygen == 1 or self.oxygen == 7):
             return self.TERRIBLE
         else:
             return None
@@ -120,8 +128,8 @@ class WaterQuality(models.Model):
         elif self.quality() == self.TERRIBLE:
             return "Renovação constante"
 
-class Cycle(models.Model):
 
+class Cycle(models.Model):
     INTENSIVE = "intensive"
     SEMI_INTENSIVE = "semi-intensive"
 
@@ -155,16 +163,18 @@ class Cycle(models.Model):
         INTENSIVE: {
             CONSTANT_RENEWAL: {500: 4.0, 600: 3.34, 700: 2.86, 800: 2.50, 900: 2.23, 1000: 2.00, 1100: 1.82},
             CONSTANT_RENEWAL_AERATORS: {500: 6.0, 600: 5.0, 700: 4.30, 800: 3.75, 900: 3.34, 1000: 3.00, 1100: 2.73},
-            WATER_GOOD_QUALITY_HIGH_RENEWAL_AERATORS: {500: 8.0, 600: 6.67, 700: 5.71, 800: 5.00, 900: 4.45, 1000: 4.00, 1100: 3.64},
+            WATER_GOOD_QUALITY_HIGH_RENEWAL_AERATORS: {500: 8.0, 600: 6.67, 700: 5.71, 800: 5.00, 900: 4.45, 1000: 4.00,
+                                                       1100: 3.64},
         }
     }
 
     date = models.DateField(auto_now_add=True)
     pond = models.ForeignKey(Pond, on_delete=models.CASCADE)
     population = models.OneToOneField(Population, on_delete=models.CASCADE, null=True, blank=True)
-    water_quality =models.OneToOneField(WaterQuality, on_delete=models.CASCADE, null=True, blank=True)
+    water_quality = models.OneToOneField(WaterQuality, on_delete=models.CASCADE, null=True, blank=True)
     system = models.CharField("Sistema", max_length=15, choices=SYSTEM_CHOICES)
-    type_intensive = models.CharField("Tipo de sistema intensivo", max_length=50, choices=TYPE_INTENSIVE_CHOICES, null=True, blank=True)
+    type_intensive = models.CharField("Tipo de sistema intensivo", max_length=50, choices=TYPE_INTENSIVE_CHOICES,
+                                      null=True, blank=True)
     final_middleweight = models.IntegerField("Peso Médio Final", choices=MIDDLEWEIGHT_CHOICES)
     finalized = models.BooleanField(default=False)
 
@@ -180,10 +190,10 @@ class Cycle(models.Model):
         elif self.system == self.INTENSIVE:
             return self.DENSITY_VALUES[self.INTENSIVE][self.type_intensive][self.final_middleweight]
 
-    #quantidade de peixes
+    # quantidade de peixes
 
     def amount_fish_total(self):
-        amount = self.density()*self.pond.area()
+        amount = self.density() * self.pond.area()
         return amount
 
     def amount_fish_population(self):
@@ -201,7 +211,7 @@ class Cycle(models.Model):
         despesca = self.despesca_total_period(date)
         return total_amount - mortality - despesca
 
-    #mortalidade
+    # mortalidade
 
     def all_mortality(self):
         return self.mortality_set.all()
@@ -212,7 +222,7 @@ class Cycle(models.Model):
     def mortality_total_period(self, date):
         return self.all_mortality().filter(date__lt=date).aggregate(Sum('amount')).get('amount__sum') or 0
 
-    #despesca
+    # despesca
 
     def all_despesca(self):
         return self.despesca_set.all()
@@ -226,7 +236,7 @@ class Cycle(models.Model):
     def last_despesca(self):
         return self.all_despesca().first()
 
-    #peso médio
+    # peso médio
 
     def population_middleweight(self):
         return self.population.middleweight
@@ -252,10 +262,10 @@ class Cycle(models.Model):
     def last_middleweight(self):
         return self.all_despesca().first().middleweight
 
-    #biomassa
+    # biomassa
 
     def biomassa(self, middleweight, amount_fish):
-        return (middleweight/1000)*amount_fish
+        return (middleweight / 1000) * amount_fish
 
     def first_biomassa(self):
         return self.biomassa(self.population_middleweight(), self.amount_fish_population())
@@ -269,7 +279,7 @@ class Cycle(models.Model):
     def last_biomassa(self):
         return self.biomassa(self.last_middleweight(), self.amount_fish_period(self.last_despesca().date))
 
-    #arraçoamento
+    # arraçoamento
 
     def feed_rate(self, middleweight):
         if self.system == self.SEMI_INTENSIVE:
@@ -320,10 +330,10 @@ class Cycle(models.Model):
             return "08:00 h, 16:00 h"
 
     def full_day_feeding(self):
-        return self.current_biomassa()*self.feed_rate(self.current_middleweight())
+        return self.current_biomassa() * self.feed_rate(self.current_middleweight())
 
     def feeding_meal(self):
-        return self.full_day_feeding()/self.number_feeds()
+        return self.full_day_feeding() / self.number_feeds()
 
     def proteina_racao(self):
         middleweight = self.current_middleweight()
@@ -389,18 +399,18 @@ class Cycle(models.Model):
             elif 801 <= middleweight <= 1100:
                 return "10 mm"
 
-    #biometria
+    # biometria
 
     def amount_fish_next_biometria(self):
         amount = self.amount_fish_current()
         if amount <= 400:
-            return amount*0.10
+            return amount * 0.10
         elif 401 <= amount <= 700:
-            return amount*0.07
+            return amount * 0.07
         elif 701 <= amount <= 2000:
-            return amount*0.05
+            return amount * 0.05
         else:
-            return amount*0.03
+            return amount * 0.03
 
     def date_next_biometria(self):
         td = timedelta(days=15)
@@ -409,7 +419,7 @@ class Cycle(models.Model):
     def all_biometria(self):
         return self.biometria_set.all()
 
-    #custo e conversão alimentar
+    # custo e conversão alimentar
 
     def ration_total(self):
         total_ration = 0
@@ -427,9 +437,9 @@ class Cycle(models.Model):
         amount_fish_population = self.amount_fish_population()
         population_biomassa = self.biomassa(population_middleweight, amount_fish_population)
 
-        ration = population_biomassa*self.feed_rate(population_middleweight)
+        ration = population_biomassa * self.feed_rate(population_middleweight)
         number_days = (end_date - start_date).days
-        total_ration += ration*number_days
+        total_ration += ration * number_days
 
         for biometria in all_biometria:
             start_date = biometria.date
@@ -444,22 +454,22 @@ class Cycle(models.Model):
             biometria_amount_fish = self.amount_fish_period(biometria.date)
             biometria_biomassa = self.biomassa(biometria_middleweight, biometria_amount_fish)
 
-            ration = biometria_biomassa*self.feed_rate(biometria_middleweight)
+            ration = biometria_biomassa * self.feed_rate(biometria_middleweight)
             number_days = (end_date - start_date).days
-            total_ration += ration*number_days
+            total_ration += ration * number_days
 
         return total_ration
 
     def food_conversion(self):
         biomassa = self.current_biomassa() - self.first_biomassa()
         if biomassa > 0:
-            return self.ration_total()/biomassa
+            return self.ration_total() / biomassa
         else:
             return 0
 
     def final_food_conversion(self):
         biomassa = self.last_biomassa() - self.first_biomassa()
-        return self.ration_total()/biomassa
+        return self.ration_total() / biomassa
 
     def cost_total(self):
         cost_dict = {
@@ -483,7 +493,7 @@ class Cycle(models.Model):
         ration = population_biomassa * self.feed_rate(population_middleweight)
         number_days = (end_date - start_date).days
 
-        total_ration = ration*number_days
+        total_ration = ration * number_days
 
         cost = self.all_cost().filter(date__lte=start_date).first()
 
@@ -529,6 +539,7 @@ class Cycle(models.Model):
     def all_cost(self):
         return self.cost_set.all()
 
+
 class Mortality(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
@@ -536,6 +547,7 @@ class Mortality(models.Model):
 
     class Meta:
         ordering = ['-date']
+
 
 class Biometria(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
@@ -545,6 +557,7 @@ class Biometria(models.Model):
     class Meta:
         ordering = ['-date']
 
+
 class Despesca(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
     date = models.DateField("Data", default=datetime.now)
@@ -553,6 +566,7 @@ class Despesca(models.Model):
 
     class Meta:
         ordering = ['-date']
+
 
 class Cost(models.Model):
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
@@ -564,4 +578,4 @@ class Cost(models.Model):
         ordering = ['-date']
 
     def price_kg(self):
-        return self.price/self.weight
+        return self.price / self.weight

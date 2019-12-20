@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
 
+
 class UserManager(BaseUserManager):
     def create_user(self, cpf, name, password=None):
         if not cpf:
@@ -24,6 +25,7 @@ class UserManager(BaseUserManager):
         user.is_admin = True
         user.save(using=self._db)
         return user
+
 
 class User(AbstractBaseUser):
     cpf = models.CharField("CPF", unique=True, max_length=11)

@@ -12,7 +12,7 @@ class Index(TemplateView):
 
 class PropertyListView(LoginRequiredMixin, ListView):
     model = Property
-    template_name = 'property_list.html'
+    template_name = 'property/list.html'
 
     def get_queryset(self):
         return self.request.user.property_set.all()
@@ -25,7 +25,7 @@ class PropertyListView(LoginRequiredMixin, ListView):
 
 class PropertyCreateView(LoginRequiredMixin, CreateView):
     model = Property
-    template_name = 'property_form.html'
+    template_name = 'property/form.html'
     form_class = PropertyForm
 
     def get_context_data(self, **kwargs):
@@ -44,7 +44,7 @@ class PropertyCreateView(LoginRequiredMixin, CreateView):
 class PropertyUpdateView(LoginRequiredMixin, UpdateView):
     model = Property
     form_class = PropertyForm
-    template_name = 'property_form.html'
+    template_name = 'property/form.html'
 
     def get_success_url(self):
         return reverse('property_list')
@@ -57,15 +57,9 @@ class PropertyUpdateView(LoginRequiredMixin, UpdateView):
 
 class PropertyDeleteView(LoginRequiredMixin, DeleteView):
     model = Property
-    template_name = 'property_delete.html'
 
     def get_success_url(self):
         return reverse('property_list')
-
-    def get_context_data(self, **kwargs):
-        context = super(PropertyDeleteView, self).get_context_data(**kwargs)
-        context["propertys_page"] = "active"
-        return context
 
 
 class PondListView(LoginRequiredMixin, ListView):

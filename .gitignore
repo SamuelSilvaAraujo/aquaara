@@ -7,3 +7,5 @@ env/
 inspinia-master/
 
 \.vscode/
+
+local_settings.py
