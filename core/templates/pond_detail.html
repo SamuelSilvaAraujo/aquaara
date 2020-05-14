@@ -498,8 +498,6 @@
                                                     </td>
                                                 </tr>
                                             {% endfor %}
-
-
                                             </tbody>
                                             <tfoot>
                                             <tr>
@@ -641,6 +639,7 @@
 
 
             var bioctx = document.getElementById("bioChart").getContext("2d");
+
             new Chart(bioctx, {
                 type: 'line',
                 data: biolineData,

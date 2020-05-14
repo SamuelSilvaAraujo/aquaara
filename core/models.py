@@ -6,6 +6,7 @@ from users.models import User
 
 
 class Property(models.Model):
+
     STATES_CHOICES = [
         ('AC', 'Acre'),
         ('AL', 'Alagoas'),
